@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    a { color: #65cd6c; }
+    p { margin-top: 0; }
+    #igtm_save { margin-right: 6px; }
+    button { margin: 10px 0; border: 1px solid #fff; padding: 8px 20px; color: #fff; background: #439e49; }
+    textarea, input[type="text"] { border: 0; padding: 5px; width: 98%; color: #222; background: #fff; }
+    textarea { margin: 3px 0 6px 0; min-height: 4em; }
+    label { font-weight: bold; padding: 0.8em 0 4px 0; user-select: none; }
+    .nowbtn { float: right; font-size: 1.2em; }
+  </style>
+</head>
+<body style="font-family:arial,sans-serif;background:#333;color:#f4f4f4">
+  <div style="min-width:550px;margin:10px;">
+    <img style="float:right; height:96px; margin:-15px -10px 0 0" src="images/injectGTM.png" />
+    <h2 id="hdng" style="color:#439e49;font-size:1.8em; margin:14px 0 0 0;">GTM Helper</h2>
+    <p id="option_hint" style="color:#aaa;float:left;width:80%">
+      Mit dem GTM Helper kannst du auf der aktuellen Seite einen GTM-Container injecten, ein dataLayer-Push Event ausführen oder extra JavaScript-Code einfügen.<br>
+      <b>Hinweis:</b> Einstellungen werden im localStorage der aktuellen Seite gespeichert.
+    </p>
+    <div style="clear:both"></div>
+        <!-- Checkup-Link (wird dynamisch angezeigt, falls vorhanden) -->
+        <p id="show_checkup" style="display:none;color:#aaa">
+          <b style="color:orange;font-size:1.3em;">GTM Container identifiziert!</b>
+          <br>Untersuche diesen Container mit Analytrix: <a href="#" id="igtm_inspect">GTM Container Checkup</a>
+        </p>
+    <!-- Checkbox: GTM-Container einfügen -->
+    <input type="checkbox" id="igtm_active" name="igtm_active">
+    <label for="igtm_gtm_id">GTM-Container einfügen</label><br>
+    <input type="text" id="igtm_gtm_id" name="igtm_gtm_id" placeholder="GTM-XXXX">
+    <br><br>
+    <!-- dataLayer-Push -->
+    <input type="checkbox" id="igtm_addinit" name="igtm_addinit">
+    <label for="igtm_addinit">Push in dataLayer</label><br>
+    <textarea id="igtm_init" placeholder='BSP: {"Internal": true, "mode": "Test"}'></textarea><br><br>
+    <!-- Extra Script-Code -->
+    <input type="checkbox" id="igtm_addcode" name="igtm_addcode">
+    <label for="igtm_addcode">Extra Script-Code einfügen</label><br>
+    <textarea id="igtm_code" placeholder="BSP: console.log('GTM Einfuegung aktiv');"></textarea><br><br>
+
+    <button id="igtm_save" name="igtm_save">💾 Speichern &amp; neu laden</button>
+    <button id="igtm_reset_consent" name="igtm_reset_consent" style="background-color:grey;">🗑️ Consent Einstellungen löschen</button>
+    
+
+
+  </div>
+  <p style="margin:-2em 0 0 0;padding:0;text-align:right">
+    <span class="utfs">&#9432;</span>
+    <a id="igtm_help" href="https://www.analytrix.de/gtm-helper-chrome-extension.html">Hilfe</a>
+  </p>
+  <script src="popup.js"></script>
+</body>
+</html>
