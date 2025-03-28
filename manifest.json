@@ -1,11 +1,10 @@
 {
   "name": "GTM Helper",
-  "version": "2.0",
+  "version": "2.1",
   "description": "Inject GTM containers and push dataLayer events on selected pages",
   "permissions": [
     "activeTab",
     "cookies",
-    "storage",
     "scripting"
   ],
   "host_permissions": [

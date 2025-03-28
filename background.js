@@ -58,7 +58,7 @@ function buildCheckupUrl(url) {
   // Polling: Alle 2 Sekunden Badge aktualisieren
   setInterval(function() {
 	chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-	  if (tabs.length > 0) {
+	  if (tabs && tabs.length > 0) {
 		updateBadgeForTab(tabs[0].id);
 	  }
 	});
