@@ -18,7 +18,7 @@
     <img style="float:right; height:96px; margin:-15px -10px 0 0" src="images/injectGTM.png" />
     <h2 id="hdng" style="color:#439e49;font-size:1.8em; margin:14px 0 0 0;">GTM Helper</h2>
     <p id="option_hint" style="color:#aaa;float:left;width:80%">
-      Mit dem GTM Helper kannst du auf der aktuellen Seite einen GTM-Container injecten, ein dataLayer-Push Event ausführen oder extra JavaScript-Code einfügen.<br>
+      Mit dem GTM Helper kannst du auf der aktuellen Seite einen GTM-Container einfügen, ein dataLayer-Push Event ausführen oder extra JavaScript-Code einfügen.<br>
       <b>Hinweis:</b> Einstellungen werden im localStorage der aktuellen Seite gespeichert.
     </p>
     <div style="clear:both"></div>
@@ -29,8 +29,9 @@
         </p>
     <!-- Checkbox: GTM-Container einfügen -->
     <input type="checkbox" id="igtm_active" name="igtm_active">
-    <label for="igtm_gtm_id">GTM-Container einfügen</label><br>
-    <input type="text" id="igtm_gtm_id" name="igtm_gtm_id" placeholder="GTM-XXXX">
+    <label for="igtm_gtm_code">GTM-Container einfügen</label><br>
+    <!--<input type="text" id="igtm_gtm_id" name="igtm_gtm_id" placeholder="GTM-XXXX">-->
+    <textarea id="igtm_gtm_code" placeholder="Kompletten Container-Code (keine script Tags erforderlich) hier einfügen"></textarea>
     <br><br>
     <!-- dataLayer-Push -->
     <input type="checkbox" id="igtm_addinit" name="igtm_addinit">

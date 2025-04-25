@@ -203,7 +203,8 @@ function deleteConsentSettings() {
 window.onload = function() {
   // Einstellungen laden und Felder füllen
   getSettingsFromPage(function(settings) {
-    document.getElementById('igtm_gtm_id').value = settings.igtmGtmId || '';
+    //document.getElementById('igtm_gtm_id').value = settings.igtmGtmId || '';
+    document.getElementById('igtm_gtm_code').value = settings.igtmGtmCode || '';
     document.getElementById('igtm_active').checked = settings.igtm_Status || false;
     document.getElementById('igtm_addcode').checked = settings.igtmAddCode || false;
     document.getElementById('igtm_code').value = settings.igtmCode || '';
@@ -232,7 +233,8 @@ window.onload = function() {
   
   document.getElementById('igtm_save').addEventListener('click', function(e) {
     var settings = {
-      igtmGtmId: document.getElementById('igtm_gtm_id').value,
+      //igtmGtmId: document.getElementById('igtm_gtm_id').value,
+      igtmGtmCode: document.getElementById('igtm_gtm_code').value,
       igtm_Status: document.getElementById('igtm_active').checked,
       igtmAddCode: document.getElementById('igtm_addcode').checked,
       igtmCode: document.getElementById('igtm_code').value.trim(),
