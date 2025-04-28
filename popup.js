@@ -149,7 +149,10 @@ function deleteConsentSettings() {
             "consent",
             
             //gms Legacy Consent Cookie
-            "trk_consent"
+            "trk_consent",
+
+            //legalweb
+            "legalweb_cookie_settings"
           ];
           
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
