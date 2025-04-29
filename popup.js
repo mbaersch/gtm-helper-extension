@@ -147,12 +147,21 @@ function deleteConsentSettings() {
     
             //let`s give it a shot... 
             "consent",
+            "cookieConsent",
+            "cookieSettings",
+            "cookiesettings",
+            "analytics",
+            "marketing",
+            "statistics"
             
             //gms Legacy Consent Cookie
             "trk_consent",
 
             //legalweb
-            "legalweb_cookie_settings"
+            "legalweb_cookie_settings",
+
+            //DP Cookie Consent (Typo3 Extension)
+            "dp_cookieconsent_status"
           ];
           
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
