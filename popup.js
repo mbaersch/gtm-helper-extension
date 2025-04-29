@@ -159,6 +159,9 @@ function deleteConsentSettings() {
 
             //DP Cookie Consent (Typo3 Extension)
             "dp_cookieconsent_status",
+
+            //Klaro.js
+            "klaro",
           ];
           
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
