@@ -207,6 +207,13 @@ function deleteConsentSettings() {
 
             //Mandatly
             "Mdt_Consent",
+            
+            //New 2.4: Hubspot Consent
+            "__hs_cookie_cat_pref",
+
+            //Amasty Cookie Consent (Magento)
+            "amcookie_allowed",
+            "amcookie_policy_restriction"
 
           ];
           
