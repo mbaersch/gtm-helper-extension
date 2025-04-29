@@ -162,6 +162,52 @@ function deleteConsentSettings() {
 
             //Klaro.js
             "klaro",
+
+            //Didomi 
+            "euconsent-v2",
+            "didomi_token",
+
+            //Clickio
+            "__lxG__consent__v2",
+
+            //CookieHub
+            "cookiehub",
+
+            //CookieScript
+            "CookieScriptConsent",
+
+            //CookieYes
+            "cookieyes-consent",
+
+            //Lawwwing
+            "lawwwing-consent-v2",
+
+            //Sourcepoint
+            "consentDate",
+            "consentUUID",
+
+            //Truendo
+            "truendo_cmp",
+
+            //Uni Consent
+            "uniconsent-v2",
+
+            //Consent Studio
+            "consent-studio__storage",
+
+            //CookiePal
+            "cookiepal-consent",
+
+            //Osano
+            "osano_consentmanager",
+
+            //Cytrio
+            "cyt-consent",
+            "cyt_consent_given",
+
+            //Mandatly
+            "Mdt_Consent",
+
           ];
           
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
@@ -182,7 +228,34 @@ function deleteConsentSettings() {
             "ccm_consent",
 
             //Piwik PRO
-            "ppms_webstorage"
+            "ppms_webstorage",
+
+            //Didomi
+            "euconsent-v2",
+            "didomi_token",
+
+            //Clickio
+            "__lxG__consent__v2",
+
+            //Secure Privacy
+            "sp_consent",
+            "sp_dynamic",
+
+            //Sourcepoint
+            "_sp_user_consent_40",
+
+            //Termly
+            "TERMLY_API_CACHE",
+
+            //Osano
+            "osano_consentmanager",
+            
+            //Cytrio
+            "cyt_consent_given",
+
+            //Acceptrics
+            "__acceptrics_settings",
+
           ];
     
           //Cookies entfernen, wenn vorhanden
