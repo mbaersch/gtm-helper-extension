@@ -12,4 +12,4 @@ Extension Code for *GTM Helper*. Provides useful functions when maintaining and 
 
 ## Links
 - GTM Helper on [Chrome Web Store](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-- [Documentation](https://www.analytrix.de/gtm-helper-chrome-extension.html) (German)
+- [Documentation + CMP list](https://www.analytrix.de/gtm-helper-chrome-extension.html) (German)
