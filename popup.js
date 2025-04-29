@@ -66,9 +66,6 @@ function getCheckupUrl(callback) {
 
 function deleteConsentSettings() {
   if (confirm("Alle Consent-Einstellungen für diese Domain löschen und Seite neu laden?")) {
-
-    ;
-
     
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       chrome.scripting.executeScript({
@@ -152,7 +149,7 @@ function deleteConsentSettings() {
             "cookiesettings",
             "analytics",
             "marketing",
-            "statistics"
+            "statistics",
             
             //gms Legacy Consent Cookie
             "trk_consent",
@@ -161,7 +158,7 @@ function deleteConsentSettings() {
             "legalweb_cookie_settings",
 
             //DP Cookie Consent (Typo3 Extension)
-            "dp_cookieconsent_status"
+            "dp_cookieconsent_status",
           ];
           
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
@@ -208,6 +205,7 @@ function deleteConsentSettings() {
       });
     });
 
+  window.close();
 
   }
 }
@@ -263,6 +261,7 @@ window.onload = function() {
         });
       });
     });
+    window.close();
   });
   
   document.getElementById('igtm_reset_consent').addEventListener('click', function(e) {
