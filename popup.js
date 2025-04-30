@@ -157,10 +157,6 @@ function deleteConsentSettings() {
             //legalweb
             "legalweb_cookie_settings",
 
-            //datareporter
-            "cookieconsent_mode",
-            "cookieconsent_status",
-
             //DP Cookie Consent (Typo3 Extension)
             "dp_cookieconsent_status",
 
@@ -217,7 +213,11 @@ function deleteConsentSettings() {
 
             //Amasty Cookie Consent (Magento)
             "amcookie_allowed",
-            "amcookie_policy_restriction"
+            "amcookie_policy_restriction",
+
+            //datareporter.eu
+            "cookieconsent_mode",
+            "cookieconsent_status",
 
           ];
           
