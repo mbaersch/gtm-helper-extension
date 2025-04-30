@@ -88,7 +88,7 @@ function deleteConsentSettings() {
           let currentUrl = tab.url;
           
           // Liste der Consent-Cookie-Namen (wie ursprünglich)
-          const cookieNames = [
+          let cookieNames = [
 
             //Piwik PRO ID, wenn vorhanden (sonst Dummy)
             ppCookie,
@@ -220,21 +220,21 @@ function deleteConsentSettings() {
             "cookieconsent_status",
 
           ];
-          
+
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
-          const localStorageKeys = [
+          let localStorageKeys = [
             //CookieFirst
             "cookiefirst-id",
             "cookiefirst-consent",
-    
+
             //UserCentrics
             "uc_user_interaction",
             "uc_settings",
-    
-             //TrustArc localStorage
+
+            //TrustArc localStorage
             "truste.eu.cookie.notice_gdpr_prefs",
             "truste.eu.cookie.notice_preferences",
-    
+
             //CCM19
             "ccm_consent",
 
@@ -268,23 +268,41 @@ function deleteConsentSettings() {
             "__acceptrics_settings",
 
           ];
-    
-          //Cookies entfernen, wenn vorhanden
-          cookieNames.forEach(function(name) {
-            chrome.cookies.remove({ url: currentUrl, name: name });
-          });
-    
-          //LS Einträge entfernen, wenn vorhanden
-          chrome.scripting.executeScript({
-            target: { tabId: tabId },
-            func: function(keys) {
-              keys.forEach(function(key) {
-                localStorage.removeItem(key);
+          
+          //Dynamische Namen von Cookies suchen und anhängen...
+          chrome.cookies.getAll({url: tabs[0].url}, function(results) {
+            let realCookiesFound = results.filter(x=>x.name.indexOf("real_cookie_banner-v:")>=0);
+            if (realCookiesFound.length > 0) cookieNames = cookieNames.concat(realCookiesFound.map(x => (x.name)));
+            let consentManagerCookiesFound = results.filter(x=>x.name.indexOf("__cmpc")>=0);
+            if (consentManagerCookiesFound.length > 0) {
+              let cmCookieDomain = consentManagerCookiesFound[0].domain; 
+              let cmCookieNames = consentManagerCookiesFound.map(x => (x.name));
+              cookieNames = cookieNames.concat(cmCookieNames);
+              cookieNames.push("__cmpiuid");
+              cmCookieNames.forEach(x=>{
+                localStorageKeys.push(x+"_"+cmCookieDomain);
+                localStorageKeys.push(x+"_expire"+cmCookieDomain);
               });
-            },
-            args: [localStorageKeys]
-          }, function() {
-            chrome.tabs.reload(tabId);
+            } 
+            //Cookies entfernen, wenn vorhanden
+            cookieNames.forEach(function(name) {
+              chrome.cookies.remove({ url: currentUrl, name: name });
+              //console.log("remove cookie: ", name); 
+            });
+      
+            //LS Einträge entfernen, wenn vorhanden
+            chrome.scripting.executeScript({
+              target: { tabId: tabId },
+              func: function(keys) {
+                keys.forEach(function(key) {
+                  localStorage.removeItem(key);
+                });
+              },
+              args: [localStorageKeys]
+            }, function() {
+              chrome.tabs.reload(tabId);
+            });
+
           });
           
         });
@@ -312,7 +330,7 @@ window.onload = function() {
       updateBadge(combinedStatus, checkupUrl);
     });
   });
-  
+
   //Background-Script für Checkup-URL
   checkURL(function(response) {
     var showCheckup = document.getElementById("show_checkup");
