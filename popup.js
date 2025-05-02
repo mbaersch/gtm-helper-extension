@@ -132,7 +132,15 @@ function deleteConsentSettings() {
             //Complianz - GDPR/CCPA Cookie Consent (WP Plugin)
             "complianz_policy_id",
             "complianz_consent_status",
+            "cmplz_banner-status",
+            "cmplz_consented_services",
+            "cmplz_saved_categories",
+            "cmplz_saved_services",
             "cmplz_stats",
+            "cmplz_policy_id",
+            "cmplz_functional",
+            "cmplz_preferences",
+            "cmplz_statistics",
             "cmplz_marketing",
     
              //TrustArc Cookies
@@ -144,6 +152,7 @@ function deleteConsentSettings() {
     
             //let`s give it a shot... 
             "consent",
+            "privacy_signal",
             "cookieConsent",
             "cookieSettings",
             "cookiesettings",
@@ -295,6 +304,9 @@ function deleteConsentSettings() {
             "sddan:cmp",
             "sddan:cmp:stc",
             "sddan:cmp:stc:ts",
+
+            //Silktide
+            "silktideCookieBanner_InitialChoice",
 
           ];
           
