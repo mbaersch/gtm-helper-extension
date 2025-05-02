@@ -219,6 +219,30 @@ function deleteConsentSettings() {
             "cookieconsent_mode",
             "cookieconsent_status",
 
+            //Commanders Act
+            "TC_PRIVACY_CENTER",
+            "TC_PRIVACY",
+
+            //Enzuzo
+            "cookies-analytics",
+            "cookies-functional",
+            "cookies-marketing",
+            "cookies-preferences",
+
+            //Termly
+            "TERMLY_API_CACHE",
+
+            //Ketch
+            "_swb",
+            "_swb_consent_",
+            "_ketch_consent_v1_",
+
+            //Gitbook
+            "__gitbook_cookie_granted",
+
+            //Wix
+            "consent-policy",
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
@@ -267,12 +291,19 @@ function deleteConsentSettings() {
             //Acceptrics
             "__acceptrics_settings",
 
+            //New 2.4: ABConsent
+            "sddan:cmp",
+            "sddan:cmp:stc",
+            "sddan:cmp:stc:ts",
+
           ];
           
           //Dynamische Namen von Cookies suchen und anhängen...
           chrome.cookies.getAll({url: tabs[0].url}, function(results) {
+            //Real Cookie Banner:
             let realCookiesFound = results.filter(x=>x.name.indexOf("real_cookie_banner-v:")>=0);
             if (realCookiesFound.length > 0) cookieNames = cookieNames.concat(realCookiesFound.map(x => (x.name)));
+            //Consentmanager.net
             let consentManagerCookiesFound = results.filter(x=>x.name.indexOf("__cmpc")>=0);
             if (consentManagerCookiesFound.length > 0) {
               let cmCookieDomain = consentManagerCookiesFound[0].domain; 
@@ -283,7 +314,26 @@ function deleteConsentSettings() {
                 localStorageKeys.push(x+"_"+cmCookieDomain);
                 localStorageKeys.push(x+"_expire"+cmCookieDomain);
               });
-            } 
+            }
+            //Concord
+            let concordCookiesFound = results.filter(x=>x.name.indexOf("concord-allow-state-")>=0);
+            if (concordCookiesFound.length > 0) {
+              let coCookieNames = concordCookiesFound.map(x => (x.name));
+              let coAccount = coCookieNames[0].replace("concord-allow-state-", "");
+              cookieNames = cookieNames.concat(coCookieNames);
+              localStorageKeys.push("concord-consent-state-"+coAccount);
+              localStorageKeys.push("concord-transient-token-"+coAccount);
+              localStorageKeys.push("concord-banner-closed");
+            }
+            //Iubenda
+            let iubCookiesFound = results.filter(x=>x.name.indexOf("_iub_cs-")>=0);
+            if (iubCookiesFound.length > 0 && iubCookiesFound[0].name) 
+              cookieNames.push(iubCookiesFound[0].name);
+            //MyAgilePrivacy
+            let mapCookiesFound = results.filter(x=>x.name.indexOf("map_accepted_")>=0);
+            if (mapCookiesFound.length > 0) 
+              cookieNames = cookieNames.concat(mapCookiesFound.map(x => (x.name)));
+
             //Cookies entfernen, wenn vorhanden
             cookieNames.forEach(function(name) {
               chrome.cookies.remove({ url: currentUrl, name: name });

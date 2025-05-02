@@ -21,6 +21,12 @@
     document.head.appendChild(script);
   }
 
+  function hideContainerQuality() {
+    var stl = document.createElement("span");
+    stl.innerHTML = '<style>div[data-ng-if="::ctrl.isTagHealthEnabled"]{display:none}</style>';
+    document.body.appendChild(stl);
+  }
+
   function pushToDataLayer(vars) {
     var code = "window.dataLayer = window.dataLayer || []; window.dataLayer.push(" + JSON.stringify(vars) + ");";
     var script = document.createElement("script");
@@ -39,6 +45,9 @@
   // Ausführung der Funktionen je nach Einstellungen  
   (function() {
     var settings = loadSettings();
+    if (settings.hideQuality) 
+      hideContainerQuality();
+
     // Wenn mindestens eine der Optionen aktiviert ist, wird der entsprechende Code injiziert:
     if (settings.igtm_Status || settings.igtmAddInit || settings.igtmAddCode) {
       if (settings.igtmAddCode && settings.igtmCode) {
@@ -58,7 +67,7 @@
       if (settings.igtmGtmCode && settings.igtm_Status) {
         injectPastedGtmCode(settings.igtmGtmCode);
       }
-
     }
+     
   })();
 })();
