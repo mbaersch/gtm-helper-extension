@@ -217,7 +217,7 @@ function deleteConsentSettings() {
             //Mandatly
             "Mdt_Consent",
             
-            //New 2.4: Hubspot Consent
+            //Hubspot Consent
             "__hs_cookie_cat_pref",
 
             //Amasty Cookie Consent (Magento)
@@ -251,6 +251,30 @@ function deleteConsentSettings() {
 
             //Wix
             "consent-policy",
+
+            //New 2.5:
+            //Shopware
+            "cookie-preference",
+
+            //Shopify
+            "_tracking_consent",
+
+            //Pandectes GDPR/DSGVO Cookie (Shopify)
+            "_pandectes_gdpr",
+
+            //Consentmo (Shopify)
+            "cookieconsent_status1",
+            "cookieconsent_preferences_disabled",
+
+            //Avada (Shopify)
+            "avada_cookie_consent",
+
+            //Consentik (Shopify)
+            "cookiesNotification",
+            "_consentik_cookie",
+
+            //GoodApps (Shopify) 
+            "goodg_block_popup",
 
           ];
 
@@ -300,13 +324,20 @@ function deleteConsentSettings() {
             //Acceptrics
             "__acceptrics_settings",
 
-            //New 2.4: ABConsent
+            //ABConsent
             "sddan:cmp",
             "sddan:cmp:stc",
             "sddan:cmp:stc:ts",
 
             //Silktide
             "silktideCookieBanner_InitialChoice",
+
+            //New 2.5:
+            //Ultimate Cookie Banner (Shopify)
+            "conversionBearCookieConsent",
+
+            //Scala (Shopify)
+            "scalaLGPDBanner",
 
           ];
           
