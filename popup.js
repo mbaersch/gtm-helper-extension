@@ -276,6 +276,13 @@ function deleteConsentSettings() {
             //GoodApps (Shopify) 
             "goodg_block_popup",
 
+            //Acris
+            "acris_cookie_acc",
+            "acris_cookie_landing_page",
+            "acris_cookie_referrer",
+            "cookiePreferences",
+            "session-1",
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
