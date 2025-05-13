@@ -255,6 +255,8 @@ function deleteConsentSettings() {
             //New 2.5:
             //Shopware
             "cookie-preference",
+            //Shopware (native Integration)
+            "google-analytics-enabled",
 
             //Shopify
             "_tracking_consent",
@@ -280,6 +282,7 @@ function deleteConsentSettings() {
             "acris_cookie_acc",
             "acris_cookie_landing_page",
             "acris_cookie_referrer",
+            "acris_cookie_first_activated",
             "cookiePreferences",
             "session-1",
 
@@ -383,6 +386,10 @@ function deleteConsentSettings() {
             let mapCookiesFound = results.filter(x=>x.name.indexOf("map_accepted_")>=0);
             if (mapCookiesFound.length > 0) 
               cookieNames = cookieNames.concat(mapCookiesFound.map(x => (x.name)));
+            //MND Cookie Notice (Shopware)
+            let mndCookiesFound = results.filter(x=>x.name.indexOf("mnd-")>=0);
+            if (mndCookiesFound.length > 0) 
+              cookieNames = cookieNames.concat(mndCookiesFound.map(x => (x.name)));
 
             //Cookies entfernen, wenn vorhanden
             cookieNames.forEach(function(name) {
