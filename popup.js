@@ -285,6 +285,13 @@ function deleteConsentSettings() {
             "acris_cookie_first_activated",
             "cookiePreferences",
             "session-1",
+            
+            //Magento 1 GDPR Compliance
+            "cookie_accepted", 
+            "cookie_closed", 
+            "cookiesEnabled", 
+            "required_cookies", 
+            "popupData",
 
           ];
 
