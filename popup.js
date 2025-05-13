@@ -252,7 +252,6 @@ function deleteConsentSettings() {
             //Wix
             "consent-policy",
 
-            //New 2.5:
             //Shopware
             "cookie-preference",
             //Shopware (native Integration)
@@ -292,6 +291,8 @@ function deleteConsentSettings() {
             "cookiesEnabled", 
             "required_cookies", 
             "popupData",
+
+            //New 2.6:
 
           ];
 
@@ -349,12 +350,13 @@ function deleteConsentSettings() {
             //Silktide
             "silktideCookieBanner_InitialChoice",
 
-            //New 2.5:
             //Ultimate Cookie Banner (Shopify)
             "conversionBearCookieConsent",
 
             //Scala (Shopify)
             "scalaLGPDBanner",
+
+            //New 2.6:
 
           ];
           

@@ -1,7 +1,7 @@
 {
   "name": "GTM Helper",
   "version": "2.5",
-  "description": "Inject GTM containers and push dataLayer events on selected pages",
+  "description": "Reset consent state for most (60+) CMPs and / or inject GTM container, push dataLayer events, or execute JS on selected pages.",
   "permissions": [
     "activeTab",
     "cookies",
