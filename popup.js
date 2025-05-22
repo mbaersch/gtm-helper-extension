@@ -294,6 +294,9 @@ function deleteConsentSettings() {
 
             //New 2.6:
 
+            //Orestbida Cookie Consent
+            "cc_cookie",
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
@@ -357,6 +360,12 @@ function deleteConsentSettings() {
             "scalaLGPDBanner",
 
             //New 2.6:
+
+            //JTL 
+            "consent",
+
+            //Doofinder
+            "df-cookies-allowed",
 
           ];
           
