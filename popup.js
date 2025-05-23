@@ -297,6 +297,9 @@ function deleteConsentSettings() {
             //Orestbida Cookie Consent
             "cc_cookie",
 
+            //Mediawiki
+            "mw-cookie-settings",
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
