@@ -300,6 +300,9 @@ function deleteConsentSettings() {
             //Mediawiki
             "mw-cookie-settings",
 
+            //SiteMinder
+            "sm-cookie-consent",
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
