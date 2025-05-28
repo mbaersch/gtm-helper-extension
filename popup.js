@@ -294,7 +294,7 @@ function deleteConsentSettings() {
 
             //New 2.6:
 
-            //Orestbida Cookie Consent
+            //Orestbida Cookie Consent / Prive
             "cc_cookie",
 
             //Mediawiki
