@@ -292,8 +292,6 @@ function deleteConsentSettings() {
             "required_cookies", 
             "popupData",
 
-            //New 2.6:
-
             //Orestbida Cookie Consent / Prive
             "cc_cookie",
 
@@ -302,6 +300,11 @@ function deleteConsentSettings() {
 
             //SiteMinder
             "sm-cookie-consent",
+
+            //New 2.6:
+
+            //Tarte au Citron
+            "tarteaucitron",
 
           ];
 
