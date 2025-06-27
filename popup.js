@@ -306,6 +306,12 @@ function deleteConsentSettings() {
             //Tarte au Citron
             "tarteaucitron",
 
+            //Tealium
+            "CONSENTMGR",
+
+            //TamTam Consent
+            "ttcm_consent"
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
