@@ -154,6 +154,7 @@ function deleteConsentSettings() {
             "consent",
             "privacy_signal",
             "cookieConsent",
+            "cookieconsent",
             "cookieSettings",
             "cookiesettings",
             "analytics",
