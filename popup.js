@@ -311,7 +311,10 @@ function deleteConsentSettings() {
             "CONSENTMGR",
 
             //TamTam Consent
-            "ttcm_consent"
+            "ttcm_consent",
+
+            //LANsoft (ts only)
+            "cookieconsentTimestamp",
 
           ];
 
@@ -375,13 +378,14 @@ function deleteConsentSettings() {
             //Scala (Shopify)
             "scalaLGPDBanner",
 
-            //New 2.6:
-
             //JTL 
             "consent",
 
             //Doofinder
             "df-cookies-allowed",
+
+            //New 2.7:
+
 
           ];
           
