@@ -302,7 +302,7 @@ function deleteConsentSettings() {
             //SiteMinder
             "sm-cookie-consent",
 
-            //New 2.6:
+            //New 2.7:
 
             //Tarte au Citron
             "tarteaucitron",
@@ -428,6 +428,13 @@ function deleteConsentSettings() {
             let mndCookiesFound = results.filter(x=>x.name.indexOf("mnd-")>=0);
             if (mndCookiesFound.length > 0) 
               cookieNames = cookieNames.concat(mndCookiesFound.map(x => (x.name)));
+            //NEW 2.7: BigID / illow 
+            let bigIdCookies = results.filter(x=>x.name.indexOf("bigidcmp-consent-")>=0);
+            if (bigIdCookies.length > 0) {
+              let biCookieNames = bigIdCookies.map(x => (x.name));
+              cookieNames = cookieNames.concat(biCookieNames);
+              localStorageKeys.push(biCookieNames[0]);
+            }
 
             //Cookies entfernen, wenn vorhanden
             cookieNames.forEach(function(name) {
