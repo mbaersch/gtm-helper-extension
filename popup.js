@@ -315,7 +315,6 @@ function deleteConsentSettings() {
             //LANsoft (ts only)
             "cookieconsentTimestamp",
 
-            //New 2.8:
             //CookieLegit
             "cl_consent",
             "cl_essential",
@@ -325,6 +324,10 @@ function deleteConsentSettings() {
             //Cookieconfirm
             "cc_accepted_cookies",
             "cc_consent_id",
+
+            //New 2.9:
+            //CCM19 - optional cookie storage
+            "ccm_consent",
 
           ];
 
@@ -342,7 +345,7 @@ function deleteConsentSettings() {
             "truste.eu.cookie.notice_gdpr_prefs",
             "truste.eu.cookie.notice_preferences",
 
-            //CCM19
+            //CCM19 (standard: localStorage)
             "ccm_consent",
 
             //Piwik PRO
@@ -394,10 +397,14 @@ function deleteConsentSettings() {
             //Doofinder
             "df-cookies-allowed",
 
-            //New 2.8:
-
           ];
-          
+
+          // Liste der localStorage-Schlüssel, die gelöscht werden sollen
+          let sessionStorageKeys = [
+            //CCM19 - optional sessionStorage key
+            "ccm_consent",
+          ];
+
           //Dynamische Namen von Cookies suchen und anhängen...
           chrome.cookies.getAll({url: tabs[0].url}, function(results) {
             //Real Cookie Banner:
@@ -459,6 +466,19 @@ function deleteConsentSettings() {
                 });
               },
               args: [localStorageKeys]
+            }, function() {
+              //chrome.tabs.reload(tabId);
+            });
+
+            //SessionStorage Einträge entfernen, wenn vorhanden (Danke, CCM19 :|)
+            chrome.scripting.executeScript({
+              target: { tabId: tabId },
+              func: function(keys) {
+                keys.forEach(function(key) {
+                  sessionStorage.removeItem(key);
+                });
+              },
+              args: [sessionStorageKeys]
             }, function() {
               chrome.tabs.reload(tabId);
             });
