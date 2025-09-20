@@ -285,6 +285,7 @@ function deleteConsentSettings() {
             "acris_cookie_first_activated",
             "cookiePreferences",
             "session-1",
+            "session-",
             
             //Magento 1 GDPR Compliance
             "cookie_accepted", 
@@ -302,8 +303,6 @@ function deleteConsentSettings() {
             //SiteMinder
             "sm-cookie-consent",
 
-            //New 2.7:
-
             //Tarte au Citron
             "tarteaucitron",
 
@@ -315,6 +314,17 @@ function deleteConsentSettings() {
 
             //LANsoft (ts only)
             "cookieconsentTimestamp",
+
+            //New 2.8:
+            //CookieLegit
+            "cl_consent",
+            "cl_essential",
+            "cl_marketing",
+            "cl_tracking",
+
+            //Cookieconfirm
+            "cc_accepted_cookies",
+            "cc_consent_id",
 
           ];
 
@@ -384,8 +394,7 @@ function deleteConsentSettings() {
             //Doofinder
             "df-cookies-allowed",
 
-            //New 2.7:
-
+            //New 2.8:
 
           ];
           
@@ -428,14 +437,13 @@ function deleteConsentSettings() {
             let mndCookiesFound = results.filter(x=>x.name.indexOf("mnd-")>=0);
             if (mndCookiesFound.length > 0) 
               cookieNames = cookieNames.concat(mndCookiesFound.map(x => (x.name)));
-            //NEW 2.7: BigID / illow 
+            //BigID / illow 
             let bigIdCookies = results.filter(x=>x.name.indexOf("bigidcmp-consent-")>=0);
             if (bigIdCookies.length > 0) {
               let biCookieNames = bigIdCookies.map(x => (x.name));
               cookieNames = cookieNames.concat(biCookieNames);
               localStorageKeys.push(biCookieNames[0]);
             }
-
             //Cookies entfernen, wenn vorhanden
             cookieNames.forEach(function(name) {
               chrome.cookies.remove({ url: currentUrl, name: name });
