@@ -329,6 +329,13 @@ function deleteConsentSettings() {
             //CCM19 - optional cookie storage
             "ccm_consent",
 
+            //Unknown
+            "dsgvo_cd",
+
+            //contao plugins,
+            "cms_cookies",
+            "cms_cookies_saved",
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
@@ -397,6 +404,9 @@ function deleteConsentSettings() {
             //Doofinder
             "df-cookies-allowed",
 
+            //Contao plugins
+            "ccb_contao_token_2", 
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
@@ -432,6 +442,10 @@ function deleteConsentSettings() {
               localStorageKeys.push("concord-transient-token-"+coAccount);
               localStorageKeys.push("concord-banner-closed");
             }
+            //Piwik PRO (alle)
+            let ppCookiesFound = results.filter(x=>x.name.indexOf("ppms_privacy_")>=0);
+            if (ppCookiesFound.length > 0) 
+              cookieNames = cookieNames.concat(ppCookiesFound.map(x => (x.name)));
             //Iubenda
             let iubCookiesFound = results.filter(x=>x.name.indexOf("_iub_cs-")>=0);
             if (iubCookiesFound.length > 0 && iubCookiesFound[0].name) 
