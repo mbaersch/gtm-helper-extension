@@ -1,0 +1,8 @@
+{
+  "track_id": "refactor_popup_20260221",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-21T12:15:00Z",
+  "updated_at": "2026-02-21T12:15:00Z",
+  "description": "Refactor the existing popup to match the Engineering Aesthetic (Orange #C44E00, Green #005141, CSS Grid) and implement the bilingual support structure."
+}
