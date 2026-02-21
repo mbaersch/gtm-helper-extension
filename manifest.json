@@ -18,15 +18,15 @@
     "default_icon": {
       "16": "images/injectGTM.png",
       "32": "images/injectGTM.png",
-      "48": "images/injectGTM_128.png",
-      "128": "images/injectGTM_128.png"
+      "48": "images/injectGTM_big.png",
+      "128": "images/injectGTM_big.png"
     }
   },
   "icons": {
     "16": "images/injectGTM.png",
     "32": "images/injectGTM.png",
-    "48": "images/injectGTM_128.png",
-    "128": "images/injectGTM_128.png"
+    "48": "images/injectGTM_big.png",
+    "128": "images/injectGTM_big.png"
   },
   "content_scripts": [
     {
