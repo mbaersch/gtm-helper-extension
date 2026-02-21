@@ -18,10 +18,16 @@
       var previewParam = settings.igtmGtmPreview ? "&gtm_preview=" + settings.igtmGtmPreview : "";
       var cookiesWinParam = (settings.igtmGtmAuth || settings.igtmGtmPreview) ? "&gtm_cookies_win=x" : "";
       
-      // Suche nach der GTM URL im Code und hänge die Parameter an
-      var urlRegex = /(googletagmanager\.com\/gtm\.js\?id=[A-Z0-9-]+)/g;
-      code = code.replace(urlRegex, function(match) {
+      // 1. Statische URL (z.B. id=GTM-XXXX)
+      var staticUrlRegex = /(googletagmanager\.com\/gtm\.js\?id=[A-Z0-9-]+)/g;
+      code = code.replace(staticUrlRegex, function(match) {
         return match + authParam + previewParam + cookiesWinParam;
+      });
+
+      // 2. Dynamisches Snippet (z.B. id='+i oder id="+i)
+      var dynamicUrlRegex = /(googletagmanager\.com\/gtm\.js\?id=)(['"]\+i)/g;
+      code = code.replace(dynamicUrlRegex, function(match, p1, p2) {
+        return p1 + p2 + "+'" + authParam + previewParam + cookiesWinParam + "'";
       });
     }
 

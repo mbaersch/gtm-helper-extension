@@ -1,0 +1,7 @@
+node_modules/
+tmp-user-data*/
+test-results/
+playwright-report/
+blob-report/
+screenshots/*.png
+!screenshots/.gitkeep
