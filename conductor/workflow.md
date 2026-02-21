@@ -45,9 +45,14 @@ All tasks follow a strict lifecycle:
    - Resume implementation
 
 8. **Commit Code Changes:**
-   - Stage all code changes related to the task.
-   - Propose a clear, concise commit message e.g, `feat(ui): Create basic HTML structure for calculator`.
-   - Perform the commit.
+   - **Trigger:** Dieser Schritt wird erst am Ende einer gesamten **Phase** (Checkpoint) ausgeführt, nicht nach jeder einzelnen Aufgabe.
+   - Stage alle Code-Änderungen der Phase.
+   - Propose einen klaren Commit-Message.
+   - Führe den Commit aus.
+
+9. **Befehlsausführung:**
+   - In dieser Umgebung (win32/PowerShell) dürfen Befehle **NIEMALS** mit `&&` verknüpft werden.
+   - Führe jeden Befehl als separaten Tool-Call aus.
 
 9. **Attach Task Summary with Git Notes:**
    - **Step 9.1: Get Commit Hash:** Obtain the hash of the *just-completed commit* (`git log -1 --format="%H"`).
@@ -59,12 +64,11 @@ All tasks follow a strict lifecycle:
      ```
 
 10. **Get and Record Task Commit SHA:**
-    - **Step 10.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the *just-completed commit's* commit hash.
-    - **Step 10.2: Write Plan:** Write the updated content back to `plan.md`.
+    - **Step 10.1: Update Plan:** Read `plan.md`, find the line for the completed task, and update its status from `[~]` to `[x]`.
+    - **Step 10.2: Write Plan:** Write the updated content back to `plan.md`. (Kein Commit an dieser Stelle).
 
-11. **Commit Plan Update:**
-    - **Action:** Stage the modified `plan.md` file.
-    - **Action:** Commit this change with a descriptive message (e.g., `conductor(plan): Mark task 'Create user model' as complete`).
+11. **Phase Completion:**
+    - Wenn alle Aufgaben einer Phase abgeschlossen sind, fahre mit dem 'Phase Completion Verification and Checkpointing Protocol' fort.
 
 ### Phase Completion Verification and Checkpointing Protocol
 
