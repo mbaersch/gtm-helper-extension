@@ -2,10 +2,15 @@ var currentLang = 'de';
 
 function updateUI(lang) {
   const elementsToTranslate = [
-    { id: 'hdng', key: 'hdng', type: 'innerHTML' },
+    { id: 'hdng', key: 'hdng', type: 'innerText' },
     { id: 'option_hint', key: 'option_hint', type: 'innerHTML' },
     { id: 'igtm_inspect', key: 'igtm_inspect', type: 'innerText' },
     { id: 'igtm_gtm_code', key: 'igtm_gtm_code_placeholder', type: 'placeholder' },
+    { id: 'igtm_init', key: 'igtm_init_placeholder', type: 'placeholder' },
+    { id: 'igtm_code', key: 'igtm_code_placeholder', type: 'placeholder' },
+    { id: 'label_igtm_active', key: 'igtm_active', type: 'innerText' },
+    { id: 'label_igtm_addinit', key: 'igtm_addinit', type: 'innerText' },
+    { id: 'label_igtm_addcode', key: 'igtm_addcode', type: 'innerText' },
     { id: 'igtm_save', key: 'save_btn', type: 'innerText' },
     { id: 'igtm_reset_consent', key: 'reset_consent_btn', type: 'innerText' },
     { id: 'igtm_help', key: 'help_link', type: 'innerText' }
@@ -23,11 +28,11 @@ function updateUI(lang) {
 
   // Update switcher styles
   document.getElementById('lang_de').style.fontWeight = lang === 'de' ? 'bold' : 'normal';
-  document.getElementById('lang_de').style.color = lang === 'de' ? 'orange' : 'inherit';
+  document.getElementById('lang_de').style.color = lang === 'de' ? 'var(--primary-color)' : 'inherit';
   document.getElementById('lang_en').style.fontWeight = lang === 'en' ? 'bold' : 'normal';
-  document.getElementById('lang_en').style.color = lang === 'en' ? 'orange' : 'inherit';
+  document.getElementById('lang_en').style.color = lang === 'en' ? 'var(--primary-color)' : 'inherit';
   
-  // Update "GTM Container identifiziert!" label specifically since it's inside a <b>
+  // Update "GTM Container identifiziert!" label specifically
   const checkupLabel = document.querySelector('#show_checkup b');
   if (checkupLabel) checkupLabel.innerText = getTranslation(lang, 'show_checkup_b');
 }

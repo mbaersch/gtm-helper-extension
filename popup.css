@@ -1,0 +1,153 @@
+:root {
+  --primary-color: #C44E00; /* Orange */
+  --secondary-color: #005141; /* Green */
+  --bg-color: #f4f4f4;
+  --text-color: #222;
+  --header-bg: #fff;
+  --border-color: #ddd;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  min-width: 400px;
+}
+
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  background: var(--header-bg);
+  border-bottom: 2px solid var(--primary-color);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 1.4em;
+  color: var(--secondary-color);
+}
+
+.lang-switcher {
+  font-size: 0.8em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lang-switcher span {
+  padding: 2px 5px;
+}
+
+main {
+  padding: 15px;
+  overflow-y: auto;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--secondary-color);
+}
+
+textarea, input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin: 0;
+}
+
+footer {
+  padding: 10px 15px;
+  background: #eee;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+#igtm_save {
+  background: var(--secondary-color);
+  color: #fff;
+}
+
+#igtm_reset_consent {
+  background: #666;
+  color: #fff;
+}
+
+.hint {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+#show_checkup {
+  background: #fff3cd;
+  border-left: 4px solid orange;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+#show_checkup b {
+  color: var(--primary-color);
+}
+
+a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
