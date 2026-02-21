@@ -3,7 +3,7 @@
 ## Phase 1: Infrastructure & Bilingual Setup
 
 - [x] Task: Create a language mapping structure for German and English strings. (7ef6531)
-- [ ] Task: Implement the language switching logic in `popup.js`.
+- [x] Task: Implement the language switching logic in `popup.js`. (915c0bd)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Bilingual Setup' (Protocol in workflow.md)
 
 ## Phase 2: UI Refactoring (Engineering Aesthetic)
