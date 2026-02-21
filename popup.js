@@ -200,6 +200,19 @@ function setLanguage(lang) {
   updateUI(lang);
 }
 
+function setTheme(theme) {
+  const body = document.body;
+  const themeBtn = document.getElementById('theme_btn');
+  if (theme === 'light') {
+    body.classList.add('light-theme');
+    themeBtn.innerText = '☀️';
+  } else {
+    body.classList.remove('light-theme');
+    themeBtn.innerText = '🌙';
+  }
+  localStorage.setItem('igtm_theme', theme);
+}
+
 function identifyCMP(callback) {
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     const tab = tabs[0];
@@ -482,6 +495,10 @@ function deleteSpecificConsentSettings(cmpName) {
 }
 
 window.onload = function() {
+  // Theme initialisieren
+  const savedTheme = localStorage.getItem('igtm_theme') || 'dark';
+  setTheme(savedTheme);
+
   // Sprache initialisieren
   const savedLang = localStorage.getItem('igtm_lang');
   if (savedLang) {
@@ -588,6 +605,15 @@ window.onload = function() {
     // Schließen bei Klick auf das Overlay außerhalb des Contents
     infoOverlay.addEventListener('click', (e) => {
       if (e.target === infoOverlay) infoOverlay.style.display = 'none';
+    });
+  }
+
+  // Theme Umschalter Listener
+  const themeBtn = document.getElementById('theme_btn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const isLight = document.body.classList.contains('light-theme');
+      setTheme(isLight ? 'dark' : 'light');
     });
   }
 };
