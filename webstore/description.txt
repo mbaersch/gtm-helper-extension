@@ -1,3 +1,44 @@
+GTM & CMP Helper - The ultimate companion for web analysts and developers
+
+GTM & CMP Helper (formerly "Insert GTM" / "GTM Helper") is a powerful Chrome extension that drastically simplifies debugging Google Tag Manager containers and managing Consent Management Platforms (CMPs).
+
+CORE FEATURES:
+
+1. Intelligent CMP Reset (60+ providers)
+Reset consent status with just one click. The extension automatically detects over 60 common CMPs (such as Cookiebot, Usercentrics, OneTrust, Borlabs, CMP19, and many more) and specifically deletes the associated cookies and storage entries. Ideal for testing consent banner logic without manually clearing cookies.
+
+2. GTM Container Injection
+Inject any GTM container code (GTM-XXXXXX) into any website. Test new tracking setups in live environments before they are implemented in the source code.
+- Supports GTM Environments (gtm_auth & gtm_preview).
+- GA4 Debugging: Automatically activates GA4 DebugView by passing preview tokens – without needing the official Tag Assistant.
+- Flexible positioning in <head> or <body>.
+
+3. dataLayer Tools
+Send dataLayer push events or execute custom JavaScript code on the current page. Perfect for quick testing of event handlers.
+
+4. GTM Workspace Checkup Integration
+When working in the GTM interface, the Helper detects this and provides a direct link to the Analytrix GTM Checkup to verify your container for best practices.
+
+DESIGN & USABILITY:
+- "Engineering Aesthetic": Lean, functional design without clutter.
+- Dark Mode by default (with Light Mode option).
+- Fully bilingual (English and German).
+- 100% Vanilla JavaScript – fast and secure.
+
+Developed by analysts for analysts. Save valuable time in your daily tracking setup and CMP debugging.
+
+---
+CHANGELOG Version 3.0:
+- Renamed to "GTM & CMP Helper".
+- Expanded CMP detection to over 60 providers.
+- Optimized CMP reset (specific vs. global).
+- Improved UI with "Engineering Aesthetic" design.
+- GA4 DebugView support via preview tokens.
+
+============================================================
+DEUTSCHE VERSION / GERMAN VERSION
+============================================================
+
 GTM & CMP Helper - Der ultimative Begleiter für Web-Analysten und Entwickler
 
 Der GTM & CMP Helper (ehemals "Insert GTM" / "GTM Helper") ist eine leistungsstarke Chrome-Extension, die das Debugging von Google Tag Manager Containern und das Management von Consent Management Plattformen (CMPs) drastisch vereinfacht.
@@ -26,11 +67,3 @@ DESIGN & USABILITY:
 - 100% Vanilla JavaScript – schnell und sicher.
 
 Entwickelt von Analysten für Analysten. Sparen Sie wertvolle Zeit beim täglichen Tracking-Setup und CMP-Debugging.
-
----
-CHANGELOG Version 3.0:
-- Umbenennung in "GTM & CMP Helper".
-- Erweiterung der CMP-Erkennung auf über 60 Anbieter.
-- Optimierter CMP-Reset (spezifisch vs. global).
-- Verbessertes UI im "Engineering Aesthetic" Design.
-- GA4 DebugView Support via Preview-Token.
