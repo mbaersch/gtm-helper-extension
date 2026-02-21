@@ -13,9 +13,9 @@
 - [x] Task: Implement the sticky header and ensure inline SVGs are used. (204c860)
 - [x] Task: Conductor - User Manual Verification 'Phase 2: UI Refactoring' (Protocol in workflow.md) (e562763)
 
-## Phase 3: Functionality & Refinement
+## Phase 3: Functionality & Refinement [checkpoint: cce0af3]
 
 - [x] Task: Port existing CMP Reset and GTM Injection triggers to the new UI structure.
 - [x] Task: Add the "GTM Workspace Checkup" shortcut feature.
 - [x] Task: Verify that all UI elements display correctly in both DE and EN.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Functionality & Refinement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Functionality & Refinement' (Protocol in workflow.md) (cce0af3)

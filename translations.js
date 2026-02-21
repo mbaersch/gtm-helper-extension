@@ -16,7 +16,9 @@ const translations = {
     help_link: "Hilfe",
     confirm_reset: "Alle Consent-Einstellungen für diese Domain löschen und Seite neu laden?",
     badge_active: "aktiv",
-    badge_check: "check"
+    badge_check: "check",
+    detected_cmp: "CMP erkannt:",
+    none_detected: "Keine CMP erkannt"
   },
   en: {
     hdng: "GTM Helper",
@@ -35,7 +37,9 @@ const translations = {
     help_link: "Help",
     confirm_reset: "Delete all consent settings for this domain and reload page?",
     badge_active: "active",
-    badge_check: "check"
+    badge_check: "check",
+    detected_cmp: "CMP detected:",
+    none_detected: "None detected"
   }
 };
 

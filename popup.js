@@ -1,5 +1,160 @@
 var currentLang = 'de';
 
+const CMP_COOKIES = {
+  "cookiefirst-consent": "CookieFirst",
+  "CookieConsent": "CookieBot",
+  "OptanonConsent": "OneTrust / CookiePro",
+  "OptanonAlertBoxClosed": "OneTrust / CookiePro",
+  "axeptio_cookies": "Axeptio",
+  "axeptio_authorized_vendors": "Axeptio",
+  "axeptio_all_vendors": "Axeptio",
+  "borlabs-cookie": "Borlabs",
+  "borlabsCookie": "Borlabs",
+  "CookieInformationConsent": "Cookie Information",
+  "viewed_cookie_policy": "Cookie Law Info",
+  "cookielawinfo-checkbox-necessary": "Cookie Law Info",
+  "cookielawinfo-checkbox-preferences": "Cookie Law Info",
+  "cookielawinfo-checkbox-analytics": "Cookie Law Info",
+  "cookielawinfo-checkbox-advertisement": "Cookie Law Info",
+  "cookielawinfo-checkbox-performance": "Cookie Law Info",
+  "cookielawinfo-checkbox-non-necessary": "Cookie Law Info",
+  "CookieLawInfoConsent": "Cookie Law Info",
+  "hu-consent": "Cookie Notice & Compliance",
+  "cookie_notice_accepted": "Cookie Notice & Compliance",
+  "complianz_policy_id": "Complianz",
+  "complianz_consent_status": "Complianz",
+  "cmplz_banner-status": "Complianz",
+  "cmplz_consented_services": "Complianz",
+  "cmplz_saved_categories": "Complianz",
+  "cmplz_saved_services": "Complianz",
+  "cmplz_stats": "Complianz",
+  "cmplz_functional": "Complianz",
+  "cmplz_preferences": "Complianz",
+  "cmplz_statistics": "Complianz",
+  "cmplz_marketing": "Complianz",
+  "notice_gdpr_prefs": "TrustArc",
+  "notice_preferences": "TrustArc",
+  "kcm_data": "Kick Consent Manager",
+  "trk_consent": "gms Legacy",
+  "legalweb_cookie_settings": "legalweb",
+  "dp_cookieconsent_status": "DP Cookie Consent",
+  "klaro": "Klaro.js",
+  "euconsent-v2": "IAB / Didomi / Uni Consent",
+  "didomi_token": "Didomi",
+  "__lxG__consent__v2": "Clickio",
+  "cookiehub": "CookieHub",
+  "CookieScriptConsent": "CookieScript",
+  "cookieyes-consent": "CookieYes",
+  "lawwwing-consent-v2": "Lawwwing",
+  "consentDate": "Sourcepoint",
+  "consentUUID": "Sourcepoint",
+  "truendo_cmp": "Truendo",
+  "uniconsent-v2": "Uni Consent",
+  "consent-studio__storage": "Consent Studio",
+  "cookiepal-consent": "CookiePal",
+  "osano_consentmanager": "Osano",
+  "cyt-consent": "Cytrio",
+  "cyt_consent_given": "Cytrio",
+  "Mdt_Consent": "Mandatly",
+  "__hs_cookie_cat_pref": "Hubspot",
+  "amcookie_allowed": "Amasty",
+  "amcookie_policy_restriction": "Amasty",
+  "cookieconsent_mode": "datareporter.eu",
+  "cookieconsent_status": "datareporter.eu",
+  "TC_PRIVACY_CENTER": "Commanders Act",
+  "TC_PRIVACY": "Commanders Act",
+  "cookies-analytics": "Enzuzo",
+  "cookies-functional": "Enzuzo",
+  "cookies-marketing": "Enzuzo",
+  "cookies-preferences": "Enzuzo",
+  "TERMLY_API_CACHE": "Termly",
+  "_swb": "Ketch",
+  "_swb_consent_": "Ketch",
+  "_ketch_consent_v1_": "Ketch",
+  "__gitbook_cookie_granted": "Gitbook",
+  "consent-policy": "Wix",
+  "cookie-preference": "Shopware",
+  "google-analytics-enabled": "Shopware (Native)",
+  "_tracking_consent": "Shopify",
+  "_pandectes_gdpr": "Pandectes",
+  "cookieconsent_status1": "Consentmo",
+  "cookieconsent_preferences_disabled": "Consentmo",
+  "avada_cookie_consent": "Avada",
+  "cookiesNotification": "Consentik",
+  "_consentik_cookie": "Consentik",
+  "goodg_block_popup": "GoodApps",
+  "acris_cookie_acc": "Acris",
+  "acris_cookie_landing_page": "Acris",
+  "acris_cookie_referrer": "Acris",
+  "acris_cookie_first_activated": "Acris",
+  "cookiePreferences": "Acris",
+  "session-1": "Acris",
+  "session-": "Acris",
+  "cookie_accepted": "Magento 1 GDPR",
+  "cookie_closed": "Magento 1 GDPR",
+  "cookiesEnabled": "Magento 1 GDPR",
+  "required_cookies": "Magento 1 GDPR",
+  "popupData": "Magento 1 GDPR",
+  "cc_cookie": "Orestbida / Prive",
+  "mw-cookie-settings": "Mediawiki",
+  "sm-cookie-consent": "SiteMinder",
+  "tarteaucitron": "Tarte au Citron",
+  "CONSENTMGR": "Tealium",
+  "ttcm_consent": "TamTam Consent",
+  "cookieconsentTimestamp": "LANsoft",
+  "cl_consent": "CookieLegit",
+  "cl_essential": "CookieLegit",
+  "cl_marketing": "CookieLegit",
+  "cl_tracking": "CookieLegit",
+  "cc_accepted_cookies": "Cookieconfirm",
+  "cc_consent_id": "Cookieconfirm",
+  "ccm_consent": "CCM19",
+  "dsgvo_cd": "Unknown",
+  "cms_cookies": "Contao",
+  "cms_cookies_saved": "Contao",
+  "GXConsents": "Gambio",
+  "oil_data": "Gambio",
+  "AdvertisementCookies": "Unknown Builder",
+  "AnalyticsCookies": "Unknown Builder",
+  "ShowCookieConsent": "Unknown Builder",
+  "cookie-pref": "InMobi"
+};
+
+const CMP_LOCAL_STORAGE = {
+  "cookiefirst-id": "CookieFirst",
+  "cookiefirst-consent": "CookieFirst",
+  "uc_user_interaction": "UserCentrics",
+  "uc_settings": "UserCentrics",
+  "truste.eu.cookie.notice_gdpr_prefs": "TrustArc",
+  "truste.eu.cookie.notice_preferences": "TrustArc",
+  "ccm_consent": "CCM19",
+  "ppms_webstorage": "Piwik PRO",
+  "euconsent-v2": "IAB / Didomi / Uni Consent",
+  "didomi_token": "Didomi",
+  "__lxG__consent__v2": "Clickio",
+  "sp_consent": "Secure Privacy",
+  "sp_dynamic": "Secure Privacy",
+  "_sp_user_consent_40": "Sourcepoint",
+  "TERMLY_API_CACHE": "Termly",
+  "osano_consentmanager": "Osano",
+  "cyt_consent_given": "Cytrio",
+  "__acceptrics_settings": "Acceptrics",
+  "sddan:cmp": "ABConsent",
+  "sddan:cmp:stc": "ABConsent",
+  "sddan:cmp:stc:ts": "ABConsent",
+  "silktideCookieBanner_InitialChoice": "Silktide",
+  "conversionBearCookieConsent": "Ultimate Cookie Banner",
+  "scalaLGPDBanner": "Scala",
+  "consent": "JTL",
+  "df-cookies-allowed": "Doofinder",
+  "ccb_contao_token": "Contao",
+  "cookieConsentChoice": "Unknown Builder"
+};
+
+const CMP_SESSION_STORAGE = {
+  "ccm_consent": "CCM19"
+};
+
 function updateUI(lang) {
   const elementsToTranslate = [
     { id: 'hdng', key: 'hdng', type: 'innerText' },
@@ -14,6 +169,7 @@ function updateUI(lang) {
     { id: 'label_igtm_addcode', key: 'igtm_addcode', type: 'innerText' },
     { id: 'igtm_save', key: 'save_btn', type: 'innerText' },
     { id: 'igtm_reset_consent', key: 'reset_consent_btn', type: 'innerText' },
+    { id: 'label_detected_cmp', key: 'detected_cmp', type: 'innerText' },
     { id: 'igtm_help', key: 'help_link', type: 'innerText' }
   ];
 
@@ -42,6 +198,63 @@ function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem('igtm_lang', lang);
   updateUI(lang);
+}
+
+function identifyCMP(callback) {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    const tab = tabs[0];
+    if (!tab) return callback(null);
+
+    // 1. Check Cookies
+    chrome.cookies.getAll({ url: tab.url }, function(cookies) {
+      for (let cookie of cookies) {
+        if (CMP_COOKIES[cookie.name]) {
+          return callback(CMP_COOKIES[cookie.name]);
+        }
+        // Sonderfall Piwik PRO (ppms_privacy_...)
+        if (cookie.name.indexOf("ppms_privacy_") === 0) return callback("Piwik PRO");
+        // Sonderfall Real Cookie Banner
+        if (cookie.name.indexOf("real_cookie_banner-v:") === 0) return callback("Real Cookie Banner");
+        // Sonderfall Consentmanager.net
+        if (cookie.name.indexOf("__cmpc") === 0) return callback("Consentmanager.net");
+      }
+
+      // 2. Check LocalStorage
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: function(keys) {
+          let found = null;
+          keys.forEach(key => {
+            if (localStorage.getItem(key)) found = key;
+          });
+          return found;
+        },
+        args: [Object.keys(CMP_LOCAL_STORAGE)]
+      }, function(results) {
+        if (results && results[0] && results[0].result) {
+          return callback(CMP_LOCAL_STORAGE[results[0].result]);
+        }
+
+        // 3. Check SessionStorage
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: function(keys) {
+            let found = null;
+            keys.forEach(key => {
+              if (sessionStorage.getItem(key)) found = key;
+            });
+            return found;
+          },
+          args: [Object.keys(CMP_SESSION_STORAGE)]
+        }, function(results) {
+          if (results && results[0] && results[0].result) {
+            return callback(CMP_SESSION_STORAGE[results[0].result]);
+          }
+          callback(null);
+        });
+      });
+    });
+  });
 }
 
 // Funktion, um den Checkup-Status (und die Checkup-URL) vom Background abzufragen
@@ -133,359 +346,14 @@ function deleteConsentSettings() {
           let tabId = tab.id;
           let currentUrl = tab.url;
           
-          // Liste der Consent-Cookie-Namen (wie ursprünglich)
-          let cookieNames = [
-
-            //Piwik PRO ID, wenn vorhanden (sonst Dummy)
-            ppCookie,
-
-            //CookieFirst
-            "cookiefirst-consent",
-    
-            //CookieBot
-            "CookieConsent",
-    
-            //OneTrust / CookiePro
-            "OptanonConsent",
-            "OptanonAlertBoxClosed",
-    
-            //Axeptio (https://www.axeptio.eu) 
-            "axeptio_cookies",
-            "axeptio_authorized_vendors",
-            "axeptio_all_vendors",
-    
-            //Borlabs
-            "borlabs-cookie",
-            "borlabsCookie",
-    
-            //Cookie Information Consent Manager
-            "CookieInformationConsent",
-    
-            //Cookie Law Info
-            "viewed_cookie_policy",
-            "cookielawinfo-checkbox-necessary",
-            "cookielawinfo-checkbox-preferences",
-            "cookielawinfo-checkbox-analytics",
-            "cookielawinfo-checkbox-advertisement",
-            "cookielawinfo-checkbox-performance",
-            "cookielawinfo-checkbox-non-necessary",
-            "CookieLawInfoConsent",
-    
-            //Cookie Notice & Compliance (WP Plugin)
-            "hu-consent",
-            "cookie_notice_accepted",
-    
-            //Complianz - GDPR/CCPA Cookie Consent (WP Plugin)
-            "complianz_policy_id",
-            "complianz_consent_status",
-            "cmplz_banner-status",
-            "cmplz_consented_services",
-            "cmplz_saved_categories",
-            "cmplz_saved_services",
-            "cmplz_stats",
-            "cmplz_policy_id",
-            "cmplz_functional",
-            "cmplz_preferences",
-            "cmplz_statistics",
-            "cmplz_marketing",
-    
-             //TrustArc Cookies
-            "notice_gdpr_prefs",
-            "notice_preferences",
-    
-            //Kick Consent Manager (Joomla)
-            "kcm_data",
-    
-            //let`s give it a shot... 
-            "consent",
-            "privacy_signal",
-            "cookieConsent",
-            "cookieconsent",
-            "cookieSettings",
-            "cookiesettings",
-            "analytics",
-            "marketing",
-            "statistics",
-            
-            //gms Legacy Consent Cookie
-            "trk_consent",
-
-            //legalweb
-            "legalweb_cookie_settings",
-
-            //DP Cookie Consent (Typo3 Extension)
-            "dp_cookieconsent_status",
-
-            //Klaro.js
-            "klaro",
-
-            //Didomi 
-            "euconsent-v2",
-            "didomi_token",
-
-            //Clickio
-            "__lxG__consent__v2",
-
-            //CookieHub
-            "cookiehub",
-
-            //CookieScript
-            "CookieScriptConsent",
-
-            //CookieYes
-            "cookieyes-consent",
-
-            //Lawwwing
-            "lawwwing-consent-v2",
-
-            //Sourcepoint
-            "consentDate",
-            "consentUUID",
-
-            //Truendo
-            "truendo_cmp",
-
-            //Uni Consent
-            "uniconsent-v2",
-
-            //Consent Studio
-            "consent-studio__storage",
-
-            //CookiePal
-            "cookiepal-consent",
-
-            //Osano
-            "osano_consentmanager",
-
-            //Cytrio
-            "cyt-consent",
-            "cyt_consent_given",
-
-            //Mandatly
-            "Mdt_Consent",
-            
-            //Hubspot Consent
-            "__hs_cookie_cat_pref",
-
-            //Amasty Cookie Consent (Magento)
-            "amcookie_allowed",
-            "amcookie_policy_restriction",
-
-            //datareporter.eu
-            "cookieconsent_mode",
-            "cookieconsent_status",
-
-            //Commanders Act
-            "TC_PRIVACY_CENTER",
-            "TC_PRIVACY",
-
-            //Enzuzo
-            "cookies-analytics",
-            "cookies-functional",
-            "cookies-marketing",
-            "cookies-preferences",
-
-            //Termly
-            "TERMLY_API_CACHE",
-
-            //Ketch
-            "_swb",
-            "_swb_consent_",
-            "_ketch_consent_v1_",
-
-            //Gitbook
-            "__gitbook_cookie_granted",
-
-            //Wix
-            "consent-policy",
-
-            //Shopware
-            "cookie-preference",
-            //Shopware (native Integration)
-            "google-analytics-enabled",
-
-            //Shopify
-            "_tracking_consent",
-
-            //Pandectes GDPR/DSGVO Cookie (Shopify)
-            "_pandectes_gdpr",
-
-            //Consentmo (Shopify)
-            "cookieconsent_status1",
-            "cookieconsent_preferences_disabled",
-
-            //Avada (Shopify)
-            "avada_cookie_consent",
-
-            //Consentik (Shopify)
-            "cookiesNotification",
-            "_consentik_cookie",
-
-            //GoodApps (Shopify) 
-            "goodg_block_popup",
-
-            //Acris
-            "acris_cookie_acc",
-            "acris_cookie_landing_page",
-            "acris_cookie_referrer",
-            "acris_cookie_first_activated",
-            "cookiePreferences",
-            "session-1",
-            "session-",
-            
-            //Magento 1 GDPR Compliance
-            "cookie_accepted", 
-            "cookie_closed", 
-            "cookiesEnabled", 
-            "required_cookies", 
-            "popupData",
-
-            //Orestbida Cookie Consent / Prive
-            "cc_cookie",
-
-            //Mediawiki
-            "mw-cookie-settings",
-
-            //SiteMinder
-            "sm-cookie-consent",
-
-            //Tarte au Citron
-            "tarteaucitron",
-
-            //Tealium
-            "CONSENTMGR",
-
-            //TamTam Consent
-            "ttcm_consent",
-
-            //LANsoft (ts only)
-            "cookieconsentTimestamp",
-
-            //CookieLegit
-            "cl_consent",
-            "cl_essential",
-            "cl_marketing",
-            "cl_tracking",
-
-            //Cookieconfirm
-            "cc_accepted_cookies",
-            "cc_consent_id",
-
-            //New 2.9:
-            //CCM19 - optional cookie storage
-            "ccm_consent",
-
-            //Unknown
-            "dsgvo_cd",
-
-            //contao plugins,
-            "cms_cookies",
-            "cms_cookies_saved",
-
-            //New 3.0
-            //Gambio
-            "GXConsents",
-            "oil_data",
-
-            //Unknown Website Builder
-            "AdvertisementCookies",
-            "AnalyticsCookies",
-            "ShowCookieConsent",
-
-            //InMobi CMP
-            "cookie-pref",
-
-          ];
-
-          // Liste der localStorage-Schlüssel, die gelöscht werden sollen
-          let localStorageKeys = [
-            //CookieFirst
-            "cookiefirst-id",
-            "cookiefirst-consent",
-
-            //UserCentrics
-            "uc_user_interaction",
-            "uc_settings",
-
-            //TrustArc localStorage
-            "truste.eu.cookie.notice_gdpr_prefs",
-            "truste.eu.cookie.notice_preferences",
-
-            //CCM19 (standard: localStorage)
-            "ccm_consent",
-
-            //Piwik PRO
-            "ppms_webstorage",
-
-            //Didomi
-            "euconsent-v2",
-            "didomi_token",
-
-            //Clickio
-            "__lxG__consent__v2",
-
-            //Secure Privacy
-            "sp_consent",
-            "sp_dynamic",
-
-            //Sourcepoint
-            "_sp_user_consent_40",
-
-            //Termly
-            "TERMLY_API_CACHE",
-
-            //Osano
-            "osano_consentmanager",
-            
-            //Cytrio
-            "cyt_consent_given",
-
-            //Acceptrics
-            "__acceptrics_settings",
-
-            //ABConsent
-            "sddan:cmp",
-            "sddan:cmp:stc",
-            "sddan:cmp:stc:ts",
-
-            //Silktide
-            "silktideCookieBanner_InitialChoice",
-
-            //Ultimate Cookie Banner (Shopify)
-            "conversionBearCookieConsent",
-
-            //Scala (Shopify)
-            "scalaLGPDBanner",
-
-            //JTL 
-            "consent",
-
-            //Doofinder
-            "df-cookies-allowed",
-
-            //Contao plugins
-            "ccb_contao_token", 
-            "ccb_contao_token_1", 
-            "ccb_contao_token_2", 
-            "ccb_contao_token_3", 
-            "ccb_contao_token_4", 
-            "ccb_contao_token_5", 
-            "ccb_contao_token_6", 
-            "ccb_contao_token_7", 
-            "ccb_contao_token_8", 
-            "ccb_contao_token_9", 
-            "ccb_contao_token_10", 
-
-            //Unknown Website Builder
-            "cookieConsentChoice",
-
-          ];
-
-          // Liste der localStorage-Schlüssel, die gelöscht werden sollen
-          let sessionStorageKeys = [
-            //CCM19 - optional sessionStorage key
-            "ccm_consent",
-          ];
+          // Liste der Consent-Cookie-Namen aus Mappings generieren
+          let cookieNames = [ppCookie, ...Object.keys(CMP_COOKIES)];
+          
+          // Liste der localStorage-Schlüssel aus Mappings generieren
+          let localStorageKeys = Object.keys(CMP_LOCAL_STORAGE);
+
+          // Liste der sessionStorage-Schlüssel aus Mappings generieren
+          let sessionStorageKeys = Object.keys(CMP_SESSION_STORAGE);
 
           //Dynamische Namen von Cookies suchen und anhängen...
           chrome.cookies.getAll({url: tabs[0].url}, function(results) {
@@ -581,6 +449,38 @@ function deleteConsentSettings() {
   }
 }
 
+function deleteSpecificConsentSettings(cmpName) {
+  if (confirm(getTranslation(currentLang, "confirm_reset") + " (" + cmpName + ")")) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      const tab = tabs[0];
+      const currentUrl = tab.url;
+
+      // Filter keys for this specific CMP
+      const cookieNames = Object.keys(CMP_COOKIES).filter(key => CMP_COOKIES[key] === cmpName);
+      const localStorageKeys = Object.keys(CMP_LOCAL_STORAGE).filter(key => CMP_LOCAL_STORAGE[key] === cmpName);
+      const sessionStorageKeys = Object.keys(CMP_SESSION_STORAGE).filter(key => CMP_SESSION_STORAGE[key] === cmpName);
+
+      // Cookies entfernen
+      cookieNames.forEach(name => {
+        chrome.cookies.remove({ url: currentUrl, name: name });
+      });
+
+      // LS/SS entfernen
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: function(lsKeys, ssKeys) {
+          lsKeys.forEach(key => localStorage.removeItem(key));
+          ssKeys.forEach(key => sessionStorage.removeItem(key));
+        },
+        args: [localStorageKeys, sessionStorageKeys]
+      }, function() {
+        chrome.tabs.reload(tab.id);
+        window.close();
+      });
+    });
+  }
+}
+
 window.onload = function() {
   // Sprache initialisieren
   const savedLang = localStorage.getItem('igtm_lang');
@@ -597,7 +497,7 @@ window.onload = function() {
 
   // Einstellungen laden und Felder füllen
   getSettingsFromPage(function(settings) {
-    //document.getElementById('igtm_gtm_id').value = settings.igtmGtmId || '';
+    // ... (vorheriger Code bleibt unverändert) ...
     document.getElementById('igtm_gtm_code').value = settings.igtmGtmCode || '';
     document.getElementById('igtm_active').checked = settings.igtm_Status || false;
     document.getElementById('igtm_addcode').checked = settings.igtmAddCode || false;
@@ -608,6 +508,22 @@ window.onload = function() {
     getCheckupUrl(function(checkupUrl) {
       updateBadge(combinedStatus, checkupUrl);
     });
+  });
+
+  // CMP Erkennung
+  identifyCMP(function(cmpName) {
+    const cmpBox = document.getElementById('show_detected_cmp');
+    const cmpNameEl = document.getElementById('detected_cmp_name');
+    if (cmpName) {
+      cmpNameEl.innerText = cmpName;
+      cmpBox.style.display = 'block';
+      document.getElementById('igtm_reset_specific').addEventListener('click', (e) => {
+        e.preventDefault();
+        deleteSpecificConsentSettings(cmpName);
+      });
+    } else {
+      cmpBox.style.display = 'none';
+    }
   });
 
   //Background-Script für Checkup-URL

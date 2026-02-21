@@ -27,7 +27,7 @@
     </header>
 
     <main>
-      <!-- Info Overlay (wird über JS gesteuert) -->
+      <!-- Info Overlay -->
       <div id="info_overlay" class="info-overlay" style="display:none;">
         <div class="info-content">
           <div id="option_hint"></div>
@@ -35,10 +35,16 @@
         </div>
       </div>
 
-      <div id="show_checkup" style="display:none;">
-        <b style="font-size:1.1em;">GTM Container identifiziert!</b>
+      <div id="show_checkup" class="info-box" style="display:none;">
+        <b style="display:inline;">GTM Container identifiziert!</b>
         <span id="checkup_desc">Untersuche diesen Container mit Analytrix:</span> 
         <a href="#" id="igtm_inspect">GTM Container Checkup</a>
+      </div>
+
+      <div id="show_detected_cmp" class="info-box cmp-box" style="display:none;">
+        <b id="label_detected_cmp" style="display:inline;">Erkannte CMP:</b>
+        <span id="detected_cmp_name">Name</span> – 
+        <a href="#" id="igtm_reset_specific">CMP Reset</a>
       </div>
 
       <section>

@@ -71,7 +71,7 @@ header h2 {
 
 main {
   flex: 1 1 auto;
-  padding: 20px;
+  padding: 20px 10px 0;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--secondary-color) transparent;
@@ -134,13 +134,40 @@ footer {
   box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
 }
 
+.info-box {
+  background: #FFF9E6;
+  border: 1px solid #FFE699;
+  border-left: 4px solid orange;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.cmp-box {
+  background: #f0f7f6;
+  border: 1px solid #d4e8e6;
+  border-left-color: var(--secondary-color);
+}
+
+.info-box b {
+  color: var(--primary-color);
+  display: inline;
+  margin-right: 5px;
+}
+
+.cmp-box b {
+  color: var(--secondary-color);
+}
+
 .footer-actions {
   display: flex;
   gap: 12px;
 }
 
 button {
-  padding: 10px 22px;
+  padding: 10px 25px;
   border: none;
   border-radius: 4px;
   cursor: pointer;

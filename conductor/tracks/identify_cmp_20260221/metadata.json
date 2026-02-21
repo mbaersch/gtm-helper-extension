@@ -1,0 +1,8 @@
+{
+  "track_id": "identify_cmp_20260221",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-21T13:00:00Z",
+  "updated_at": "2026-02-21T13:00:00Z",
+  "description": "Restructure cookie/storage lists to identify and display the active CMP on the current page."
+}
