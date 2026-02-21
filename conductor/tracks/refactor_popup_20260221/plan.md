@@ -6,16 +6,16 @@
 - [x] Task: Implement the language switching logic in `popup.js`. (915c0bd)
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Bilingual Setup' (Protocol in workflow.md) (8fb482a)
 
-## Phase 2: UI Refactoring (Engineering Aesthetic)
+## Phase 2: UI Refactoring (Engineering Aesthetic) [checkpoint: e562763]
 
 - [x] Task: Refactor `popup.html` structure using CSS Grid. (6954d09)
-- [~] Task: Update styles in `popup.css` (or within `popup.html` if currently inline) to match the Orange/Green theme.
-- [ ] Task: Implement the sticky header and ensure inline SVGs are used.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Refactoring' (Protocol in workflow.md)
+- [x] Task: Update styles in `popup.css` (or within `popup.html` if currently inline) to match the Orange/Green theme. (204c860)
+- [x] Task: Implement the sticky header and ensure inline SVGs are used. (204c860)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: UI Refactoring' (Protocol in workflow.md) (e562763)
 
 ## Phase 3: Functionality & Refinement
 
 - [x] Task: Port existing CMP Reset and GTM Injection triggers to the new UI structure.
 - [x] Task: Add the "GTM Workspace Checkup" shortcut feature.
-- [ ] Task: Verify that all UI elements display correctly in both DE and EN.
+- [x] Task: Verify that all UI elements display correctly in both DE and EN.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Functionality & Refinement' (Protocol in workflow.md)

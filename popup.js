@@ -652,8 +652,26 @@ window.onload = function() {
     deleteConsentSettings();
   });
   
-  var lnk = document.getElementById('igtm_help');
-  lnk.addEventListener("click", function() {
-    chrome.tabs.create({ active: true, url: lnk.href });
+  var helpLnk = document.getElementById('igtm_help');
+  helpLnk.addEventListener("click", function() {
+    chrome.tabs.create({ active: true, url: helpLnk.href });
   });
+
+  // Info Overlay Steuerung
+  const infoBtn = document.getElementById('info_btn');
+  const infoOverlay = document.getElementById('info_overlay');
+  const infoCloseBtn = document.getElementById('info_close_btn');
+
+  if (infoBtn && infoOverlay && infoCloseBtn) {
+    infoBtn.addEventListener('click', () => {
+      infoOverlay.style.display = 'flex';
+    });
+    infoCloseBtn.addEventListener('click', () => {
+      infoOverlay.style.display = 'none';
+    });
+    // Schließen bei Klick auf das Overlay außerhalb des Contents
+    infoOverlay.addEventListener('click', (e) => {
+      if (e.target === infoOverlay) infoOverlay.style.display = 'none';
+    });
+  }
 };

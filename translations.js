@@ -29,7 +29,7 @@ const translations = {
     igtm_init_placeholder: 'Ex: {"Internal": true, "mode": "Test"}',
     igtm_addcode: "Inject extra script code",
     igtm_code_placeholder: "Ex: console.log('GTM injection active');",
-    save_btn: "💾 Save & reload",
+    save_btn: "💾 Save & Reload",
     reset_consent_btn: "🗑️ Clear Consent",
     checkup_desc: "Inspect this container with Analytrix:",
     help_link: "Help",

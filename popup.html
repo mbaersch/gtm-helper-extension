@@ -7,12 +7,19 @@
 <body>
   <div class="container">
     <header>
-      <div style="display:flex; align-items:center; gap:10px;">
-        <svg height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary-color);">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <svg height="28" width="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary-color);">
           <polyline points="16 18 22 12 16 6"></polyline>
           <polyline points="8 6 2 12 8 18"></polyline>
         </svg>
         <h2 id="hdng">GTM Helper</h2>
+        <div class="info-icon" id="info_btn" title="Information">
+          <svg height="18" width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </div>
       </div>
       <div id="lang_switcher" class="lang-switcher">
         <span id="lang_de">DE</span> | <span id="lang_en">EN</span>
@@ -20,12 +27,16 @@
     </header>
 
     <main>
-      <div id="option_hint" class="hint">
-        <!-- Will be filled by translations -->
+      <!-- Info Overlay (wird über JS gesteuert) -->
+      <div id="info_overlay" class="info-overlay" style="display:none;">
+        <div class="info-content">
+          <div id="option_hint"></div>
+          <button id="info_close_btn">OK</button>
+        </div>
       </div>
 
       <div id="show_checkup" style="display:none;">
-        <b style="font-size:1.1em;">GTM Container identifiziert!</b><br>
+        <b style="font-size:1.1em;">GTM Container identifiziert!</b>
         <span id="checkup_desc">Untersuche diesen Container mit Analytrix:</span> 
         <a href="#" id="igtm_inspect">GTM Container Checkup</a>
       </div>
@@ -56,11 +67,11 @@
     </main>
 
     <footer>
-      <div style="display:flex; gap:10px;">
+      <div class="footer-actions">
         <button id="igtm_save">💾 Speichern &amp; neu laden</button>
         <button id="igtm_reset_consent">🗑️ Consent löschen</button>
       </div>
-      <div style="font-size:0.9em;">
+      <div class="help-link-container">
         <span class="utfs">&#9432;</span>
         <a id="igtm_help" href="https://www.analytrix.de/gtm-helper-chrome-extension.html">Hilfe</a>
       </div>
