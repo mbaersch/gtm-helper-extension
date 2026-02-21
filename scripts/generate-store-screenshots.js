@@ -5,7 +5,7 @@ const fs = require('fs');
 async function generateStoreScreenshots() {
   const extensionPath = path.resolve(__dirname, '..');
   const userDataDir = path.resolve(__dirname, '..', 'tmp-user-data-store');
-  const imagesDir = path.resolve(__dirname, '..', 'images');
+  const webstoreDir = path.resolve(__dirname, '..', 'webstore');
 
   if (!fs.existsSync(userDataDir)) fs.mkdirSync(userDataDir);
 
@@ -85,7 +85,7 @@ async function generateStoreScreenshots() {
     // Use the specific file names to replace the old ones (converting to PNG/JPG as needed)
     // We'll use 2026 for the new ones
     const filename = `insertgtm-2026-${s.name.split('-')[0]}.png`;
-    await page.screenshot({ path: path.join(imagesDir, filename) });
+    await page.screenshot({ path: path.join(webstoreDir, filename) });
   }
 
   // Generate NEW ICON 128x128
@@ -110,8 +110,8 @@ async function generateStoreScreenshots() {
       <div style="font-size: 14px; letter-spacing: 2px; color: #aaa; margin-top: 2px;">HELPER</div>
     </div>
   `);
-  await page.screenshot({ path: path.join(imagesDir, 'injectGTM_big_v3.png'), omitBackground: true });
-  await page.screenshot({ path: path.join(imagesDir, 'injectGTM_128.png'), omitBackground: true });
+  await page.screenshot({ path: path.join(webstoreDir, 'injectGTM_big_v3.png'), omitBackground: true });
+  await page.screenshot({ path: path.join(webstoreDir, 'injectGTM_128_webstore.png'), omitBackground: true });
 
   console.log('✅ Webstore assets generated in /images');
   await browserContext.close();
