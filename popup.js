@@ -1,3 +1,43 @@
+var currentLang = 'de';
+
+function updateUI(lang) {
+  const elementsToTranslate = [
+    { id: 'hdng', key: 'hdng', type: 'innerHTML' },
+    { id: 'option_hint', key: 'option_hint', type: 'innerHTML' },
+    { id: 'igtm_inspect', key: 'igtm_inspect', type: 'innerText' },
+    { id: 'igtm_gtm_code', key: 'igtm_gtm_code_placeholder', type: 'placeholder' },
+    { id: 'igtm_save', key: 'save_btn', type: 'innerText' },
+    { id: 'igtm_reset_consent', key: 'reset_consent_btn', type: 'innerText' },
+    { id: 'igtm_help', key: 'help_link', type: 'innerText' }
+  ];
+
+  elementsToTranslate.forEach(item => {
+    const el = document.getElementById(item.id);
+    if (el) {
+      const translation = getTranslation(lang, item.key);
+      if (item.type === 'innerHTML') el.innerHTML = translation;
+      else if (item.type === 'placeholder') el.placeholder = translation;
+      else el.innerText = translation;
+    }
+  });
+
+  // Update switcher styles
+  document.getElementById('lang_de').style.fontWeight = lang === 'de' ? 'bold' : 'normal';
+  document.getElementById('lang_de').style.color = lang === 'de' ? 'orange' : 'inherit';
+  document.getElementById('lang_en').style.fontWeight = lang === 'en' ? 'bold' : 'normal';
+  document.getElementById('lang_en').style.color = lang === 'en' ? 'orange' : 'inherit';
+  
+  // Update "GTM Container identifiziert!" label specifically since it's inside a <b>
+  const checkupLabel = document.querySelector('#show_checkup b');
+  if (checkupLabel) checkupLabel.innerText = getTranslation(lang, 'show_checkup_b');
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('igtm_lang', lang);
+  updateUI(lang);
+}
+
 // Funktion, um den Checkup-Status (und die Checkup-URL) vom Background abzufragen
 function checkURL(callback) {
   chrome.runtime.sendMessage({ action: "checkURL" }, function(response) {
@@ -40,10 +80,10 @@ function saveSettingsToPage(settings, callback) {
 // sonst "aktiv" (grün) wenn mindestens eine Checkbox aktiviert ist, sonst leer.
 function updateBadge(status, checkupUrl) {
   if (checkupUrl && checkupUrl !== "") {
-    chrome.action.setBadgeText({ text: "check" });
+    chrome.action.setBadgeText({ text: getTranslation(currentLang, "badge_check") });
     chrome.action.setBadgeBackgroundColor({ color: "orange" });
   } else if (status) {
-    chrome.action.setBadgeText({ text: "aktiv" });
+    chrome.action.setBadgeText({ text: getTranslation(currentLang, "badge_active") });
     chrome.action.setBadgeBackgroundColor({ color: "#439e49" });
   } else {
     chrome.action.setBadgeText({ text: "" });
@@ -65,7 +105,7 @@ function getCheckupUrl(callback) {
 
 
 function deleteConsentSettings() {
-  if (confirm("Alle Consent-Einstellungen für diese Domain löschen und Seite neu laden?")) {
+  if (confirm(getTranslation(currentLang, "confirm_reset"))) {
     
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       chrome.scripting.executeScript({
@@ -336,6 +376,19 @@ function deleteConsentSettings() {
             "cms_cookies",
             "cms_cookies_saved",
 
+            //New 3.0
+            //Gambio
+            "GXConsents",
+            "oil_data",
+
+            //Unknown Website Builder
+            "AdvertisementCookies",
+            "AnalyticsCookies",
+            "ShowCookieConsent",
+
+            //InMobi CMP
+            "cookie-pref",
+
           ];
 
           // Liste der localStorage-Schlüssel, die gelöscht werden sollen
@@ -405,7 +458,20 @@ function deleteConsentSettings() {
             "df-cookies-allowed",
 
             //Contao plugins
+            "ccb_contao_token", 
+            "ccb_contao_token_1", 
             "ccb_contao_token_2", 
+            "ccb_contao_token_3", 
+            "ccb_contao_token_4", 
+            "ccb_contao_token_5", 
+            "ccb_contao_token_6", 
+            "ccb_contao_token_7", 
+            "ccb_contao_token_8", 
+            "ccb_contao_token_9", 
+            "ccb_contao_token_10", 
+
+            //Unknown Website Builder
+            "cookieConsentChoice",
 
           ];
 
@@ -510,6 +576,19 @@ function deleteConsentSettings() {
 }
 
 window.onload = function() {
+  // Sprache initialisieren
+  const savedLang = localStorage.getItem('igtm_lang');
+  if (savedLang) {
+    setLanguage(savedLang);
+  } else {
+    const browserLang = chrome.i18n.getUILanguage().split('-')[0];
+    setLanguage(browserLang === 'en' ? 'en' : 'de');
+  }
+
+  // Sprachumschalter Listener
+  document.getElementById('lang_de').addEventListener('click', () => setLanguage('de'));
+  document.getElementById('lang_en').addEventListener('click', () => setLanguage('en'));
+
   // Einstellungen laden und Felder füllen
   getSettingsFromPage(function(settings) {
     //document.getElementById('igtm_gtm_id').value = settings.igtmGtmId || '';
