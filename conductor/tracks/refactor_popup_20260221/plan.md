@@ -1,10 +1,10 @@
 # Plan: Refactor Popup for Engineering Aesthetic and Bilingual Support
 
-## Phase 1: Infrastructure & Bilingual Setup
+## Phase 1: Infrastructure & Bilingual Setup [checkpoint: 8fb482a]
 
 - [x] Task: Create a language mapping structure for German and English strings. (7ef6531)
 - [x] Task: Implement the language switching logic in `popup.js`. (915c0bd)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Bilingual Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Bilingual Setup' (Protocol in workflow.md) (8fb482a)
 
 ## Phase 2: UI Refactoring (Engineering Aesthetic)
 
