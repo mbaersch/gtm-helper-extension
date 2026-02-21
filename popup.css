@@ -234,6 +234,71 @@ a:hover {
   color: var(--primary-color);
 }
 
+/* Advanced GTM Settings */
+.advanced-gtm {
+  margin-top: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: rgba(0,0,0,0.1);
+}
+
+.advanced-gtm summary {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.85em;
+  color: var(--text-dim);
+  font-weight: 600;
+  user-select: none;
+  outline: none;
+}
+
+.advanced-gtm summary:hover {
+  color: var(--secondary-color);
+}
+
+.advanced-content {
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.field-hint {
+  font-size: 0.8em;
+  color: var(--text-dim);
+  margin: 0 0 12px 0;
+  font-style: italic;
+}
+
+.advanced-content label {
+  font-size: 0.85em;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.advanced-content input[type="text"] {
+  padding: 6px 10px;
+  font-size: 0.85em;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  cursor: pointer;
+  margin: 0;
+}
+
+.radio-group input[type="radio"] {
+  margin: 0;
+  accent-color: var(--secondary-color);
+}
+
 /* Info Boxes */
 .info-box {
   background: #2a2100; 

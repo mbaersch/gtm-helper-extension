@@ -56,6 +56,26 @@
           <label for="igtm_active" id="label_igtm_active">GTM-Container einfügen</label>
         </div>
         <textarea id="igtm_gtm_code"></textarea>
+        
+        <!-- Advanced GTM Settings -->
+        <details class="advanced-gtm">
+          <summary id="label_advanced_settings">Erweiterte Einstellungen</summary>
+          <div class="advanced-content">
+            <p class="field-hint" id="label_advanced_hint">Nutze diese Parameter für GTM Umgebungen oder GA4 DebugView.</p>
+            
+            <label for="igtm_gtm_auth" id="label_gtm_auth">GTM Auth:</label>
+            <input type="text" id="igtm_gtm_auth" placeholder="e.g. abcd123456789">
+            
+            <label for="igtm_gtm_preview" id="label_gtm_preview">GTM Preview:</label>
+            <input type="text" id="igtm_gtm_preview" placeholder="e.g. env-1">
+            
+            <label id="label_gtm_position">Injektions-Position:</label>
+            <div class="radio-group">
+              <label><input type="radio" name="igtm_pos" value="head" checked> <span id="label_pos_head">Head</span></label>
+              <label><input type="radio" name="igtm_pos" value="body"> <span id="label_pos_body">Body</span></label>
+            </div>
+          </div>
+        </details>
       </section>
 
       <section>

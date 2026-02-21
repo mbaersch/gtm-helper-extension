@@ -18,7 +18,14 @@ const translations = {
     badge_active: "aktiv",
     badge_check: "check",
     detected_cmp: "CMP erkannt:",
-    none_detected: "Keine CMP erkannt"
+    none_detected: "Keine CMP erkannt",
+    advanced_settings: "Erweiterte Einstellungen",
+    gtm_auth_label: "GTM Auth (Environment Token):",
+    gtm_preview_label: "GTM Preview (ID):",
+    gtm_position_label: "Injektions-Position:",
+    pos_head: "Head (Standard)",
+    pos_body: "Body",
+    advanced_hint: "Nutze diese Parameter für GTM Umgebungen oder GA4 DebugView ohne Tag Assistant."
   },
   en: {
     hdng: "GTM Helper",
@@ -39,7 +46,14 @@ const translations = {
     badge_active: "active",
     badge_check: "check",
     detected_cmp: "CMP detected:",
-    none_detected: "None detected"
+    none_detected: "None detected",
+    advanced_settings: "Advanced Settings",
+    gtm_auth_label: "GTM Auth (Environment Token):",
+    gtm_preview_label: "GTM Preview (ID):",
+    gtm_position_label: "Injection Position:",
+    pos_head: "Head (Default)",
+    pos_body: "Body",
+    advanced_hint: "Use these parameters for GTM environments or GA4 DebugView without Tag Assistant."
   }
 };
 

@@ -9,16 +9,31 @@
     }
   }
   
-  function injectGtmCode(gtmId) {
-    return;
-  }
-
-  function injectPastedGtmCode(gtmCode) {
+  function injectPastedGtmCode(gtmCode, settings) {
     var code = gtmCode.replace("<script>", "").replace("</script>", "");
+    
+    // Advanced Parameters (gtm_auth, gtm_preview) integrieren, falls vorhanden
+    if (settings.igtmGtmAuth || settings.igtmGtmPreview) {
+      var authParam = settings.igtmGtmAuth ? "&gtm_auth=" + settings.igtmGtmAuth : "";
+      var previewParam = settings.igtmGtmPreview ? "&gtm_preview=" + settings.igtmGtmPreview : "";
+      var cookiesWinParam = (settings.igtmGtmAuth || settings.igtmGtmPreview) ? "&gtm_cookies_win=x" : "";
+      
+      // Suche nach der GTM URL im Code und hänge die Parameter an
+      var urlRegex = /(googletagmanager\.com\/gtm\.js\?id=[A-Z0-9-]+)/g;
+      code = code.replace(urlRegex, function(match) {
+        return match + authParam + previewParam + cookiesWinParam;
+      });
+    }
+
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.textContent = code;
-    document.head.appendChild(script);
+    
+    // Injektions-Position (Head vs Body)
+    var target = (settings.igtmPos === "body") ? document.body : document.head;
+    if (target) {
+      target.appendChild(script);
+    }
   }
 
   function hideContainerQuality() {
@@ -61,11 +76,8 @@
           console.error("Error parsing object for dataLayer. Please provide a valid JSON string: ", e);
         }
       }
-      //if (settings.igtmGtmId && settings.igtm_Status) {
-      //  injectGtmCode(settings.igtmGtmId);
-      //}
       if (settings.igtmGtmCode && settings.igtm_Status) {
-        injectPastedGtmCode(settings.igtmGtmCode);
+        injectPastedGtmCode(settings.igtmGtmCode, settings);
       }
     }
      

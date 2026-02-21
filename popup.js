@@ -167,6 +167,13 @@ function updateUI(lang) {
     { id: 'label_igtm_active', key: 'igtm_active', type: 'innerText' },
     { id: 'label_igtm_addinit', key: 'igtm_addinit', type: 'innerText' },
     { id: 'label_igtm_addcode', key: 'igtm_addcode', type: 'innerText' },
+    { id: 'label_advanced_settings', key: 'advanced_settings', type: 'innerText' },
+    { id: 'label_advanced_hint', key: 'advanced_hint', type: 'innerText' },
+    { id: 'label_gtm_auth', key: 'gtm_auth_label', type: 'innerText' },
+    { id: 'label_gtm_preview', key: 'gtm_preview_label', type: 'innerText' },
+    { id: 'label_gtm_position', key: 'gtm_position_label', type: 'innerText' },
+    { id: 'label_pos_head', key: 'pos_head', type: 'innerText' },
+    { id: 'label_pos_body', key: 'pos_body', type: 'innerText' },
     { id: 'igtm_save', key: 'save_btn', type: 'innerText' },
     { id: 'igtm_reset_consent', key: 'reset_consent_btn', type: 'innerText' },
     { id: 'label_detected_cmp', key: 'detected_cmp', type: 'innerText' },
@@ -521,6 +528,15 @@ window.onload = function() {
     document.getElementById('igtm_code').value = settings.igtmCode || '';
     document.getElementById('igtm_addinit').checked = settings.igtmAddInit || false;
     document.getElementById('igtm_init').value = settings.igtmInit || '';
+    document.getElementById('igtm_gtm_auth').value = settings.igtmGtmAuth || '';
+    document.getElementById('igtm_gtm_preview').value = settings.igtmGtmPreview || '';
+    
+    if (settings.igtmPos === 'body') {
+      document.querySelector('input[name="igtm_pos"][value="body"]').checked = true;
+    } else {
+      document.querySelector('input[name="igtm_pos"][value="head"]').checked = true;
+    }
+
     let combinedStatus = settings.igtm_Status || settings.igtmAddInit || settings.igtmAddCode;
     getCheckupUrl(function(checkupUrl) {
       updateBadge(combinedStatus, checkupUrl);
@@ -566,7 +582,10 @@ window.onload = function() {
       igtmAddCode: document.getElementById('igtm_addcode').checked,
       igtmCode: document.getElementById('igtm_code').value.trim(),
       igtmAddInit: document.getElementById('igtm_addinit').checked,
-      igtmInit: document.getElementById('igtm_init').value.trim()
+      igtmInit: document.getElementById('igtm_init').value.trim(),
+      igtmGtmAuth: document.getElementById('igtm_gtm_auth').value.trim(),
+      igtmGtmPreview: document.getElementById('igtm_gtm_preview').value.trim(),
+      igtmPos: document.querySelector('input[name="igtm_pos"]:checked').value
     };
     saveSettingsToPage(settings, function() {
       let combinedStatus = settings.igtm_Status || settings.igtmAddInit || settings.igtmAddCode;
