@@ -1,6 +1,6 @@
 {
-  "name": "GTM Helper",
-  "version": "2.9",
+  "name": "GTM & CMP Helper",
+  "version": "3.0",
   "description": "Reset consent state for 60+ CMPs and / or inject GTM container, push dataLayer events, or execute JS on selected pages.",
   "permissions": [
     "activeTab",
@@ -18,15 +18,15 @@
     "default_icon": {
       "16": "images/injectGTM.png",
       "32": "images/injectGTM.png",
-      "48": "images/injectGTM_big.png",
-      "128": "images/injectGTM_big.png"
+      "48": "images/injectGTM_128.png",
+      "128": "images/injectGTM_128.png"
     }
   },
   "icons": {
     "16": "images/injectGTM.png",
     "32": "images/injectGTM.png",
-    "48": "images/injectGTM_big.png",
-    "128": "images/injectGTM_big.png"
+    "48": "images/injectGTM_128.png",
+    "128": "images/injectGTM_128.png"
   },
   "content_scripts": [
     {

@@ -1,7 +1,7 @@
 const translations = {
   de: {
-    hdng: "GTM Helper",
-    option_hint: "Mit dem GTM Helper kannst du auf der aktuellen Seite einen GTM-Container einfügen, ein dataLayer-Push Event ausführen oder extra JavaScript-Code einfügen.<br><b>Hinweis:</b> Einstellungen werden im localStorage der aktuellen Seite gespeichert.",
+    hdng: "GTM & CMP Helper",
+    option_hint: "Mit dem GTM & CMP Helper kannst du den Consent-Status von über 60 CMPs zurücksetzen, einen GTM-Container einfügen, ein dataLayer-Push Event ausführen oder extra JavaScript-Code einfügen.<br><b>Hinweis:</b> Einstellungen werden im localStorage der aktuellen Seite gespeichert.",
     show_checkup_b: "GTM Container identifiziert!",
     igtm_inspect: "GTM Container Checkup",
     igtm_active: "GTM-Container einfügen",
@@ -28,8 +28,8 @@ const translations = {
     advanced_hint: "Nutze diese Parameter für GTM Umgebungen oder GA4 DebugView ohne Tag Assistant."
   },
   en: {
-    hdng: "GTM Helper",
-    option_hint: "With GTM Helper you can inject a GTM container, perform a dataLayer-Push event or insert extra JavaScript code on the current page.<br><b>Note:</b> Settings are stored in the localStorage of the current page.",
+    hdng: "GTM & CMP Helper",
+    option_hint: "With GTM & CMP Helper you can reset the consent state for 60+ CMPs, inject a GTM container, perform a dataLayer-Push event or insert extra JavaScript code on the current page.<br><b>Note:</b> Settings are stored in the localStorage of the current page.",
     show_checkup_b: "GTM Container identified!",
     igtm_inspect: "GTM Container Checkup",
     igtm_active: "Inject GTM container",

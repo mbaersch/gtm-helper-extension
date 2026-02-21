@@ -18,6 +18,10 @@
 !images/*
 !screenshots/
 !screenshots/*
+!webstore/
+!webstore/*
+!scripts/
+!scripts/*
 
 # 4. Git-Konfiguration selbst erlauben (falls nötig)
 !.gitkeep

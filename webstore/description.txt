@@ -1,0 +1,36 @@
+GTM & CMP Helper - Der ultimative Begleiter für Web-Analysten und Entwickler
+
+Der GTM & CMP Helper (ehemals "Insert GTM" / "GTM Helper") ist eine leistungsstarke Chrome-Extension, die das Debugging von Google Tag Manager Containern und das Management von Consent Management Plattformen (CMPs) drastisch vereinfacht.
+
+KERNFUNKTIONEN:
+
+1. Intelligenter CMP-Reset (über 60 Anbieter)
+Setzen Sie den Consent-Status mit nur einem Klick zurück. Die Extension erkennt automatisch über 60 gängige CMPs (wie Cookiebot, Usercentrics, OneTrust, Borlabs, CMP19 uvm.) und löscht gezielt die zugehörigen Cookies und Storage-Einträge. Ideal zum Testen von Consent-Banner-Logiken ohne manuelles Löschen von Cookies.
+
+2. GTM Container Injektion
+Fügen Sie beliebigen GTM-Container-Code (GTM-XXXXXX) in jede beliebige Website ein. Testen Sie neue Tracking-Setups in Live-Umgebungen, bevor diese im Quellcode implementiert sind.
+- Unterstützt GTM Environments (gtm_auth & gtm_preview).
+- GA4 Debugging: Aktiviert automatisch die GA4 DebugView durch Übergabe der Preview-Token – ganz ohne den offiziellen Tag Assistant.
+- Flexible Positionierung im <head> oder <body>.
+
+3. dataLayer Tools
+Senden Sie dataLayer-Push-Events oder führen Sie benutzerdefinierten JavaScript-Code auf der aktuellen Seite aus. Perfekt für schnelle Tests von Event-Handlern.
+
+4. GTM Workspace Checkup Integration
+Wenn Sie in der GTM-Oberfläche arbeiten, erkennt der Helper dies und bietet einen direkten Absprung zum Analytrix GTM Checkup, um Ihren Container auf Best Practices zu prüfen.
+
+DESIGN & USABILITY:
+- "Engineering Aesthetic": Schlankes, funktionales Design ohne Ballast.
+- Dark Mode Standard (mit Light Mode Option).
+- Vollständig bilingual (Deutsch und Englisch).
+- 100% Vanilla JavaScript – schnell und sicher.
+
+Entwickelt von Analysten für Analysten. Sparen Sie wertvolle Zeit beim täglichen Tracking-Setup und CMP-Debugging.
+
+---
+CHANGELOG Version 3.0:
+- Umbenennung in "GTM & CMP Helper".
+- Erweiterung der CMP-Erkennung auf über 60 Anbieter.
+- Optimierter CMP-Reset (spezifisch vs. global).
+- Verbessertes UI im "Engineering Aesthetic" Design.
+- GA4 DebugView Support via Preview-Token.
