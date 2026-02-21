@@ -4,6 +4,7 @@ function updateUI(lang) {
   const elementsToTranslate = [
     { id: 'hdng', key: 'hdng', type: 'innerText' },
     { id: 'option_hint', key: 'option_hint', type: 'innerHTML' },
+    { id: 'checkup_desc', key: 'checkup_desc', type: 'innerText' },
     { id: 'igtm_inspect', key: 'igtm_inspect', type: 'innerText' },
     { id: 'igtm_gtm_code', key: 'igtm_gtm_code_placeholder', type: 'placeholder' },
     { id: 'igtm_init', key: 'igtm_init_placeholder', type: 'placeholder' },

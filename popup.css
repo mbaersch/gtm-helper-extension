@@ -112,31 +112,51 @@ button {
 }
 
 button:hover {
-  opacity: 0.9;
+  filter: brightness(1.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: none;
 }
 
 #igtm_save {
   background: var(--secondary-color);
   color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
 #igtm_reset_consent {
-  background: #666;
-  color: #fff;
+  background: transparent;
+  color: #666;
+  border: 1px solid #ccc;
 }
 
-.hint {
-  font-size: 0.85em;
-  color: #666;
-  margin-bottom: 15px;
-  line-height: 1.4;
+#igtm_reset_consent:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+textarea:focus, input[type="text"]:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(0, 81, 65, 0.1);
+}
+
+.checkbox-group label {
+  cursor: pointer;
+  margin-bottom: 0;
+  font-size: 0.95em;
 }
 
 #show_checkup {
-  background: #fff3cd;
+  background: #FFF9E6;
+  border: 1px solid #FFE699;
   border-left: 4px solid orange;
-  padding: 10px;
-  margin-bottom: 15px;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 0 4px 4px 0;
 }
 
 #show_checkup b {
