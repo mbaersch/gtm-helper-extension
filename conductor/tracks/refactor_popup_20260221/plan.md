@@ -8,7 +8,7 @@
 
 ## Phase 2: UI Refactoring (Engineering Aesthetic)
 
-- [ ] Task: Refactor `popup.html` structure using CSS Grid.
+- [x] Task: Refactor `popup.html` structure using CSS Grid. (6954d09)
 - [ ] Task: Update styles in `popup.css` (or within `popup.html` if currently inline) to match the Orange/Green theme.
 - [ ] Task: Implement the sticky header and ensure inline SVGs are used.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Refactoring' (Protocol in workflow.md)
