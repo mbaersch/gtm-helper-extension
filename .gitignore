@@ -1,7 +1,23 @@
-node_modules/
-tmp-user-data*/
-test-results/
-playwright-report/
-blob-report/
-screenshots/*.png
-!screenshots/.gitkeep
+# 1. Alles ignorieren
+*
+
+# 2. Spezifische Dateien und Ordner der Extension erlauben
+!manifest.json
+!background.js
+!content.js
+!popup.html
+!popup.js
+!popup.css
+!translations.js
+!README.md
+!README.de.md
+!.gitignore
+
+# 3. Ordner erlauben
+!images/
+!images/*
+!screenshots/
+!screenshots/*
+
+# 4. Git-Konfiguration selbst erlauben (falls nötig)
+!.gitkeep

@@ -1,8 +1,0 @@
-{
-  "track_id": "playwright_tests_20260221",
-  "type": "test",
-  "status": "in_progress",
-  "created_at": "2026-02-21T14:00:00Z",
-  "updated_at": "2026-02-21T14:00:00Z",
-  "description": "Set up Playwright for E2E testing and automated screenshot generation."
-}

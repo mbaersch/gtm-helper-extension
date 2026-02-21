@@ -1,8 +1,0 @@
-{
-  "track_id": "dark_mode_20260221",
-  "type": "feature",
-  "status": "in_progress",
-  "created_at": "2026-02-21T13:35:00Z",
-  "updated_at": "2026-02-21T13:35:00Z",
-  "description": "Implement Dark Mode as the default theme for the extension."
-}
