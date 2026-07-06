@@ -42,12 +42,29 @@ async function generateStoreScreenshots() {
         await browserContext.addCookies([{ name: 'CookieConsent', value: '-1', domain: '.google.com', path: '/' }]);
       }
     },
-    { 
-      name: '3-gtm-detected', 
+    {
+      name: '3-gtm-detected',
       setup: async (p) => {
         await p.goto('https://tagmanager.google.com');
         await p.evaluate(() => {
           localStorage.setItem('igtm_checkup', 'https://www.analytrix.de/gtm-checkup-helper.html?id=GTM-XXXXXX');
+        });
+      }
+    },
+    {
+      name: '4-tags-detected',
+      setup: async (p) => {
+        await p.goto('https://www.example.com');
+      },
+      // Zeigt die neue Sektion "Erkannte Google-Tags & Container" mit Beispiel-Funden (Mock).
+      afterOpen: async (p) => {
+        await p.evaluate(() => {
+          window.gtmDetectRecords = [
+            { id: 'GTM-XXXX123', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' },
+            { id: 'G-ABCD1234', method: 'first-party', host: 'sst.example.com', frame: 'top' },
+            { id: 'AW-98765432', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' }
+          ];
+          window.paintGtmDetections();
         });
       }
     }
@@ -82,6 +99,8 @@ async function generateStoreScreenshots() {
     `});
 
     await page.waitForTimeout(500);
+    // Optionaler Hook nach dem Öffnen (z.B. Mock-Funde in die Erkennungs-Sektion injizieren)
+    if (s.afterOpen) { await s.afterOpen(page); await page.waitForTimeout(200); }
     // Use the specific file names to replace the old ones (converting to PNG/JPG as needed)
     // We'll use 2026 for the new ones
     const filename = `insertgtm-2026-${s.name.split('-')[0]}.png`;

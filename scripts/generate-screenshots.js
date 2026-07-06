@@ -32,6 +32,7 @@ async function generateScreenshots() {
     { name: 'dark_en', lang: 'en', theme: 'dark', advanced: false },
     { name: 'light_de', lang: 'de', theme: 'light', advanced: false },
     { name: 'advanced_open', lang: 'de', theme: 'dark', advanced: true },
+    { name: 'detection_de', lang: 'de', theme: 'dark', advanced: false, detection: true },
   ];
 
   for (const scenario of scenarios) {
@@ -52,6 +53,19 @@ async function generateScreenshots() {
     if (scenario.advanced) {
       await page.click('summary#label_advanced_settings');
       await page.waitForTimeout(300); // Animation abwarten
+    }
+
+    // Falls die Tag-Erkennungs-Sektion demonstriert werden soll (Mock-Funde injizieren)
+    if (scenario.detection) {
+      await page.waitForTimeout(300); // renderGtmDetections-Callback abwarten (setzt sonst auf leer zurück)
+      await page.evaluate(() => {
+        window.gtmDetectRecords = [
+          { id: 'GTM-XXXX123', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' },
+          { id: 'G-ABCD1234', method: 'first-party', host: 'sst.example.com', frame: 'top' },
+          { id: 'AW-98765432', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' }
+        ];
+        window.paintGtmDetections();
+      });
     }
 
     // Screenshot nur vom Container-Div machen (für saubere Ränder)
