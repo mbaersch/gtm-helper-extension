@@ -554,6 +554,15 @@ function deleteSpecificConsentSettings(cmpName) {
   }
 }
 
+// Eingabehilfe: aus einer reinen GTM-Container-ID den Standard-Loader-Snippet erzeugen.
+function gtmSnippetFromId(id) {
+  return "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\n"
+    + "new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\n"
+    + "j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n"
+    + "'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n"
+    + "})(window,document,'script','dataLayer','" + id + "');";
+}
+
 window.onload = function() {
   // Theme initialisieren
   const savedTheme = localStorage.getItem('igtm_theme') || 'dark';
@@ -571,6 +580,17 @@ window.onload = function() {
   // Sprachumschalter Listener
   document.getElementById('lang_de').addEventListener('click', () => setLanguage('de'));
   document.getElementById('lang_en').addEventListener('click', () => setLanguage('en'));
+
+  // Eingabehilfe: reine GTM-ID im Code-Feld beim Verlassen zum Loader-Snippet expandieren
+  const gtmCodeField = document.getElementById('igtm_gtm_code');
+  if (gtmCodeField) {
+    gtmCodeField.addEventListener('blur', function() {
+      const v = gtmCodeField.value.trim();
+      if (/^GTM-[A-Z0-9]+$/i.test(v)) {
+        gtmCodeField.value = gtmSnippetFromId(v);
+      }
+    });
+  }
 
   // Einstellungen laden und Felder füllen
   getSettingsFromPage(function(settings) {
