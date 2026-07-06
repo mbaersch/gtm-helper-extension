@@ -75,36 +75,41 @@ async function generateStoreScreenshots() {
     await s.setup(page);
     await page.goto(popupUrl);
     
-    // Inject some style to make it look nice in the center of 1280x800
+    // Popup als zentriertes Panel voller Höhe: oben ausgerichtet, scrollt intern
+    // statt überzulaufen (verhindert das Abschneiden von Header/Footer bei langem Popup).
     await page.addStyleTag({ content: `
-      body { 
-        background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        height: 100vh; 
-        margin: 0;
-        overflow: hidden;
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 1280px !important;
+        height: 800px !important;
+        overflow: hidden !important;
+        background: linear-gradient(135deg, #1a1a1a 0%, #000 100%) !important;
       }
-      .container { 
-        box-shadow: 0 20px 80px rgba(0,0,0,0.8);
-        border: 1px solid #C44E00;
-        width: 400px;
-        transform: scale(1.2);
-        background: #111;
-        border-radius: 8px;
+      .container {
+        position: fixed !important;
+        top: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 440px !important;
+        height: 800px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        background: #111 !important;
+        border-left: 1px solid #C44E00 !important;
+        border-right: 1px solid #C44E00 !important;
+        box-shadow: 0 0 100px rgba(0,0,0,0.9) !important;
+        box-sizing: border-box !important;
       }
-      /* Hide scrollbars */
       ::-webkit-scrollbar { display: none; }
     `});
 
     await page.waitForTimeout(500);
     // Optionaler Hook nach dem Öffnen (z.B. Mock-Funde in die Erkennungs-Sektion injizieren)
     if (s.afterOpen) { await s.afterOpen(page); await page.waitForTimeout(200); }
-    // Use the specific file names to replace the old ones (converting to PNG/JPG as needed)
-    // We'll use 2026 for the new ones
+    // Store-Screenshots müssen exakt 1280x800 sein -> per clip erzwingen.
     const filename = `insertgtm-2026-${s.name.split('-')[0]}.png`;
-    await page.screenshot({ path: path.join(webstoreDir, filename) });
+    await page.screenshot({ path: path.join(webstoreDir, filename), clip: { x: 0, y: 0, width: 1280, height: 800 } });
   }
 
   // Generate NEW ICON 128x128
