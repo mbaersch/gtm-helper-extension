@@ -206,6 +206,8 @@ function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem('igtm_lang', lang);
   updateUI(lang);
+  // Erkannte Tags neu lokalisieren (Methoden-Labels folgen der Sprache).
+  paintGtmDetections();
   // Background über die Sprache informieren, damit das Badge (im 2s-Polling) lokalisiert bleibt.
   try { chrome.runtime.sendMessage({ action: 'setLang', lang: lang }); } catch (e) { /* ignore */ }
 }
@@ -287,39 +289,49 @@ function checkURL(callback) {
   });
 }
 
-// Erkannte GTM-Container vom Background holen und rendern
+// Zuletzt geholte Funde, damit die Liste bei Sprachwechsel neu lokalisiert werden kann.
+var gtmDetectRecords = [];
+
+// Rendert die erkannten Tags aus dem Cache in der aktuellen Sprache neu.
+function paintGtmDetections() {
+  const box = document.getElementById('gtm_detect_box');
+  const list = document.getElementById('gtm_detect_list');
+  if (!box || !list) return;
+  list.innerHTML = '';
+  if (!gtmDetectRecords || gtmDetectRecords.length === 0) {
+    // Wie der Checkup-Hinweis: Sektion nur zeigen, wenn wirklich etwas erkannt wurde.
+    box.style.display = 'none';
+    return;
+  }
+  gtmDetectRecords.forEach((r) => {
+    const li = document.createElement('li');
+    const method = getTranslation(currentLang, 'gtm_method_' + r.method) || r.method;
+    li.innerText = r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
+                   (r.frame === 'iframe' ? ' (iframe)' : '');
+    list.appendChild(li);
+  });
+  box.style.display = 'block';
+}
+
+// Erkannte GTM-Container/Tags vom Background holen und rendern
 function renderGtmDetections() {
   const box = document.getElementById('gtm_detect_box');
   const list = document.getElementById('gtm_detect_list');
   if (!box || !list) return;
 
-  const paint = (records) => {
-    list.innerHTML = '';
-    if (!records || records.length === 0) {
-      // Wie der Checkup-Hinweis: Sektion nur zeigen, wenn wirklich etwas erkannt wurde.
-      box.style.display = 'none';
-      return;
-    }
-    records.forEach((r) => {
-      const li = document.createElement('li');
-      const method = getTranslation(currentLang, 'gtm_method_' + r.method) || r.method;
-      li.innerText = r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
-                     (r.frame === 'iframe' ? ' (iframe)' : '');
-      list.appendChild(li);
-    });
-    box.style.display = 'block';
-  };
-
   // 1) aktueller Stand aus dem Background
   chrome.runtime.sendMessage({ action: 'gtmGetForActiveTab' }, (resp) => {
-    const fromBg = (resp && resp.records) || [];
-    paint(fromBg);
+    gtmDetectRecords = (resp && resp.records) || [];
+    paintGtmDetections();
     // 2) Fallback nach SW-Neustart: Content-Script direkt rescannen lassen
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (!tabs[0]) return;
       chrome.tabs.sendMessage(tabs[0].id, { action: 'gtmRescan' }, (r2) => {
         if (chrome.runtime.lastError) return; // kein Content-Script auf dieser Seite
-        if (r2 && r2.records && r2.records.length > fromBg.length) paint(r2.records);
+        if (r2 && r2.records && r2.records.length > gtmDetectRecords.length) {
+          gtmDetectRecords = r2.records;
+          paintGtmDetections();
+        }
       });
     });
   });
