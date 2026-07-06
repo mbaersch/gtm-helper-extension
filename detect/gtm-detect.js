@@ -44,8 +44,10 @@
     if (!fresh.length) return;
 
     fresh.forEach(function (r) {
-      console.log('[GTM Helper] ' + r.id + ' geladen via ' + methodLabel(r.method) +
-                  (r.host ? ' — Host: ' + r.host : '') + (frame === 'iframe' ? ' (iframe)' : ''));
+      // Konsole bewusst englisch (MAIN-World kennt die gewählte UI-Sprache nicht) + Farbakzent im Badge-Blau.
+      console.log('%c[GTM Helper]%c ' + r.id + ' loaded via ' + methodLabel(r.method) +
+                  (r.host ? ' — host: ' + r.host : '') + (frame === 'iframe' ? ' (iframe)' : ''),
+                  'color:#3b6fd4;font-weight:bold', 'color:inherit');
     });
     try {
       window.postMessage({ source: 'gtmhelper-detect', records: fresh, url: location.href }, '*');
