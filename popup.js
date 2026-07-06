@@ -296,10 +296,8 @@ function renderGtmDetections() {
   const paint = (records) => {
     list.innerHTML = '';
     if (!records || records.length === 0) {
-      const li = document.createElement('li');
-      li.innerText = getTranslation(currentLang, 'gtm_detect_none');
-      list.appendChild(li);
-      box.style.display = 'block';
+      // Wie der Checkup-Hinweis: Sektion nur zeigen, wenn wirklich etwas erkannt wurde.
+      box.style.display = 'none';
       return;
     }
     records.forEach((r) => {
