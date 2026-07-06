@@ -34,7 +34,14 @@
       "all_frames": true,
       "run_at": "document_idle",
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js", "detect/classify.js", "detect/gtm-detect.js"]
+    },
+    {
+      "world": "ISOLATED",
+      "all_frames": true,
+      "run_at": "document_idle",
+      "matches": ["<all_urls>"],
+      "js": ["detect/gtm-relay.js"]
     }
   ],
   "manifest_version": 3
