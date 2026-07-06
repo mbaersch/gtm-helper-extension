@@ -57,12 +57,14 @@ Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer 
 
 ## Changelog
 
+> Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
+
 ### 3.1
 - **Neu — Google-Tag- & Container-Erkennung:** immer aktive Erkennung geladener GTM-Container und gtag.js-Tags mit Klassifikation des Ladewegs (standard, first-party/sGTM, custom-path, base64), angezeigt über Toolbar-Badge, Popup-Sektion und Konsolen-Log. Keine neuen Berechtigungen.
 - **Fix:** Der Badge-Text folgt jetzt der eingestellten UI-Sprache.
 
 ### 3.0
-- Erstes öffentliches Release nach Refactoring: GTM-Container-Injektion (mit `gtm_auth`/`gtm_preview`-Token), CMP-Erkennung & Reset für über 60 CMPs, Dark-/Light-Theme, deutsche/englische UI.
+- Refactoring & Umbenennung zu „GTM & CMP Helper": überarbeitete Oberfläche, GTM-Container-Injektion (mit `gtm_auth`/`gtm_preview`-Token), CMP-Erkennung & Reset für über 60 CMPs, Dark-/Light-Theme, deutsche/englische UI.
 
 ---
 
