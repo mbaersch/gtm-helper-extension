@@ -24,8 +24,11 @@ const filesToInclude = [
   'popup.js',
   'popup.css',
   'translations.js',
+  'detect/classify.js',
+  'detect/gtm-detect.js',
+  'detect/gtm-relay.js',
   'images/injectGTM.png',
-  'images/injectGTM_128.png'
+  'images/injectGTM_big.png'
 ];
 
 console.log('Copying files to dist...');
@@ -51,8 +54,10 @@ filesToInclude.forEach(file => {
 // 3. Zip it using PowerShell (since we are on Windows)
 console.log('Creating ZIP archive...');
 try {
-  // Compress-Archive expects absolute paths on Windows
-  const psCommand = `powershell -Command "Compress-Archive -Path '${distDir}\*' -DestinationPath '${zipFile}' -Force"`;
+  // Compress-Archive expects absolute paths on Windows.
+  // Inhalt von dist/ packen (nicht den Ordner selbst) -> manifest.json liegt im ZIP-Root.
+  const zipSource = path.join(distDir, '*');
+  const psCommand = `powershell -Command "Compress-Archive -Path '${zipSource}' -DestinationPath '${zipFile}' -Force"`;
   execSync(psCommand);
   console.log(`✅ Success! Extension packaged to: ${zipFile}`);
 } catch (error) {
