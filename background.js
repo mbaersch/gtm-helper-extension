@@ -4,7 +4,7 @@ function buildCheckupUrl(url) {
 	if (matches && matches.length === 4) {
 	  return "https://www.analytrix.de/gtm-checkup-helper.html?autoaccountid=" +
 		matches[1] + "&autocontainerid=" + matches[2] +
-		"&autoworkspaceid=" + matches[3] + "#results";
+		"&autoworkspaceid=" + matches[3] + "#methods";
 	}
 	return "";
   }

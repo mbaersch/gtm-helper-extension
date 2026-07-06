@@ -204,13 +204,13 @@ button:active {
   color: #fff;
 }
 
-#igtm_reset_consent {
+#igtm_reset_consent, #igtm_inspect {
   background: transparent;
-  color: var(--text-dim);
+  color: var(--text-color);
   border: 1px solid var(--border-color);
 }
 
-#igtm_reset_consent:hover {
+#igtm_reset_consent:hover, #igtm_inspect:hover {
   background: rgba(128,128,128,0.1);
   color: var(--text-color);
   border-color: var(--text-dim);
@@ -331,8 +331,9 @@ body.light-theme .cmp-box {
   color: #005141;
 }
 
+#igtm_inspect {font-size:bold; padding: 6px; margin-top:1em;display:inline-block}
+
 .info-box b {
-  color: var(--primary-color);
   display: inline;
   margin-right: 5px;
 }
