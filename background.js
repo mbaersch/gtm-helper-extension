@@ -1,3 +1,9 @@
+// translations.js im Service-Worker verfügbar machen (definiert getTranslation/translations global).
+importScripts('translations.js');
+
+// Aktuelle UI-Sprache fürs Badge. Flüchtig (SW-Lebensdauer); das Popup meldet sie beim Öffnen/Umschalten.
+let badgeLang = 'de';
+
 // Flüchtige, per-Tab-Sammlung erkannter GTM-Container (Service-Worker-lebensdauer).
 const gtmByTab = new Map(); // tabId -> Map<idUpper, Record>
 
@@ -49,10 +55,10 @@ function buildCheckupUrl(url) {
 		let active = settings.igtm_Status || settings.igtmAddInit || settings.igtmAddCode;
 		let gtmCount = gtmRecordsForTab(tabId).length;
 		if (checkupUrl && checkupUrl !== "") {
-		  chrome.action.setBadgeText({ text: "check" });
+		  chrome.action.setBadgeText({ text: getTranslation(badgeLang, "badge_check") });
 		  chrome.action.setBadgeBackgroundColor({ color: "orange" });
 		} else if (active) {
-		  chrome.action.setBadgeText({ text: "aktiv" });
+		  chrome.action.setBadgeText({ text: getTranslation(badgeLang, "badge_active") });
 		  chrome.action.setBadgeBackgroundColor({ color: "#439e49" });
 		} else if (gtmCount > 0) {
 		  chrome.action.setBadgeText({ text: String(gtmCount) });
@@ -88,6 +94,13 @@ function buildCheckupUrl(url) {
   
   //URL Prüfen auf GTM-Container Parameter
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+	if (msg.action === "setLang") {
+	  badgeLang = msg.lang || "de";
+	  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+		if (tabs && tabs[0]) updateBadgeForTab(tabs[0].id);
+	  });
+	  return; // keine Antwort nötig
+	}
 	if (msg.action === "gtmDetected") {
 	  const tabId = sender.tab && sender.tab.id;
 	  addGtmRecords(tabId, msg.records);

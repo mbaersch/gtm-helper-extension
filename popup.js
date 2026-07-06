@@ -206,6 +206,8 @@ function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem('igtm_lang', lang);
   updateUI(lang);
+  // Background über die Sprache informieren, damit das Badge (im 2s-Polling) lokalisiert bleibt.
+  try { chrome.runtime.sendMessage({ action: 'setLang', lang: lang }); } catch (e) { /* ignore */ }
 }
 
 function setTheme(theme) {
