@@ -14,6 +14,11 @@
 !.gitignore
 
 # 3. Ordner erlauben
+# detect/: nur Runtime-Dateien versionieren, Tests bleiben lokal (wie *.test.js sonst auch)
+!detect/
+!detect/classify.js
+!detect/gtm-detect.js
+!detect/gtm-relay.js
 !images/
 !images/*
 !screenshots/
