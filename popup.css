@@ -383,3 +383,6 @@ body.light-theme .cmp-box {
   padding: 10px 30px;
   font-size: 1em;
 }
+
+#gtm_detect_box ul { list-style: disc; }
+#gtm_detect_box li { font-size: 0.85em; line-height: 1.5; word-break: break-all; }

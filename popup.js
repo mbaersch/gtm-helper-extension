@@ -35,7 +35,7 @@ const CMP_COOKIES = {
   "notice_gdpr_prefs": "TrustArc",
   "notice_preferences": "TrustArc",
   "kcm_data": "Kick Consent Manager",
-  "trk_consent": "gms Legacy",
+  "trk_consent": "Simple Consent Manager",
   "legalweb_cookie_settings": "legalweb",
   "dp_cookieconsent_status": "DP Cookie Consent",
   "klaro": "Klaro.js",
@@ -177,6 +177,7 @@ function updateUI(lang) {
     { id: 'igtm_save', key: 'save_btn', type: 'innerText' },
     { id: 'igtm_reset_consent', key: 'reset_consent_btn', type: 'innerText' },
     { id: 'label_detected_cmp', key: 'detected_cmp', type: 'innerText' },
+    { id: 'label_gtm_detect', key: 'gtm_detect_title', type: 'innerText' },
     { id: 'igtm_help', key: 'help_link', type: 'innerText' }
   ];
 
@@ -281,6 +282,46 @@ function identifyCMP(callback) {
 function checkURL(callback) {
   chrome.runtime.sendMessage({ action: "checkURL" }, function(response) {
     callback(response);
+  });
+}
+
+// Erkannte GTM-Container vom Background holen und rendern
+function renderGtmDetections() {
+  const box = document.getElementById('gtm_detect_box');
+  const list = document.getElementById('gtm_detect_list');
+  if (!box || !list) return;
+
+  const paint = (records) => {
+    list.innerHTML = '';
+    if (!records || records.length === 0) {
+      const li = document.createElement('li');
+      li.innerText = getTranslation(currentLang, 'gtm_detect_none');
+      list.appendChild(li);
+      box.style.display = 'block';
+      return;
+    }
+    records.forEach((r) => {
+      const li = document.createElement('li');
+      const method = getTranslation(currentLang, 'gtm_method_' + r.method) || r.method;
+      li.innerText = r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
+                     (r.frame === 'iframe' ? ' (iframe)' : '');
+      list.appendChild(li);
+    });
+    box.style.display = 'block';
+  };
+
+  // 1) aktueller Stand aus dem Background
+  chrome.runtime.sendMessage({ action: 'gtmGetForActiveTab' }, (resp) => {
+    const fromBg = (resp && resp.records) || [];
+    paint(fromBg);
+    // 2) Fallback nach SW-Neustart: Content-Script direkt rescannen lassen
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs[0]) return;
+      chrome.tabs.sendMessage(tabs[0].id, { action: 'gtmRescan' }, (r2) => {
+        if (chrome.runtime.lastError) return; // kein Content-Script auf dieser Seite
+        if (r2 && r2.records && r2.records.length > fromBg.length) paint(r2.records);
+      });
+    });
   });
 }
 
@@ -558,6 +599,9 @@ window.onload = function() {
       cmpBox.style.display = 'none';
     }
   });
+
+  // GTM-Erkennung anzeigen
+  renderGtmDetections();
 
   //Background-Script für Checkup-URL
   checkURL(function(response) {
