@@ -62,7 +62,7 @@ Automatically detects Google tags loaded on the current page — always on, no c
 - **Fix:** badge text now follows the selected UI language.
 
 ### 3.0
-- Initial public release: GTM container injection (with `gtm_auth`/`gtm_preview` tokens), CMP detection & reset for 60+ CMPs, dark/light theme, English/German UI.
+- Initial public release of refactored extension: GTM container injection (with `gtm_auth`/`gtm_preview` tokens), CMP detection & reset for 60+ CMPs, dark/light theme, English/German UI.
 
 ---
 

@@ -62,7 +62,7 @@ Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer 
 - **Fix:** Der Badge-Text folgt jetzt der eingestellten UI-Sprache.
 
 ### 3.0
-- Erstes öffentliches Release: GTM-Container-Injektion (mit `gtm_auth`/`gtm_preview`-Token), CMP-Erkennung & Reset für über 60 CMPs, Dark-/Light-Theme, deutsche/englische UI.
+- Erstes öffentliches Release nach Refactoring: GTM-Container-Injektion (mit `gtm_auth`/`gtm_preview`-Token), CMP-Erkennung & Reset für über 60 CMPs, Dark-/Light-Theme, deutsche/englische UI.
 
 ---
 
