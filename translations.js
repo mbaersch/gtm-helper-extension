@@ -25,7 +25,14 @@ const translations = {
     gtm_position_label: "Injektions-Position:",
     pos_head: "Head (Standard)",
     pos_body: "Body",
-    advanced_hint: "Nutze diese Parameter für GTM Umgebungen oder GA4 DebugView ohne Tag Assistant."
+    advanced_hint: "Nutze diese Parameter für GTM Umgebungen oder GA4 DebugView ohne Tag Assistant.",
+    gtm_detect_title: "Erkannte GTM-Container",
+    gtm_detect_none: "Kein GTM erkannt",
+    "gtm_method_standard": "Standard (googletagmanager.com)",
+    "gtm_method_first-party": "first-party (sGTM)",
+    "gtm_method_custom-path": "Custom Path",
+    "gtm_method_base64": "base64-Loader",
+    "gtm_method_unknown": "unbekannt (inline?)"
   },
   en: {
     hdng: "GTM & CMP Helper",
@@ -53,7 +60,14 @@ const translations = {
     gtm_position_label: "Injection Position:",
     pos_head: "Head (Default)",
     pos_body: "Body",
-    advanced_hint: "Use these parameters for GTM environments or GA4 DebugView without Tag Assistant."
+    advanced_hint: "Use these parameters for GTM environments or GA4 DebugView without Tag Assistant.",
+    gtm_detect_title: "Detected GTM containers",
+    gtm_detect_none: "No GTM detected",
+    "gtm_method_standard": "standard (googletagmanager.com)",
+    "gtm_method_first-party": "first-party (sGTM)",
+    "gtm_method_custom-path": "custom path",
+    "gtm_method_base64": "base64 loader",
+    "gtm_method_unknown": "unknown (inline?)"
   }
 };
 
