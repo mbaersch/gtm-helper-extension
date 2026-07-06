@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.0-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.1-blue.svg)](#)
 
 GTM & CMP Helper is a Chrome Extension for resetting Consent Management Platform (CMP) data, injecting Google Tag Manager containers, and managing data during development and debugging.
 
