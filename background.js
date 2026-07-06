@@ -1,3 +1,18 @@
+// Flüchtige, per-Tab-Sammlung erkannter GTM-Container (Service-Worker-lebensdauer).
+const gtmByTab = new Map(); // tabId -> Map<idUpper, Record>
+
+function gtmRecordsForTab(tabId) {
+  const m = gtmByTab.get(tabId);
+  return m ? Array.from(m.values()) : [];
+}
+
+function addGtmRecords(tabId, records) {
+  if (tabId == null) return;
+  let m = gtmByTab.get(tabId);
+  if (!m) { m = new Map(); gtmByTab.set(tabId, m); }
+  (records || []).forEach(r => { if (r && r.id) m.set(r.id.toUpperCase(), r); });
+}
+
 function buildCheckupUrl(url) {
 	var regex = /https:\/\/tagmanager\.google\.com\/.*\/accounts\/(\d+)\/containers\/(\d+)\/workspaces\/(\d+)/;
 	var matches = regex.exec(url);
@@ -32,12 +47,16 @@ function buildCheckupUrl(url) {
 		}
 		let settings = JSON.parse(results[0].result)||{};
 		let active = settings.igtm_Status || settings.igtmAddInit || settings.igtmAddCode;
+		let gtmCount = gtmRecordsForTab(tabId).length;
 		if (checkupUrl && checkupUrl !== "") {
 		  chrome.action.setBadgeText({ text: "check" });
 		  chrome.action.setBadgeBackgroundColor({ color: "orange" });
 		} else if (active) {
 		  chrome.action.setBadgeText({ text: "aktiv" });
 		  chrome.action.setBadgeBackgroundColor({ color: "#439e49" });
+		} else if (gtmCount > 0) {
+		  chrome.action.setBadgeText({ text: String(gtmCount) });
+		  chrome.action.setBadgeBackgroundColor({ color: "#3b6fd4" });
 		} else {
 		  chrome.action.setBadgeText({ text: "" });
 		}
@@ -47,6 +66,9 @@ function buildCheckupUrl(url) {
   
   // Update Badge bei Tab-Updates und Aktivierung
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+	if (changeInfo.status === "loading") {
+	  gtmByTab.delete(tabId); // Funde gelten nur für die aktuelle Seite
+	}
 	if (changeInfo.status === "complete") {
 	  updateBadgeForTab(tabId);
 	}
@@ -66,6 +88,18 @@ function buildCheckupUrl(url) {
   
   //URL Prüfen auf GTM-Container Parameter
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+	if (msg.action === "gtmDetected") {
+	  const tabId = sender.tab && sender.tab.id;
+	  addGtmRecords(tabId, msg.records);
+	  if (tabId != null) updateBadgeForTab(tabId);
+	  return; // keine Antwort nötig
+	}
+	if (msg.action === "gtmGetForActiveTab") {
+	  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+		sendResponse({ records: tabs[0] ? gtmRecordsForTab(tabs[0].id) : [] });
+	  });
+	  return true;
+	}
 	if (msg.action === "checkURL") {
 	  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
 		if (tabs[0]) {
@@ -77,6 +111,9 @@ function buildCheckupUrl(url) {
 		  sendResponse({ hasCheckup: false, checkupUrl: "" });
 		}
 	  });
-	  return true; 
+	  return true;
 	}
   });
+
+  // Aufräumen: Fund-Map beim Schließen eines Tabs entfernen
+  chrome.tabs.onRemoved.addListener(function (tabId) { gtmByTab.delete(tabId); });
