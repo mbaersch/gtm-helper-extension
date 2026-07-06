@@ -34,7 +34,13 @@ Identifies the active Consent Management Platform on a website.
 - **Specific Reset:** Clears cookies and storage keys for the identified CMP.
 - **Global Reset:** Option to clear all known consent-related data (supports 60+ CMPs).
 
-### 3. User Interface
+### 3. Google Tag & Container Detection
+Automatically detects Google tags loaded on the current page — always on, no configuration, no extra permissions.
+- **What:** GTM containers and gtag.js tags (GA4, Google Ads, etc.), identified via `window.google_tag_manager` and resource timings.
+- **How:** Classifies the load method — `standard` (googletagmanager.com), `first-party` (server-side GTM / Google Tag Gateway), `custom-path`, or `base64` tunnel.
+- **Where:** Container count on the toolbar badge, a "Detected Google tags & containers" popup section (ID · method · host), and a console log per new detection.
+
+### 4. User Interface
 - **Theme:** Dark mode by default with an optional light mode toggle.
 - **Language:** Available in English and German.
 - **Architecture:** Built with CSS Grid and modern extension standards (Manifest V3).
@@ -46,6 +52,17 @@ Identifies the active Consent Management Platform on a website.
 1. **GTM Injection:** Enter the container code in the text area, enable the checkbox, and click **Save & Reload**.
 2. **Advanced Settings:** Open the accordion to enter environment-specific tokens.
 3. **Consent Reset:** Use the **CMP Reset** link in the detection box or the **Clear Consent** button in the footer.
+
+---
+
+## Changelog
+
+### 3.1
+- **New — Google Tag & Container Detection:** always-on detection of loaded GTM containers and gtag.js tags with load-method classification (standard, first-party/sGTM, custom-path, base64), surfaced via toolbar badge, popup section, and console log. No new permissions.
+- **Fix:** badge text now follows the selected UI language.
+
+### 3.0
+- Initial public release: GTM container injection (with `gtm_auth`/`gtm_preview` tokens), CMP detection & reset for 60+ CMPs, dark/light theme, English/German UI.
 
 ---
 

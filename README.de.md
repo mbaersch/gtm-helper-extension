@@ -34,7 +34,13 @@ Identifiziert die aktive Consent Management Platform auf einer Website.
 - **Spezifischer Reset:** Löscht Cookies und Storage-Einträge der erkannten CMP.
 - **Globaler Reset:** Option zum Löschen aller bekannten Consent-Daten (unterstützt über 60 CMPs).
 
-### 3. Benutzeroberfläche
+### 3. Google-Tag- & Container-Erkennung
+Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer aktiv, ohne Konfiguration und ohne zusätzliche Berechtigungen.
+- **Was:** GTM-Container und gtag.js-Tags (GA4, Google Ads etc.), erkannt über `window.google_tag_manager` und Resource-Timings.
+- **Wie:** Klassifiziert den Ladeweg — `standard` (googletagmanager.com), `first-party` (Server-side GTM / Google Tag Gateway), `custom-path` oder `base64`-Tunnel.
+- **Wo:** Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Methode · Host) und ein Konsolen-Log pro neuem Fund.
+
+### 4. Benutzeroberfläche
 - **Design:** Standardmäßig im Dark Mode mit manuellem Umschalter für das Light Theme.
 - **Sprache:** Verfügbar in Deutsch und Englisch.
 - **Architektur:** Erstellt mit CSS Grid unter Einhaltung aktueller Extension-Standards (Manifest V3).
@@ -46,6 +52,17 @@ Identifiziert die aktive Consent Management Platform auf einer Website.
 1. **GTM-Injektion:** Container-Code in das Textfeld eingeben, Checkbox aktivieren und auf **Speichern & neu laden** klicken.
 2. **Erweiterte Einstellungen:** Akkordeon öffnen, um umgebungsspezifische Token einzugeben.
 3. **Consent-Reset:** Den Link **CMP Reset** in der Erkennungs-Box oder den Button **Consent löschen** im Footer nutzen.
+
+---
+
+## Changelog
+
+### 3.1
+- **Neu — Google-Tag- & Container-Erkennung:** immer aktive Erkennung geladener GTM-Container und gtag.js-Tags mit Klassifikation des Ladewegs (standard, first-party/sGTM, custom-path, base64), angezeigt über Toolbar-Badge, Popup-Sektion und Konsolen-Log. Keine neuen Berechtigungen.
+- **Fix:** Der Badge-Text folgt jetzt der eingestellten UI-Sprache.
+
+### 3.0
+- Erstes öffentliches Release: GTM-Container-Injektion (mit `gtm_auth`/`gtm_preview`-Token), CMP-Erkennung & Reset für über 60 CMPs, Dark-/Light-Theme, deutsche/englische UI.
 
 ---
 
