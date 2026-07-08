@@ -407,7 +407,7 @@ function deleteConsentSettings() {
         }
       }, function(results) {
         var ppCookie = "noPPCookie";
-        if (results && results[0].result) {
+        if (results && results[0] && results[0].result) {
           var ppobj;
           try {ppobj = JSON.parse(results[0].result); } catch(e) {ppobj = []}
           var ppid = ppobj[0];
@@ -508,16 +508,19 @@ function deleteConsentSettings() {
               args: [sessionStorageKeys]
             }, function() {
               chrome.tabs.reload(tabId);
+              // Popup erst schließen, wenn die gesamte Async-Kette (Cookies,
+              // LS/SS, Reload) durchgelaufen ist. Ein früheres window.close()
+              // zerstört den Popup-Kontext und bricht die ausstehenden
+              // Callbacks ab, bevor die Cookies überhaupt entfernt werden.
+              window.close();
             });
 
           });
-          
+
         });
 
       });
     });
-
-  window.close();
 
   }
 }
