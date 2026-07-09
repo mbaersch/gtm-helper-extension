@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.2-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.3-blue.svg)](#)
 
 GTM & CMP Helper is a Chrome Extension for resetting Consent Management Platform (CMP) data, injecting Google Tag Manager containers, and managing data during development and debugging.
 
@@ -58,6 +58,10 @@ Automatically detects Google tags loaded on the current page — always on, no c
 ## Changelog
 
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
+
+### 3.3
+- **New — GTM submit-dialog warning:** on `tagmanager.google.com`, a CSS-only hint colors the submit button orange and tints the selected "Create Version" option whenever the chosen action only creates a version instead of publishing — making it obvious when changes will not go live (e.g. with approve-but-not-publish permissions), where the button caption reads just "Submit" either way. No new permissions.
+- **Change:** the "Detected Google tags & containers" popup section now uses blue (matching the toolbar badge count) instead of warning-orange, so it reads as information rather than a warning and stays distinct from the orange Checkup hint.
 
 ### 3.2
 - **Fix:** the full CMP reset ("clear everything") no longer aborts before deleting cookies. `window.close()` was firing synchronously while the asynchronous delete chain was still running, tearing down the popup context before the cookies were removed (a timing-dependent race). The popup now closes only after the chain completes, and the reset works reliably regardless of the detected CMP.
