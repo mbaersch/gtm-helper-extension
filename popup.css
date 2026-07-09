@@ -342,6 +342,30 @@ body.light-theme .cmp-box {
   color: var(--secondary-color);
 }
 
+/* Blaue Variante fuer die erkannten Google-Tags & Container.
+   Blauton passend zur Icon-Badge (#3b6fd4), damit Zahl und Liste
+   zusammengehoeren – und bewusst nicht "Warn-Orange" wie der Checkup-Hinweis. */
+.gtm-box {
+  background: #0d1b33;
+  border: 1px solid #1e3a66;
+  border-left-color: #3b6fd4;
+  color: #8fb4ec;
+}
+
+body.light-theme .gtm-box {
+  background: #eef2fb;
+  border-color: #d0dcf5;
+  color: #274b8f;
+}
+
+.gtm-box b {
+  color: #6f9de8;
+}
+
+body.light-theme .gtm-box b {
+  color: #274b8f;
+}
+
 /* Info Overlay */
 .info-overlay {
   position: absolute;
