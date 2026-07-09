@@ -42,6 +42,11 @@
       "run_at": "document_idle",
       "matches": ["<all_urls>"],
       "js": ["detect/gtm-relay.js"]
+    },
+    {
+      "run_at": "document_idle",
+      "matches": ["https://tagmanager.google.com/*"],
+      "css": ["gtm-ui.css"]
     }
   ],
   "manifest_version": 3

@@ -1,0 +1,30 @@
+/*
+ * GTM UI-Hinweise
+ *
+ * Warnt im Sende-Dialog von tagmanager.google.com davor, dass die gewaehlte
+ * Aktion nur eine Version ERSTELLT, aber NICHT veroeffentlicht. Der Dialog
+ * zeigt in beiden Faellen nur "Senden" – ohne Publish-Recht faellt das leicht
+ * unbemerkt durch, und Aenderungen gehen nie live.
+ *
+ * Der Selektor greift von selbst nur im richtigen Moment: AngularJS entfernt
+ * das Element per ng-if komplett aus dem DOM, wenn CREATE nicht die aktive
+ * Option ist. Ist es im DOM, ist "Version erstellen" gewaehlt.
+ */
+
+[data-ng-if="ctrl.selectedOption == ctrl.SubmitOption.CREATE"] {
+  background-color: #ff9800 !important;
+  color: #1a1a1a !important;
+}
+
+[data-ng-if="ctrl.selectedOption == ctrl.SubmitOption.CREATE"]:hover {
+  background-color: #f57c00 !important;
+}
+
+/*
+ * Zusaetzlich den gewaehlten "Version erstellen"-Bereich dezent beige
+ * hinterlegen – aber nur, wenn er auch aktiv ausgewaehlt ist. Solange
+ * "Veroeffentlichen" gewaehlt ist, bleibt der Bereich neutral.
+ */
+.gtm-draft-submit__option--create.gtm-draft-submit__option--selected {
+  background-color: #f3e7d1 !important;
+}
