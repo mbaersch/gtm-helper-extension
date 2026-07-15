@@ -80,9 +80,5 @@ Automatically detects Google tags loaded on the current page — always on, no c
 
 ## Links
 
-- **Documentation:** [analytrix.de/gtm-helper](https://www.analytrix.de/gtm-helper-chrome-extension.html)
-- **Checkup Tool:** Integrated shortcut to the Analytrix GTM Checkup.
-
----
-
-*Developed by [Analytrix](https://www.analytrix.de).*
+- **Documentation:** [Extension Homepage (German)](https://www.markus-baersch.de/gtm-cmp-helper-extension.html)
+- **Checkup Tool:** Integrated shortcut to the [Analytrix GTM Checkup](https://www.analytrix.de/gtm-checkup-helper.html) (German).

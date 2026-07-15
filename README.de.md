@@ -80,9 +80,5 @@ Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer 
 
 ## Links
 
-- **Dokumentation:** [analytrix.de/gtm-helper](https://www.analytrix.de/gtm-helper-chrome-extension.html)
-- **Checkup-Tool:** Integrierter Shortcut zum Analytrix GTM Checkup.
-
----
-
-*Entwickelt von [Analytrix](https://www.analytrix.de).*
+- **Dokumentation:** [Extension Homepage](https://www.markus-baersch.de/gtm-cmp-helper-extension.html)
+- **Checkup-Tool:** Integrierter Shortcut zum [Analytrix GTM Checkup](https://www.analytrix.de/gtm-checkup-helper.html).
