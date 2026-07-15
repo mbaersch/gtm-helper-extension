@@ -2,7 +2,7 @@ var currentLang = 'de';
 
 const CMP_COOKIES = {
   "cookiefirst-consent": "CookieFirst",
-  "CookieConsent": "CookieBot",
+  "CookieConsent": "CookieBot / TYPO3 Cookieman",
   "OptanonConsent": "OneTrust / CookiePro",
   "OptanonAlertBoxClosed": "OneTrust / CookiePro",
   "axeptio_cookies": "Axeptio",
@@ -39,7 +39,7 @@ const CMP_COOKIES = {
   "legalweb_cookie_settings": "legalweb",
   "dp_cookieconsent_status": "DP Cookie Consent",
   "klaro": "Klaro.js",
-  "euconsent-v2": "IAB / Didomi / Uni Consent",
+  "euconsent-v2": "IAB / Didomi / Uni Consent / Sirdata",
   "didomi_token": "Didomi",
   "__lxG__consent__v2": "Clickio",
   "cookiehub": "CookieHub",
@@ -80,6 +80,17 @@ const CMP_COOKIES = {
   "cookieconsent_status1": "Consentmo",
   "cookieconsent_preferences_disabled": "Consentmo",
   "avada_cookie_consent": "Avada",
+  "aviaCookieConsent": "Avia (Enfold)",
+  "moove_gdpr_popup": "Moove GDPR",
+  "clearfy_cookie_hide": "Clearfy",
+  "cookiesjsr": "Drupal Cookies JSR",
+  "cookie-agreed": "EU Cookie Compliance",
+  "gox_cookie_consent": "go-x-blocks",
+  "reDimCookieHint": "reDim CookieHint",
+  "sg-cookie-manager": "SG Cookies Bar",
+  "cookie_consent_user_accepted": "TermsFeed",
+  "ss_performanceCookiesAllowed": "Squarespace",
+  "ss_marketingCookiesAllowed": "Squarespace",
   "cookiesNotification": "Consentik",
   "_consentik_cookie": "Consentik",
   "goodg_block_popup": "GoodApps",
@@ -95,7 +106,7 @@ const CMP_COOKIES = {
   "cookiesEnabled": "Magento 1 GDPR",
   "required_cookies": "Magento 1 GDPR",
   "popupData": "Magento 1 GDPR",
-  "cc_cookie": "Orestbida / Prive",
+  "cc_cookie": "Orestbida / Prive / Legal Cockpit",
   "mw-cookie-settings": "Mediawiki",
   "sm-cookie-consent": "SiteMinder",
   "tarteaucitron": "Tarte au Citron",
@@ -108,16 +119,53 @@ const CMP_COOKIES = {
   "cl_tracking": "CookieLegit",
   "cc_accepted_cookies": "Cookieconfirm",
   "cc_consent_id": "Cookieconfirm",
-  "ccm_consent": "CCM19",
+  "ccm_consent": "CCM19 / clickskeks / CMP4Net / WUM",
   "dsgvo_cd": "Unknown",
-  "cms_cookies": "Contao",
-  "cms_cookies_saved": "Contao",
+  "cms_cookies": "Contao / CMS Accept Tags",
+  "cms_cookies_saved": "Contao / CMS Accept Tags",
   "GXConsents": "Gambio",
   "oil_data": "Gambio",
   "AdvertisementCookies": "Unknown Builder",
   "AnalyticsCookies": "Unknown Builder",
   "ShowCookieConsent": "Unknown Builder",
-  "cookie-pref": "InMobi"
+  "cookie-pref": "InMobi",
+  "cookie-cracker_2": "Cookie Cracker",
+  "hwdatenschutz_cookie_approved": "HW Datenschutz",
+  "icm_cookie_settings": "Impuls Cookie Monster",
+  "DIRO_C_FINGERPRINT": "JS Consent Banner",
+  "ka_cookies_viewed": "KA Cookies",
+  "kekt-kookies": "KookieTool CMP",
+  "cc_cookie_accept": "LWD Cookie Master",
+  "cc_cookie_save": "LWD Cookie Master",
+  "cc_cookie_decline": "LWD Cookie Master",
+  "cookieControl": "TYPO3 IG CookieConsent",
+  "cookie_banner_hidden": "TYPO3 RM Cookie Consent",
+  "cookiefox_consent": "CookieFox",
+  "cookies_and_content_security_policy": "Cookies and Content Security Policy",
+  "ct_action": "Cookietrust CMP",
+  "ConsentID": "DNN Cookie Consent",
+  "cookieAcceptanceCookie": "EU Cookie Directive Lite",
+  "euCookie": "EU Cookie Law",
+  "fmalertcookies": "FM Alert Cookies",
+  "gdpr_notice_shown": "GDPR Tools",
+  "cookieaccept": "mod_cookiesaccept",
+  "cookie_optin": "Sgalinski Cookie Opt-In",
+  "sgcc-cookie-notice": "Simple GDPR Cookie Compliance",
+  "omCookieConsent": "TYPO3 OM Cookie Manager",
+  "displayCookieConsent": "WF Cookie Consent",
+  "lwpcngStatus": "WP Cookie Notice",
+  "cookie_consent": "Zoho Cookie Banner / TYPO3 Datamints Consentmanager",
+  "mhcookie": "Must Have Cookie",
+  "cookieadmin_consent": "CookieAdmin",
+  "pixelmate": "DSGVO-Pixelmate",
+  "privacyPolicyAccept": "TYPO3 NB Cookie Banner",
+  "bst_dsgvo_cookie": "BST DSGVO Cookie",
+  "cookiesDirective": "Cookies Policy Notification Bar",
+  "wpca_consent": "WP Cookie Allow",
+  "ez-consent-tcf": "Ezoic CMP",
+  "wpl_viewed_cookie": "GDPR Cookie Consent",
+  "pressidium_cookie_consent": "Pressidium Cookie Consent",
+  "sellwerk_cbconsent": "Sellwerk / Website-Check (Dury Legal)"
 };
 
 const CMP_LOCAL_STORAGE = {
@@ -127,9 +175,9 @@ const CMP_LOCAL_STORAGE = {
   "uc_settings": "UserCentrics",
   "truste.eu.cookie.notice_gdpr_prefs": "TrustArc",
   "truste.eu.cookie.notice_preferences": "TrustArc",
-  "ccm_consent": "CCM19",
+  "ccm_consent": "CCM19 / clickskeks / CMP4Net / WUM",
   "ppms_webstorage": "Piwik PRO",
-  "euconsent-v2": "IAB / Didomi / Uni Consent",
+  "euconsent-v2": "IAB / Didomi / Uni Consent / Sirdata",
   "didomi_token": "Didomi",
   "__lxG__consent__v2": "Clickio",
   "sp_consent": "Secure Privacy",
@@ -148,11 +196,12 @@ const CMP_LOCAL_STORAGE = {
   "consent": "JTL",
   "df-cookies-allowed": "Doofinder",
   "ccb_contao_token": "Contao",
-  "cookieConsentChoice": "Unknown Builder"
+  "cookieConsentChoice": "Unknown Builder",
+  "dcm_cookie_consent": "CM Cookie Manager"
 };
 
 const CMP_SESSION_STORAGE = {
-  "ccm_consent": "CCM19"
+  "ccm_consent": "CCM19 / clickskeks / CMP4Net / WUM"
 };
 
 function updateUI(lang) {
@@ -239,7 +288,7 @@ function identifyCMP(callback) {
         // Sonderfall Piwik PRO (ppms_privacy_...)
         if (cookie.name.indexOf("ppms_privacy_") === 0) return callback("Piwik PRO");
         // Sonderfall Real Cookie Banner
-        if (cookie.name.indexOf("real_cookie_banner-v:") === 0) return callback("Real Cookie Banner");
+        if (cookie.name.indexOf("real_cookie_banner-") === 0) return callback("Real Cookie Banner");
         // Sonderfall Consentmanager.net
         if (cookie.name.indexOf("__cmpc") === 0) return callback("Consentmanager.net");
       }
@@ -430,8 +479,9 @@ function deleteConsentSettings() {
 
           //Dynamische Namen von Cookies suchen und anhängen...
           chrome.cookies.getAll({url: tabs[0].url}, function(results) {
-            //Real Cookie Banner:
-            let realCookiesFound = results.filter(x=>x.name.indexOf("real_cookie_banner-v:")>=0);
+            //Real Cookie Banner: Praefix ohne "v:", es gibt beide Varianten
+            //(real_cookie_banner-v:3_blog:1_path:... und real_cookie_banner-blog:1)
+            let realCookiesFound = results.filter(x=>x.name.indexOf("real_cookie_banner-")>=0);
             if (realCookiesFound.length > 0) cookieNames = cookieNames.concat(realCookiesFound.map(x => (x.name)));
             //Consentmanager.net
             let consentManagerCookiesFound = results.filter(x=>x.name.indexOf("__cmpc")>=0);
