@@ -5,7 +5,7 @@ GTM & CMP Helper (formerly "Insert GTM" / "GTM Helper") is a powerful Chrome ext
 CORE FEATURES:
 
 1. Intelligent CMP Reset (60+ providers)
-Reset consent status with just one click. The extension automatically detects over 60 common CMPs (such as Cookiebot, Usercentrics, OneTrust, Borlabs, CMP19, and many more) and specifically deletes the associated cookies and storage entries. Ideal for testing consent banner logic without manually clearing cookies.
+Reset consent status with just one click. The extension automatically detects over 130 common CMPs (such as Cookiebot, Usercentrics, OneTrust, Borlabs, CCM19, Complianz, Real Cookie Banner, and many more) and specifically deletes the associated cookies and storage entries. Ideal for testing consent banner logic without manually clearing cookies.
 
 2. GTM Container Injection
 Inject any GTM container code (GTM-XXXXXX) into any website. Test new tracking setups in live environments before they are implemented in the source code.
@@ -46,7 +46,7 @@ Der GTM & CMP Helper (ehemals "Insert GTM" / "GTM Helper") ist eine leistungssta
 KERNFUNKTIONEN:
 
 1. Intelligenter CMP-Reset (über 60 Anbieter)
-Setzen Sie den Consent-Status mit nur einem Klick zurück. Die Extension erkennt automatisch über 60 gängige CMPs (wie Cookiebot, Usercentrics, OneTrust, Borlabs, CMP19 uvm.) und löscht gezielt die zugehörigen Cookies und Storage-Einträge. Ideal zum Testen von Consent-Banner-Logiken ohne manuelles Löschen von Cookies.
+Setzen Sie den Consent-Status mit nur einem Klick zurück. Die Extension erkennt automatisch über 130 gängige CMPs (wie Cookiebot, Usercentrics, OneTrust, Borlabs, CCM19, Complianz, Real Cookie Banner uvm.) und löscht gezielt die zugehörigen Cookies und Storage-Einträge. Ideal zum Testen von Consent-Banner-Logiken ohne manuelles Löschen von Cookies.
 
 2. GTM Container Injektion
 Fügen Sie beliebigen GTM-Container-Code (GTM-XXXXXX) in jede beliebige Website ein. Testen Sie neue Tracking-Setups in Live-Umgebungen, bevor diese im Quellcode implementiert sind.

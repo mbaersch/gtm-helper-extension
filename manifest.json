@@ -1,7 +1,7 @@
 {
   "name": "GTM & CMP Helper",
   "version": "3.3",
-  "description": "Reset consent state for 60+ CMPs and / or inject GTM container, push dataLayer events, or execute JS on selected pages.",
+  "description": "Reset consent state for 130+ CMPs and / or inject GTM container, push dataLayer events, or execute JS on selected pages.",
   "permissions": [
     "activeTab",
     "cookies",

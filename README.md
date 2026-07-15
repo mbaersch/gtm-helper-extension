@@ -32,7 +32,7 @@ Injects GTM container code into the current page.
 ### 2. CMP Detection & Reset
 Identifies the active Consent Management Platform on a website.
 - **Specific Reset:** Clears cookies and storage keys for the identified CMP.
-- **Global Reset:** Option to clear all known consent-related data (supports 60+ CMPs).
+- **Global Reset:** Option to clear all known consent-related data (supports 130+ CMPs).
 
 ### 3. Google Tag & Container Detection
 Automatically detects Google tags loaded on the current page — always on, no configuration, no extra permissions.
@@ -58,6 +58,9 @@ Automatically detects Google tags loaded on the current page — always on, no c
 ## Changelog
 
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
+
+### 3.4 (unreleased)
+- **New — increased CMP coverage:** the reset now knows about 130 CMPs (previously 70+), including CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, several TYPO3 consent tools, and many more. 
 
 ### 3.3
 - **New — GTM submit-dialog warning:** on `tagmanager.google.com`, a CSS-only hint colors the submit button orange and tints the selected "Create Version" option whenever the chosen action only creates a version instead of publishing — making it obvious when changes will not go live (e.g. with approve-but-not-publish permissions), where the button caption reads just "Submit" either way. No new permissions.
