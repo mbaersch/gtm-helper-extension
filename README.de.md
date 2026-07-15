@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Installieren-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.3-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.4-blue.svg)](#)
 
 GTM & CMP Helper ist eine Chrome-Extension zum Verwalten von Consent Management Platform (CMP) Daten, Injizieren von Google Tag Manager Containern und zum Debugging während der Entwicklung.
 
@@ -59,7 +59,7 @@ Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer 
 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
 
-### 3.4 (unveröffentlicht)
+### 3.4
 - **Neu — CMP-Abdeckung deutlich ausgebaut:** Der Reset kennt jetzt ca. 130 CMPs (vorher 70+), darunter CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, mehrere TYPO3-Consent-Tools und viele weitere. 
 
 ### 3.3
