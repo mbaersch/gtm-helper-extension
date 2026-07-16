@@ -60,7 +60,7 @@ Automatically detects Google tags loaded on the current page — always on, no c
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
 
 ### 3.4
-- **New — increased CMP coverage:** the reset now knows about 130 CMPs (previously 70+), including CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, several TYPO3 consent tools, and many more. 
+- **New — increased CMP coverage:** the reset now knows about 130 CMPs (previously 70+), including CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, several TYPO3 consent tools, and many more. ♥️ **h/t:** The source was a list of CMPs that Joachim Nickel kindly extracted from his tool [exatics](https://www.exatics.de/).
 
 ### 3.3
 - **New — GTM submit-dialog warning:** on `tagmanager.google.com`, a CSS-only hint colors the submit button orange and tints the selected "Create Version" option whenever the chosen action only creates a version instead of publishing — making it obvious when changes will not go live (e.g. with approve-but-not-publish permissions), where the button caption reads just "Submit" either way. No new permissions.

@@ -60,7 +60,7 @@ Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
 
 ### 3.4
-- **Neu — CMP-Abdeckung deutlich ausgebaut:** Der Reset kennt jetzt ca. 130 CMPs (vorher 70+), darunter CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, mehrere TYPO3-Consent-Tools und viele weitere. 
+- **Neu — CMP-Abdeckung deutlich ausgebaut:** Der Reset kennt jetzt ca. 130 CMPs (vorher 70+), darunter CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, mehrere TYPO3-Consent-Tools und viele weitere. ♥️ **h/t:** Die Quelle war eine freundlicherweise von Joachim Nickel bereitgestellte Liste von CMPs aus seinem Tool [exatics](https://www.exatics.de/). 
 
 ### 3.3
 - **Neu — Warnung im GTM-Sende-Dialog:** Auf `tagmanager.google.com` färbt ein reiner CSS-Hinweis den Senden-Button orange und hinterlegt die gewählte Option „Version erstellen", sobald die Aktion nur eine Version erstellt statt zu veröffentlichen — so ist sofort erkennbar, wenn Änderungen nicht live gehen (z. B. bei Freigeben-, aber nicht Veröffentlichen-Recht), wo der Button in beiden Fällen nur „Senden" heißt. Keine neuen Berechtigungen.
