@@ -7,7 +7,7 @@ const fs = require('fs');
 // rechts angedocktes Panel voller Höhe (scrollt intern) — wie ein reales Extension-Popup.
 const VIEW_W = 1280;
 const VIEW_H = 800;
-const PANEL_W = 440;
+const PANEL_W = 480;
 const imagesDir = path.resolve(__dirname, '..', 'images');
 
 const bgCache = {};
@@ -86,7 +86,7 @@ function promoTileHtml(w, h) {
       <div class="icon">${BRACKETS_SVG}</div>
       <div class="text">
         <div class="title">GTM <span class="amp">&amp;</span> CMP Helper</div>
-        <div class="tagline">Reset consent for 60+ CMPs, inject GTM containers, and detect loaded Google tags &amp; containers.</div>
+        <div class="tagline">Reset consent for 120+ CMPs, inject GTM containers, and detect loaded Google tags &amp; containers.</div>
       </div>
     </div>
   </body></html>`;
