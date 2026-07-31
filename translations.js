@@ -31,7 +31,14 @@ const translations = {
     "gtm_method_first-party": "first-party (sGTM)",
     "gtm_method_custom-path": "Custom Path",
     "gtm_method_base64": "base64-Loader",
-    "gtm_method_unknown": "unbekannt (inline?)"
+    "gtm_method_unknown": "unbekannt (inline?)",
+    gtm_ui_pin_on: "Suchleiste beim Scrollen fixieren",
+    gtm_ui_pin_off: "Suchleiste wieder mitscrollen lassen",
+    gtm_ui_sort_asc: "Tabelle nach „{col}“ aufsteigend sortieren",
+    gtm_ui_sort_desc: "Tabelle nach „{col}“ absteigend sortieren",
+    gtm_ui_sort_column: "Spalte {n}",
+    gtm_ui_builtin_hide: "Integrierte Variablen ausblenden",
+    gtm_ui_builtin_show: "Integrierte Variablen einblenden"
   },
   en: {
     hdng: "GTM & CMP Helper",
@@ -65,7 +72,14 @@ const translations = {
     "gtm_method_first-party": "first-party (sGTM)",
     "gtm_method_custom-path": "custom path",
     "gtm_method_base64": "base64 loader",
-    "gtm_method_unknown": "unknown (inline?)"
+    "gtm_method_unknown": "unknown (inline?)",
+    gtm_ui_pin_on: "Keep the search bar visible while scrolling",
+    gtm_ui_pin_off: "Let the search bar scroll away",
+    gtm_ui_sort_asc: "Sort table by “{col}” in ascending order",
+    gtm_ui_sort_desc: "Sort table by “{col}” in descending order",
+    gtm_ui_sort_column: "Column {n}",
+    gtm_ui_builtin_hide: "Hide built-in variables",
+    gtm_ui_builtin_show: "Show built-in variables"
   }
 };
 

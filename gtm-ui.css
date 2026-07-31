@@ -28,3 +28,164 @@
 .gtm-draft-submit__option--create.gtm-draft-submit__option--selected {
   background-color: #f3e7d1 !important;
 }
+
+/*
+ * Bedienkomfort: Navigation bleibt beim Scrollen erreichbar
+ *
+ * Bei langen Listen scrollt die Seitennavigation nach oben weg, und der
+ * Wechsel des Bereichs erzwingt jedes Mal ein Zurueckscrollen. "sticky"
+ * statt "fixed", weil das Element damit im Layoutfluss bleibt: Es scrollt
+ * normal mit und bleibt erst am oberen Rand stehen – "fixed" wuerde es aus
+ * dem Fluss nehmen und die Luecke hinterlassen, in der der Header verschwindet.
+ *
+ * Angesetzt wird auf gtm-container-page-navigation, nicht auf das Menue
+ * selbst: In der inneren Ebene reicht der Spielraum zum Elternelement nicht
+ * aus, "sticky" bliebe dort wirkungslos. align-self verhindert, dass ein
+ * Flex-Container das Element auf volle Hoehe streckt – auch dann gibt es
+ * nichts mehr zu kleben.
+ */
+div.gtm-container-page-navigation {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+/*
+ * Bedienkomfort: Titelbalken der Listen fixierbar
+ *
+ * Anders als die Navigation ist das Geschmackssache, deshalb haengt es am
+ * Schalter aus gtm-ui.js (Pin in der Suchleiste, Standard: aus).
+ *
+ * Fixiert wird card-title-bar, nicht die darin liegende card-actions: Die
+ * Aktionsleiste fuellt ihren Elternbalken exakt aus (56 px in 56 px) und hat
+ * damit keinen Spielraum zum Kleben. Der Titelbalken dagegen sitzt in einem
+ * Wrapper ueber die volle Tabellenhoehe und loest sich am Ende der Karte von
+ * selbst wieder. Canvas ist die CSS-Systemfarbe und folgt dem Farbschema,
+ * damit unter dem Balken nichts durchscheint.
+ *
+ * Die drei Listen werden einzeln benannt statt ueber einen Sammelselektor: Auf
+ * der Variablenseite gibt es mit ctrl.builtInVariables eine zweite Karte, die
+ * sonst einen zweiten Balken an dieselbe Kante haengen wuerde.
+ */
+html.igtm-sticky-bar gtm-tag-list-table div.card-title-bar,
+html.igtm-sticky-bar div[data-items="ctrl.triggerList"] div.card-title-bar,
+html.igtm-sticky-bar div[data-items="ctrl.variableList"] div.card-title-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: Canvas;
+}
+
+/*
+ * Der Schalter selbst: flach, monochrom, in GTM-Blau. Die erste color-Angabe
+ * ist der Fallback fuer Umgebungen ohne light-dark(), die zweite folgt dem
+ * color-scheme der GTM-Oberflaeche. Das SVG erbt die Farbe ueber currentColor,
+ * der Zustand steckt allein in der Deckkraft.
+ */
+button.igtm-pin-bar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 4px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  color: #1a73e8;
+  color: light-dark(#1a73e8, #8ab4f8);
+  opacity: 0.45;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+button.igtm-pin-bar svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+button.igtm-pin-bar:hover {
+  opacity: 0.8;
+  background-color: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+html.igtm-sticky-bar button.igtm-pin-bar {
+  opacity: 1;
+}
+
+/*
+ * Sortierschalter in Parametertabellen
+ *
+ * Sie tragen die GTM-Klasse "btn", damit Rahmen, Hover und Uebergaenge zur
+ * Oberflaeche passen. Deren Groessenangaben sind allerdings auf vollwertige
+ * Schaltflaechen ausgelegt und beanspruchen in einer Tabellenzeile zu viel
+ * Platz – genau die werden hier zurueckgenommen, der Rest des Designs bleibt.
+ * Der zweiteilige Selektor verschafft die noetige Spezifitaet gegenueber .btn.
+ */
+.igtm-sort-row button.igtm-sort-btn {
+  padding: 2px 6px;
+  height: auto;
+  width: auto;
+  min-width: auto;
+  max-width: none;
+  /* .btn setzt eine feste Zeilenhoehe fuer grosse Schaltflaechen – zurueck auf
+     die der umgebenden Zelle, sonst baut der Schalter unnoetig hoch auf. */
+  line-height: unset;
+}
+
+/*
+ * Integrierte Variablen ein- und ausblenden
+ *
+ * Die Liste steht dauerhaft ueber den benutzerdefinierten Variablen und wird
+ * selten gebraucht. Ausgeblendet wird nur die Tabelle, nicht die Karte: Titel
+ * und Schalter bleiben stehen, sonst gaebe es keinen Weg zurueck. Der Zustand
+ * haengt an einer Klasse auf <html>, weil die AngularJS-Oberflaeche den
+ * Karteninhalt bei jedem Wechsel neu aufbaut.
+ */
+html.igtm-hide-builtin div[data-items="ctrl.builtInVariables"] table.gtm-table--hide-empty {
+  display: none;
+}
+
+/*
+ * Der Schalter dazu: ein Schieberegler im Stil der Oberflaeche. Eingeschaltet
+ * bedeutet sichtbar – die Voreinstellung, an der sich ohne Zutun nichts aendert.
+ */
+#igtm-builtin-switch {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 14px;
+  margin: 0 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: #bdc1c6;
+  background: light-dark(#bdc1c6, #5f6368);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#igtm-builtin-switch::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#igtm-builtin-switch[aria-checked="true"] {
+  background: #a8c7fa;
+  background: light-dark(#a8c7fa, #3c5a8a);
+}
+
+#igtm-builtin-switch[aria-checked="true"]::after {
+  transform: translateX(14px);
+  background: #1a73e8;
+  background: light-dark(#1a73e8, #8ab4f8);
+}

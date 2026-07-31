@@ -1,6 +1,6 @@
 {
   "name": "GTM & CMP Helper",
-  "version": "3.4",
+  "version": "3.5",
   "description": "Reset consent state for 130+ CMPs and / or inject GTM container, push dataLayer events, or execute JS on selected pages.",
   "permissions": [
     "activeTab",
@@ -46,7 +46,8 @@
     {
       "run_at": "document_idle",
       "matches": ["https://tagmanager.google.com/*"],
-      "css": ["gtm-ui.css"]
+      "css": ["gtm-ui.css"],
+      "js": ["translations.js", "gtm-ui.js"]
     }
   ],
   "manifest_version": 3

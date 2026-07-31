@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Installieren-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.4-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.5-blue.svg)](#)
 
 GTM & CMP Helper ist eine Chrome-Extension zum Verwalten von Consent Management Platform (CMP) Daten, Injizieren von Google Tag Manager Containern und zum Debugging während der Entwicklung.
 
@@ -40,7 +40,17 @@ Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer 
 - **Wie:** Klassifiziert den Ladeweg — `standard` (googletagmanager.com), `first-party` (Server-side GTM / Google Tag Gateway), `custom-path` oder `base64`-Tunnel.
 - **Wo:** Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Methode · Host) und ein Konsolen-Log pro neuem Fund.
 
-### 4. Benutzeroberfläche
+### 4. Komfort in der GTM-Oberfläche
+Anzeige- und Bedienhilfen auf `tagmanager.google.com` — ohne zusätzliche Berechtigungen und ohne Zugriff auf Container-Daten.
+- **Fixierte Navigation:** Die Bereichsnavigation bleibt beim Scrollen langer Listen sichtbar, statt nach oben wegzuscrollen.
+- **Fixierbare Suchleiste:** Ein Schalter in der Titelleiste von Tags, Triggern und Variablen hält Titel, Suche und Schaltflächen beim Scrollen oben (Standard: aus).
+- **Sortierung von Parametertabellen:** Suchtabellen, Ereignisparameter und vergleichbare Schlüssel-Wert-Listen lassen sich alphabetisch auf- und absteigend sortieren — nach Eingabe- oder Ausgabespalte, auch in Custom Templates. Der Schalter erscheint nur an Tabellen, die sich verlustfrei sortieren lassen.
+- **Integrierte Variablen ausblenden:** Ein Schieberegler blendet die selten benötigte Liste dauerhaft aus, damit die benutzerdefinierten Variablen ohne Scrollen erreichbar sind.
+- **Warnung im Sende-Dialog:** Färbt den Senden-Button orange, sobald die gewählte Aktion nur eine Version erstellt statt zu veröffentlichen.
+
+Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache der GTM-Oberfläche.
+
+### 5. Benutzeroberfläche
 - **Design:** Standardmäßig im Dark Mode mit manuellem Umschalter für das Light Theme.
 - **Sprache:** Verfügbar in Deutsch und Englisch.
 - **Architektur:** Erstellt mit CSS Grid unter Einhaltung aktueller Extension-Standards (Manifest V3).
@@ -58,6 +68,10 @@ Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer 
 ## Changelog
 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
+
+### 3.5
+- **Neu — Komfort in der GTM-Oberfläche:** dauerhaft sichtbare Bereichsnavigation, auf Wunsch fixierte Titel- und Suchleiste in Tag-, Trigger- und Variablenlisten, alphabetische Sortierung von Parametertabellen (Suchtabellen, Ereignisparameter, Custom Templates) und ein Schalter zum Ausblenden der integrierten Variablen. Keine neuen Berechtigungen.
+- **Hinweis zur Sortierung:** Sie erscheint nur an Tabellen, deren Zellen ausschließlich Textfelder enthalten. Enthält eine Spalte etwas anderes — etwa eine Auswahlliste —, bleibt der Schalter aus: Ein solcher Wert würde beim Umsortieren nicht mitwandern und aus seiner Zeile gerissen. Geschrieben wird ohnehin nur in die Eingabefelder; übernommen wird erst, wenn im GTM gespeichert wird.
 
 ### 3.4
 - **Neu — CMP-Abdeckung deutlich ausgebaut:** Der Reset kennt jetzt ca. 130 CMPs (vorher 70+), darunter CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, mehrere TYPO3-Consent-Tools und viele weitere. ♥️ **h/t:** Die Quelle war eine freundlicherweise von Joachim Nickel bereitgestellte Liste von CMPs aus seinem Tool [exatics](https://www.exatics.de/). 
