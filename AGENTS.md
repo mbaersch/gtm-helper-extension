@@ -48,6 +48,9 @@ Die öffentliche Doku liegt **nicht** in diesem Repo, sondern unter:
 - `webdoc/gtm-helper-chrome-extension.html` im Repo ist ein **veralteter Stand** der alten analytrix-Seite, nicht die Quelle der Wahrheit.
 - `README.md` verlinkt noch auf die alte analytrix-URL (funktioniert via Redirect, bei Gelegenheit korrigieren).
 
+## Sprache im GTM-UI: nicht `<html lang>`
+Alles, was in die GTM-Oberfläche hineingeschrieben wird (`gtm-ui.js`, `gtm-var-edit.js`), folgt deren Sprache, nicht der Popup-Einstellung — die ist aus einem Content-Script dort auch gar nicht erreichbar. **`<html lang>` ist auf `tagmanager.google.com` leer**, ein Griff darauf fällt still auf `navigator.language` durch und fällt nur auf, wenn Browser- und GTM-Sprache auseinanderlaufen (`?hl=en`). Maßgeblich ist `preloadData.currentLocale` aus dem Seitencode; aus der ISOLATED world ist das Objekt unsichtbar, deshalb liest `detectGtmLanguage()` in `translations.js` den Inline-Code als Text. Immer diese Funktion verwenden.
+
 ## Konventionen
 - Popup-Texte immer über `translations.js` (DE **und** EN), nie hart im HTML.
 - Keine neuen Permissions ohne Not — "no new permissions" ist ein wiederkehrendes Changelog-Versprechen. Aktuell: `activeTab`, `cookies`, `scripting`, `<all_urls>`.

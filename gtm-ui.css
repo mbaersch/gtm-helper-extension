@@ -66,6 +66,11 @@ div.gtm-container-page-navigation {
  * Die drei Listen werden einzeln benannt statt ueber einen Sammelselektor: Auf
  * der Variablenseite gibt es mit ctrl.builtInVariables eine zweite Karte, die
  * sonst einen zweiten Balken an dieselbe Kante haengen wuerde.
+ *
+ * Die untere Kante gehoert nur an den fixierten Balken: Ohne Abschluss
+ * verschwindet der durchscrollende Inhalt uebergangslos unter dem Titelbalken.
+ * Im nicht fixierten Zustand liegt der Balken ruhig im Fluss und braucht die
+ * Linie nicht.
  */
 html.igtm-sticky-bar gtm-tag-list-table div.card-title-bar,
 html.igtm-sticky-bar div[data-items="ctrl.triggerList"] div.card-title-bar,
@@ -74,6 +79,7 @@ html.igtm-sticky-bar div[data-items="ctrl.variableList"] div.card-title-bar {
   top: 0;
   z-index: 5;
   background: Canvas;
+  border-bottom: 1px solid #dadce0;
 }
 
 /*
@@ -188,4 +194,69 @@ html.igtm-hide-builtin div[data-items="ctrl.builtInVariables"] table.gtm-table--
   transform: translateX(14px);
   background: #1a73e8;
   background: light-dark(#1a73e8, #8ab4f8);
+}
+
+/*
+ * Variablen-Chips unter dem fokussierten Eingabefeld
+ *
+ * Die Leiste haengt am body und wird ueber Bildschirmkoordinaten platziert, nicht
+ * in den Feld-Container eingehaengt: In den engen Zellen der Parametertabellen
+ * wuerde sie sonst das Zeilenraster auseinanderschieben. Deshalb braucht sie einen
+ * z-index oberhalb der Sheets – ohne ihn laege sie hinter dem Overlay, in dem das
+ * Feld selbst steht.
+ *
+ * Die Chips erscheinen nur im fokussierten Feld und nur, wenn dort {{…}} steht.
+ * Ein Schalter waere hier fehl am Platz: Sie draengen sich nicht auf, sondern
+ * verhalten sich wie die Sortierschalter, die auch nur an geeigneten Tabellen
+ * auftauchen.
+ */
+.igtm-var-chips {
+  position: absolute;
+  z-index: 99999;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 460px;
+}
+
+/* Die erste Farbangabe ist jeweils der Fallback fuer Umgebungen ohne light-dark(),
+   die zweite folgt dem color-scheme der GTM-Oberflaeche. */
+.igtm-var-chip {
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 18px;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: Canvas;
+  border: 1px solid #dadce0;
+  border: 1px solid light-dark(#dadce0, #5f6368);
+  color: #1a73e8;
+  color: light-dark(#1a73e8, #8ab4f8);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.igtm-var-chip:hover:not(:disabled) {
+  background-color: color-mix(in srgb, currentColor 12%, Canvas);
+}
+
+/*
+ * Der Zustand steckt in der Farbe, die Erklaerung im Tooltip – fuer einen Satz ist
+ * in der Pille kein Platz. Grau heisst: integrierte Variable, es gibt nichts zu
+ * bearbeiten, deshalb auch kein Zeiger und kein Klick. Rot heisst: unter diesem
+ * Namen steht nichts in der Liste. Rot bleibt anklickbar, weil die Variable
+ * inzwischen angelegt worden sein kann.
+ */
+.igtm-var-chip--builtin {
+  color: GrayText;
+  cursor: default;
+}
+
+.igtm-var-chip--missing,
+.igtm-var-chip--failed {
+  color: #c5221f;
+  color: light-dark(#c5221f, #f28b82);
 }

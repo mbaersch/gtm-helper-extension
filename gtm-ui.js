@@ -45,14 +45,11 @@
   ];
   var SORT_ROW_CLASS = 'igtm-sort-row';
 
-  var LANG = (function () {
-    var tag = document.documentElement.getAttribute('lang') || navigator.language || 'de';
-    return tag.toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
-  })();
-
   // Duenne Huelle um getTranslation() aus translations.js, ergaenzt um Platzhalter.
+  // Die Sprache ermittelt detectGtmLanguage() dort ebenfalls – erst bei Bedarf,
+  // damit der Seitencode zum Zeitpunkt der Auswertung vollstaendig ist.
   function t(key, vars) {
-    var text = getTranslation(LANG, key);
+    var text = getTranslation(detectGtmLanguage(), key);
     if (vars) {
       Object.keys(vars).forEach(function (name) {
         text = text.replace('{' + name + '}', vars[name]);
@@ -292,7 +289,7 @@
       values.push(fields.map(function (input) { return input.value; }));
     }
 
-    var collator = new Intl.Collator(LANG, { numeric: true, sensitivity: 'base' });
+    var collator = new Intl.Collator(detectGtmLanguage(), { numeric: true, sensitivity: 'base' });
     var sorted = values.slice().sort(function (a, b) {
       var left = (a[column] || '').trim();
       var right = (b[column] || '').trim();

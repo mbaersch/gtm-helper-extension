@@ -38,7 +38,11 @@ const translations = {
     gtm_ui_sort_desc: "Tabelle nach „{col}“ absteigend sortieren",
     gtm_ui_sort_column: "Spalte {n}",
     gtm_ui_builtin_hide: "Integrierte Variablen ausblenden",
-    gtm_ui_builtin_show: "Integrierte Variablen einblenden"
+    gtm_ui_builtin_show: "Integrierte Variablen einblenden",
+    gtm_ui_var_edit: "Variable „{name}“ bearbeiten",
+    gtm_ui_var_builtin: "„{name}“ ist eine integrierte Variable und hat keine Konfiguration",
+    gtm_ui_var_missing: "„{name}“ steht nicht in der Variablenliste",
+    gtm_ui_var_failed: "Variable „{name}“ konnte nicht geöffnet werden"
   },
   en: {
     hdng: "GTM & CMP Helper",
@@ -79,7 +83,11 @@ const translations = {
     gtm_ui_sort_desc: "Sort table by “{col}” in descending order",
     gtm_ui_sort_column: "Column {n}",
     gtm_ui_builtin_hide: "Hide built-in variables",
-    gtm_ui_builtin_show: "Show built-in variables"
+    gtm_ui_builtin_show: "Show built-in variables",
+    gtm_ui_var_edit: "Edit variable “{name}”",
+    gtm_ui_var_builtin: "“{name}” is a built-in variable and has no configuration",
+    gtm_ui_var_missing: "“{name}” is not in the variable list",
+    gtm_ui_var_failed: "Could not open variable “{name}”"
   }
 };
 
@@ -88,7 +96,47 @@ function getTranslation(lang, key) {
   return translations[l][key] || translations['de'][key] || key;
 }
 
+/*
+ * Sprache der GTM-Oberfläche — für alles, was in deren Seite hineingeschrieben wird.
+ *
+ * Beschriftungen in einer fremden Seite folgen deren Sprache, nicht der im Popup
+ * gewählten: Ein deutscher Tooltip neben englischen GTM-Schaltflächen wäre verkehrt,
+ * und die Popup-Einstellung ist aus einem Content-Script dort ohnehin nicht
+ * erreichbar.
+ *
+ * `<html lang>` taugt dafür nicht — auf tagmanager.google.com ist das Attribut leer.
+ * Maßgeblich ist `preloadData.currentLocale`, das im Seitencode steht und den
+ * `hl`-Parameter der URL bereits abbildet. Erreichbar ist es nur als Text: In der
+ * ISOLATED world, in der die Content-Scripts laufen, ist `window.preloadData`
+ * unsichtbar. Deshalb wird der Inline-Code gelesen statt das Objekt.
+ *
+ * Deutsch, wenn die Locale mit "de" beginnt (`de`, `de_DE`, `de-AT`), sonst
+ * Englisch — die Extension kennt nur diese beiden Sprachen.
+ *
+ * Das Ergebnis wird gemerkt: Der Seitencode ist groß, und die Sprache ändert sich
+ * ohne Neuladen nicht.
+ */
+let gtmLanguage = null;
+
+function detectGtmLanguage() {
+  if (gtmLanguage) return gtmLanguage;
+
+  let locale = '';
+  const scripts = document.querySelectorAll('script:not([src])');
+  for (let i = 0; i < scripts.length; i++) {
+    const match = /currentLocale"?\s*[:=]\s*"([a-zA-Z_-]+)"/.exec(scripts[i].textContent);
+    if (match) {
+      locale = match[1];
+      break;
+    }
+  }
+  if (!locale) locale = navigator.language || '';
+
+  gtmLanguage = locale.toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  return gtmLanguage;
+}
+
 // Export für Node.js Tests
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { translations, getTranslation };
+  module.exports = { translations, getTranslation, detectGtmLanguage };
 }
