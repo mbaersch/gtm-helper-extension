@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Installieren-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.5-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.6-blue.svg)](#)
 
 GTM & CMP Helper ist eine Chrome-Extension zum Verwalten von Consent Management Platform (CMP) Daten, Injizieren von Google Tag Manager Containern und zum Debugging während der Entwicklung.
 
@@ -47,6 +47,7 @@ Anzeige- und Bedienhilfen auf `tagmanager.google.com` — ohne zusätzliche Bere
 - **Sortierung von Parametertabellen:** Suchtabellen, Ereignisparameter und vergleichbare Schlüssel-Wert-Listen lassen sich alphabetisch auf- und absteigend sortieren — nach Eingabe- oder Ausgabespalte, auch in Custom Templates. Der Schalter erscheint nur an Tabellen, die sich verlustfrei sortieren lassen.
 - **Integrierte Variablen ausblenden:** Ein Schieberegler blendet die selten benötigte Liste dauerhaft aus, damit die benutzerdefinierten Variablen ohne Scrollen erreichbar sind.
 - **Warnung im Sende-Dialog:** Färbt den Senden-Button orange, sobald die gewählte Aktion nur eine Version erstellt statt zu veröffentlichen.
+- **Variablen aus Eingabefeldern heraus bearbeiten:** Enthält ein Feld eines Tags oder Triggers eine Referenz wie `{{Meine Variable}}`, erscheint darunter ein Chip pro Variable. Ein Klick öffnet deren Definition direkt darüber — nach dem Schließen steht man wieder im Tag, ohne Bereichswechsel und ohne Umweg über die Auswahlliste. Auch bei kombinierten Referenzen in einem Feld.
 
 Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache der GTM-Oberfläche.
 
@@ -68,6 +69,13 @@ Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache d
 ## Changelog
 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
+
+### 3.6
+- **Neu — Variablen aus Eingabefeldern heraus bearbeiten:** Steht in einem Feld eines Tags oder Triggers eine Referenz wie `{{Meine Variable}}`, erscheint unter dem Feld ein Chip je Variable; ein Klick öffnet deren Definition direkt über dem Tag, so dass das Schließen dorthin zurückführt statt in die Variablenliste. Kombinierte Referenzen in einem Feld bekommen je einen eigenen Chip. Integrierte Variablen werden nach dem ersten Versuch grau markiert (sie haben keine Konfiguration), Namen ohne Eintrag in der Liste rot. Keine neuen Berechtigungen.
+- **Hinweis zur Umsetzung:** Die Zuordnung Name → Variable übernimmt GTMs eigene Auswahlliste, es wird keine Variablenliste vorgehalten. Umbenennen, Anlegen und Löschen wirken deshalb sofort, und es entsteht keine Dauerlast — die Chips erscheinen nur im gerade fokussierten Feld.
+- **Fix:** Der Hilfe-Link im Popup zeigt direkt auf die aktuelle Adresse statt auf die weitergeleitete alte.
+- **Fix:** Die Beschriftungen in der GTM-Oberfläche folgen wieder deren Sprache. Bisher richteten sie sich immer nach der Browsersprache, was nur auffiel, wenn beide auseinanderliefen (etwa mit `?hl=en`).
+- **Änderung:** Fixierte Titelleisten haben eine untere Abschlusslinie, damit der durchscrollende Inhalt nicht unvermittelt darunter verschwindet.
 
 ### 3.5
 - **Neu — Komfort in der GTM-Oberfläche:** dauerhaft sichtbare Bereichsnavigation, auf Wunsch fixierte Titel- und Suchleiste in Tag-, Trigger- und Variablenlisten, alphabetische Sortierung von Parametertabellen (Suchtabellen, Ereignisparameter, Custom Templates) und ein Schalter zum Ausblenden der integrierten Variablen. Keine neuen Berechtigungen.

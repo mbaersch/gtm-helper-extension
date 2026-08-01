@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.5-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.6-blue.svg)](#)
 
 GTM & CMP Helper is a Chrome Extension for resetting Consent Management Platform (CMP) data, injecting Google Tag Manager containers, and managing data during development and debugging.
 
@@ -47,6 +47,7 @@ Display and usability helpers on `tagmanager.google.com` — no extra permission
 - **Sorting for parameter tables:** lookup tables, event parameters, and comparable key/value lists can be sorted alphabetically in both directions — by input or output column, custom templates included. The control only appears on tables that can be sorted without data loss.
 - **Hide built-in variables:** a switch permanently collapses the rarely needed list so the user-defined variables are reachable without scrolling.
 - **Submit dialog warning:** colors the submit button orange whenever the selected action only creates a version instead of publishing.
+- **Edit variables straight from input fields:** when a field of a tag or trigger contains a reference such as `{{My Variable}}`, a chip appears below it for each variable. Clicking it opens the variable's definition right on top — closing it returns you to the tag, with no section switch and no detour through the variable picker. Combined references in one field are handled as well.
 
 The toggles remember their state; their labels follow the language of the GTM interface.
 
@@ -68,6 +69,13 @@ The toggles remember their state; their labels follow the language of the GTM in
 ## Changelog
 
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
+
+### 3.6
+- **New — Edit variables straight from input fields:** when a field of a tag or trigger holds a reference such as `{{My Variable}}`, a chip appears below the field for each variable; clicking it opens that variable's definition directly above the tag, so closing it returns you there instead of leaving you in the variable list. Combined references in one field each get their own chip. Built-in variables turn grey after the first attempt (they have no configuration), names with no entry in the list turn red. No new permissions.
+- **Note on the approach:** the mapping from name to variable is done by GTM's own variable picker; no variable list is cached. Renaming, adding, and deleting therefore take effect immediately, and there is no ongoing cost — chips only appear in the field that currently has focus.
+- **Fix:** the popup's help link now points straight at the current address instead of the redirected old one.
+- **Fix:** labels inside the GTM interface follow its language again. They previously always followed the browser language, which only showed when the two differed (e.g. with `?hl=en`).
+- **Change:** pinned title bars now have a bottom border so scrolling content no longer disappears underneath without a visible edge.
 
 ### 3.5
 - **New — GTM interface comfort:** permanently visible section navigation, optionally pinned title and search bar in the tag, trigger, and variable lists, alphabetical sorting for parameter tables (lookup tables, event parameters, custom templates), and a switch to hide the built-in variables. No new permissions.
