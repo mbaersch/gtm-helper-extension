@@ -51,6 +51,18 @@ Die öffentliche Doku liegt **nicht** in diesem Repo, sondern unter:
 ## Sprache im GTM-UI: nicht `<html lang>`
 Alles, was in die GTM-Oberfläche hineingeschrieben wird (`gtm-ui.js`, `gtm-var-edit.js`), folgt deren Sprache, nicht der Popup-Einstellung — die ist aus einem Content-Script dort auch gar nicht erreichbar. **`<html lang>` ist auf `tagmanager.google.com` leer**, ein Griff darauf fällt still auf `navigator.language` durch und fällt nur auf, wenn Browser- und GTM-Sprache auseinanderlaufen (`?hl=en`). Maßgeblich ist `preloadData.currentLocale` aus dem Seitencode; aus der ISOLATED world ist das Objekt unsichtbar, deshalb liest `detectGtmLanguage()` in `translations.js` den Inline-Code als Text. Immer diese Funktion verwenden.
 
+## Offen: GTM-UI-Funktionen einzeln abschaltbar machen
+**Vor der nächsten Veröffentlichung zu klären.** Die GTM-Oberfläche wird inzwischen von vielen Extensions erweitert; wer zwei davon installiert hat, bekommt doppelte oder kollidierende Bedienelemente. Schon heute überschneidet sich unser Ausblenden der integrierten Variablen mit `hideBuiltInVariables.js` des GTM Fixers, dazu greifen dessen `searchBoxes.js` und `filterTagTriggerVariable.js` in dieselben Listen.
+
+Ziel: **jede** Funktion einzeln schaltbar, mindestens so granular wie der GTM Fixer — der hält pro Funktion ein eigenes Flag (`variableQuickPicker`, `hideBuiltInVariables`, `searchBoxes`, `reorderTagParameters` …, zwölf insgesamt) und schaltet sie über sein Popup.
+
+Randbedingungen:
+- **Keine neuen Permissions.** `chrome.storage` scheidet damit aus — der Weg des Fixers ist für uns versperrt. Aktuell: `activeTab`, `cookies`, `scripting`, `<all_urls>`.
+- Unser Zustand liegt im `localStorage` von `tagmanager.google.com` unter `igtm_gtm_ui` (bisher `stickyBar`, `hideBuiltInVars`). Aus dem Popup ist diese Origin nur über `chrome.scripting` erreichbar.
+- Ohne Schalter sind derzeit: Sortierung der Parametertabellen, fixierte Bereichsnavigation, Hinweis im Sende-Dialog, Variablen-Chips.
+
+Zu entscheiden ist vor allem, **wo** die Schalter sitzen. Die vorhandenen hängen in den Kartenkopfzeilen der Listen; für Funktionen ohne solchen Ort (Chips, Sende-Dialog) gibt es keine naheliegende Stelle, und ein Sammelort im Popup widerspräche dem bisherigen Grundsatz, GTM-Einstellungen nicht dorthin zu holen.
+
 ## Konventionen
 - Popup-Texte immer über `translations.js` (DE **und** EN), nie hart im HTML.
 - Keine neuen Permissions ohne Not — "no new permissions" ist ein wiederkehrendes Changelog-Versprechen. Aktuell: `activeTab`, `cookies`, `scripting`, `<all_urls>`.
