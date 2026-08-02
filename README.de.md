@@ -48,8 +48,7 @@ Anzeige- und Bedienhilfen auf `tagmanager.google.com` — ohne zusätzliche Bere
 - **Integrierte Variablen ausblenden:** Ein Schieberegler blendet die selten benötigte Liste dauerhaft aus, damit die benutzerdefinierten Variablen ohne Scrollen erreichbar sind.
 - **Warnung im Sende-Dialog:** Färbt den Senden-Button orange, sobald die gewählte Aktion nur eine Version erstellt statt zu veröffentlichen.
 - **Variablen aus Eingabefeldern heraus bearbeiten:** Enthält ein Feld eines Tags oder Triggers eine Referenz wie `{{Meine Variable}}`, erscheint darunter ein Chip pro Variable. Ein Klick öffnet deren Definition direkt darüber — nach dem Schließen steht man wieder im Tag, ohne Bereichswechsel und ohne Umweg über die Auswahlliste. Auch bei kombinierten Referenzen in einem Feld.
-
-- **Einzeln abschaltbar:** Die Karte „GTM-Oberfläche" im Popup schaltet jede dieser Funktionen für sich ab, dazu alle zusammen. Abgeschaltet heißt weg: Auch die Bedienelemente in der Oberfläche verschwinden, damit sich nichts mit anderen GTM-Extensions doppelt. Voreingestellt ist alles an. Die Karte lässt sich bedienen, während ein Tab mit `tagmanager.google.com` aktiv ist — dort liegen die Einstellungen, und ohne neue Berechtigung ist von außen kein Weg dorthin.
+- **Einzeln abschaltbar:** Die Karte „GTM-Oberfläche verbessern" im Popup schaltet jede dieser Funktionen für sich ab, dazu alle zusammen. Abgeschaltet heißt weg: Auch die Bedienelemente in der Oberfläche verschwinden, damit sich nichts mit anderen GTM-Extensions doppelt. Voreingestellt ist alles an. Die Karte lässt sich bedienen, während ein Tab mit `tagmanager.google.com` aktiv ist — dort liegen die Einstellungen, und ohne neue Berechtigung ist von außen kein Weg dorthin.
 
 Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache der GTM-Oberfläche.
 
@@ -62,9 +61,9 @@ Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache d
 
 ## Bedienung
 
-1. **GTM-Injektion:** Container-Code in das Textfeld eingeben, Checkbox aktivieren und auf **Speichern & neu laden** klicken.
+1. **GTM-Injektion:** Container-Code in das Textfeld eingeben, Schalter umlegen und auf **Speichern & neu laden** klicken.
 2. **Erweiterte Einstellungen:** Akkordeon öffnen, um umgebungsspezifische Token einzugeben.
-3. **Consent-Reset:** Den Link **CMP Reset** in der Erkennungs-Box oder den Button **Consent löschen** im Footer nutzen.
+3. **Consent-Reset:** Den Link **nur diese zurücksetzen** in der Erkennungs-Box (löscht allein die Daten der erkannten CMP) oder den Button **Consent löschen** im Footer (löscht alle bekannten).
 
 ---
 
@@ -73,11 +72,16 @@ Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache d
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
 
 ### 3.6
+- **Neu — Komfortfunktionen im GTM einzeln abschaltbar:** Die Karte „GTM-Oberfläche verbessern" unten im Popup schaltet jede der sechs Funktionen für sich ab, dazu eine für alle zusammen. Abgeschaltet heißt weg: Pin, Variablen-Schalter und Sortierzeilen verschwinden mitsamt Wirkung aus der Oberfläche, damit sich nichts mit anderen GTM-Extensions doppelt. Voreingestellt ist alles an. Bedienbar ist die Karte, während ein Tab mit `tagmanager.google.com` aktiv ist — dort liegen die Einstellungen, und ohne neue Berechtigung führt kein Weg von außen dorthin.
 - **Neu — Variablen aus Eingabefeldern heraus bearbeiten:** Steht in einem Feld eines Tags oder Triggers eine Referenz wie `{{Meine Variable}}`, erscheint unter dem Feld ein Chip je Variable; ein Klick öffnet deren Definition direkt über dem Tag, so dass das Schließen dorthin zurückführt statt in die Variablenliste. Kombinierte Referenzen in einem Feld bekommen je einen eigenen Chip. Integrierte Variablen werden nach dem ersten Versuch grau markiert (sie haben keine Konfiguration), Namen ohne Eintrag in der Liste rot. Keine neuen Berechtigungen.
 - **Hinweis zur Umsetzung:** Die Zuordnung Name → Variable übernimmt GTMs eigene Auswahlliste, es wird keine Variablenliste vorgehalten. Umbenennen, Anlegen und Löschen wirken deshalb sofort, und es entsteht keine Dauerlast — die Chips erscheinen nur im gerade fokussierten Feld.
 - **Fix:** Der Hilfe-Link im Popup zeigt direkt auf die aktuelle Adresse statt auf die weitergeleitete alte.
 - **Fix:** Die Beschriftungen in der GTM-Oberfläche folgen wieder deren Sprache. Bisher richteten sie sich immer nach der Browsersprache, was nur auffiel, wenn beide auseinanderliefen (etwa mit `?hl=en`).
 - **Änderung:** Fixierte Titelleisten haben eine untere Abschlusslinie, damit der durchscrollende Inhalt nicht unvermittelt darunter verschwindet.
+- **Änderung — Infoseite statt Hinweisfenster:** Das „i" in der Kopfzeile öffnet keinen zentrierten Kasten mit zwei Sätzen mehr, sondern eine Seite über den ganzen Inhaltsbereich, mit Zurück-Schalter oben und unten (Escape schließt ebenfalls). Der Text beschreibt jetzt alle Funktionsbereiche samt Speicherort und benötigten Berechtigungen — und nennt die richtige Zahl unterstützter CMPs.
+- **Änderung — Schalter statt Kästchen:** Die Optionen im Popup sind Schieberegler im Stil derer in der GTM-Oberfläche. Ein Doppelklick auf die Beschriftung schaltet jetzt zweimal, statt den Text zu markieren.
+- **Änderung — Consent-Löschung klarer getrennt:** Der Link an der erkannten CMP heißt „nur diese zurücksetzen"; die beiden Bestätigungsdialoge nennen getrennt, was genau gelöscht wird. Der Rundumschlag über alle bekannten CMPs ist bei geteilten CMP- und Plattform-Einträgen oft die einzige Lösung — das steht jetzt dort. Neue Symbole in der Fußzeile: Keks statt Mülleimer, Kreispfeil statt Diskette.
+- **Fix:** Auf Seiten, in die keine Extension schreiben darf (`chrome://`, Web Store), schrieb das Popup Fehler in die Konsole, statt die dort sinnlosen Abfragen zu überspringen.
 
 ### 3.5
 - **Neu — Komfort in der GTM-Oberfläche:** dauerhaft sichtbare Bereichsnavigation, auf Wunsch fixierte Titel- und Suchleiste in Tag-, Trigger- und Variablenlisten, alphabetische Sortierung von Parametertabellen (Suchtabellen, Ereignisparameter, Custom Templates) und ein Schalter zum Ausblenden der integrierten Variablen. Keine neuen Berechtigungen.

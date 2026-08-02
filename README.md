@@ -48,8 +48,7 @@ Display and usability helpers on `tagmanager.google.com` — no extra permission
 - **Hide built-in variables:** a switch permanently collapses the rarely needed list so the user-defined variables are reachable without scrolling.
 - **Submit dialog warning:** colors the submit button orange whenever the selected action only creates a version instead of publishing.
 - **Edit variables straight from input fields:** when a field of a tag or trigger contains a reference such as `{{My Variable}}`, a chip appears below it for each variable. Clicking it opens the variable's definition right on top — closing it returns you to the tag, with no section switch and no detour through the variable picker. Combined references in one field are handled as well.
-
-- **Individually switchable:** the "GTM interface" card in the popup turns each of these features off on its own, plus a master switch for all of them. Off means gone: the controls in the interface disappear as well, so nothing collides with other GTM extensions. Everything is on by default. The card is operable while a `tagmanager.google.com` tab is active — that is where the settings live, and without a new permission there is no way in from outside.
+- **Individually switchable:** the "Enhance the GTM interface" card in the popup turns each of these features off on its own, plus a master switch for all of them. Off means gone: the controls in the interface disappear as well, so nothing collides with other GTM extensions. Everything is on by default. The card is operable while a `tagmanager.google.com` tab is active — that is where the settings live, and without a new permission there is no way in from outside.
 
 The toggles remember their state; their labels follow the language of the GTM interface.
 
@@ -62,9 +61,9 @@ The toggles remember their state; their labels follow the language of the GTM in
 
 ## Usage
 
-1. **GTM Injection:** Enter the container code in the text area, enable the checkbox, and click **Save & Reload**.
+1. **GTM Injection:** Enter the container code in the text area, flip the switch, and click **Save & Reload**.
 2. **Advanced Settings:** Open the accordion to enter environment-specific tokens.
-3. **Consent Reset:** Use the **CMP Reset** link in the detection box or the **Clear Consent** button in the footer.
+3. **Consent Reset:** Use the **reset this one only** link in the detection box (clears just the detected CMP) or the **Clear Consent** button in the footer (clears every known one).
 
 ---
 
@@ -73,11 +72,16 @@ The toggles remember their state; their labels follow the language of the GTM in
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
 
 ### 3.6
+- **New — GTM comfort features can be switched off individually:** the "Enhance the GTM interface" card at the bottom of the popup turns each of the six features off on its own, plus one switch for all of them. Off means gone: the pin, the variable switch, and the sort rows disappear from the interface along with their effect, so nothing collides with other GTM extensions. Everything is on by default. The card is operable while a `tagmanager.google.com` tab is active — that is where the settings live, and without a new permission there is no way in from outside.
 - **New — Edit variables straight from input fields:** when a field of a tag or trigger holds a reference such as `{{My Variable}}`, a chip appears below the field for each variable; clicking it opens that variable's definition directly above the tag, so closing it returns you there instead of leaving you in the variable list. Combined references in one field each get their own chip. Built-in variables turn grey after the first attempt (they have no configuration), names with no entry in the list turn red. No new permissions.
 - **Note on the approach:** the mapping from name to variable is done by GTM's own variable picker; no variable list is cached. Renaming, adding, and deleting therefore take effect immediately, and there is no ongoing cost — chips only appear in the field that currently has focus.
 - **Fix:** the popup's help link now points straight at the current address instead of the redirected old one.
 - **Fix:** labels inside the GTM interface follow its language again. They previously always followed the browser language, which only showed when the two differed (e.g. with `?hl=en`).
 - **Change:** pinned title bars now have a bottom border so scrolling content no longer disappears underneath without a visible edge.
+- **Change — info page instead of a dialog:** the "i" in the header no longer opens a centred box with two sentences but a page filling the whole content area, with a back button at the top and the bottom (Escape works too). The text now covers every functional area including where settings are stored and which permissions are used — and states the correct number of supported CMPs.
+- **Change — switches instead of checkboxes:** the options in the popup are sliders in the style of those in the GTM interface. Double-clicking a label now toggles it twice instead of selecting the text.
+- **Change — clearer separation of the consent resets:** the link next to the detected CMP now reads "reset this one only", and the two confirmation dialogs state separately what exactly gets deleted. Clearing every known CMP is often the only way when a CMP and the platform share entries — that is spelled out now. New footer icons: a cookie instead of a bin, a reload arrow instead of a floppy disk.
+- **Fix:** on pages no extension may write to (`chrome://`, the Web Store), the popup logged errors to the console instead of skipping the queries that make no sense there.
 
 ### 3.5
 - **New — GTM interface comfort:** permanently visible section navigation, optionally pinned title and search bar in the tag, trigger, and variable lists, alphabetical sorting for parameter tables (lookup tables, event parameters, custom templates), and a switch to hide the built-in variables. No new permissions.
