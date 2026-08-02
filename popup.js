@@ -208,6 +208,8 @@ function updateUI(lang) {
   const elementsToTranslate = [
     { id: 'hdng', key: 'hdng', type: 'innerText' },
     { id: 'option_hint', key: 'option_hint', type: 'innerHTML' },
+    { id: 'info_back_top', key: 'info_back', type: 'innerText' },
+    { id: 'info_close_btn', key: 'info_back', type: 'innerText' },
     { id: 'checkup_desc', key: 'checkup_desc', type: 'innerText' },
     { id: 'igtm_inspect', key: 'igtm_inspect', type: 'innerText' },
     { id: 'igtm_gtm_code', key: 'igtm_gtm_code_placeholder', type: 'placeholder' },
@@ -225,6 +227,9 @@ function updateUI(lang) {
     { id: 'label_pos_body', key: 'pos_body', type: 'innerText' },
     { id: 'igtm_save', key: 'save_btn', type: 'innerText' },
     { id: 'igtm_reset_consent', key: 'reset_consent_btn', type: 'innerText' },
+    { id: 'igtm_reset_consent', key: 'reset_consent_title', type: 'title' },
+    { id: 'igtm_reset_specific', key: 'reset_specific_link', type: 'innerText' },
+    { id: 'igtm_reset_specific', key: 'reset_specific_title', type: 'title' },
     { id: 'label_detected_cmp', key: 'detected_cmp', type: 'innerText' },
     { id: 'label_gtm_detect', key: 'gtm_detect_title', type: 'innerText' },
     { id: 'label_igtm_gtmui_active', key: 'gtmui_active', type: 'innerText' },
@@ -245,6 +250,7 @@ function updateUI(lang) {
       const translation = getTranslation(lang, item.key);
       if (item.type === 'innerHTML') el.innerHTML = translation;
       else if (item.type === 'placeholder') el.placeholder = translation;
+      else if (item.type === 'title') el.title = translation;
       else el.innerText = translation;
     }
   });
@@ -726,7 +732,11 @@ function deleteConsentSettings() {
 }
 
 function deleteSpecificConsentSettings(cmpName) {
-  if (confirm(getTranslation(currentLang, "confirm_reset") + " (" + cmpName + ")")) {
+  // Eigener Text: Hier gehen nur die Einträge dieser einen CMP weg — der
+  // Unterschied zum Rundumschlag unten im Footer ist genau das, was vor dem
+  // Klick klar sein muss.
+  const frage = getTranslation(currentLang, "confirm_reset_specific").replace("{cmp}", cmpName);
+  if (confirm(frage)) {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       const tab = tabs[0];
       const currentUrl = tab.url;
@@ -891,21 +901,32 @@ window.onload = function() {
     chrome.tabs.create({ active: true, url: helpLnk.href });
   });
 
-  // Info Overlay Steuerung
+  // Info-Ansicht: tauscht den Inhalt von main aus, statt sich darüberzulegen.
   const infoBtn = document.getElementById('info_btn');
-  const infoOverlay = document.getElementById('info_overlay');
-  const infoCloseBtn = document.getElementById('info_close_btn');
+  const mainEl = document.querySelector('main');
 
-  if (infoBtn && infoOverlay && infoCloseBtn) {
+  if (infoBtn && mainEl) {
     infoBtn.addEventListener('click', () => {
-      infoOverlay.style.display = 'flex';
+      mainEl.classList.add('info-open');
+      // Der Text beginnt oben, auch wenn vorher weit unten gescrollt war.
+      mainEl.scrollTop = 0;
     });
-    infoCloseBtn.addEventListener('click', () => {
-      infoOverlay.style.display = 'none';
+
+    ['info_back_top', 'info_close_btn'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.addEventListener('click', () => {
+        mainEl.classList.remove('info-open');
+        mainEl.scrollTop = 0;
+      });
     });
-    // Schließen bei Klick auf das Overlay außerhalb des Contents
-    infoOverlay.addEventListener('click', (e) => {
-      if (e.target === infoOverlay) infoOverlay.style.display = 'none';
+
+    // Escape schließt ebenfalls – der Weg, den man bei einer eingeblendeten
+    // Ansicht zuerst probiert.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mainEl.classList.contains('info-open')) {
+        mainEl.classList.remove('info-open');
+        mainEl.scrollTop = 0;
+      }
     });
   }
 

@@ -30,11 +30,17 @@
     </header>
 
     <main>
-      <!-- Info Overlay -->
-      <div id="info_overlay" class="info-overlay" style="display:none;">
-        <div class="info-content">
-          <div id="option_hint"></div>
-          <button id="info_close_btn">OK</button>
+      <!-- Info: ersetzt den Inhalt von main, statt sich als Overlay darüberzulegen.
+           Der Zurück-Schalter steht oben und unten, damit er nach dem Lesen nicht
+           erst wieder gesucht werden muss. Umgeschaltet wird über die Klasse
+           info-open an main (siehe popup.css). -->
+      <div id="info_page">
+        <div class="info-nav">
+          <button id="info_back_top" class="info-back">← Zurück</button>
+        </div>
+        <div id="option_hint" class="info-text"></div>
+        <div class="info-nav">
+          <button id="info_close_btn" class="info-back">← Zurück</button>
         </div>
       </div>
 
@@ -47,7 +53,7 @@
       <div id="show_detected_cmp" class="info-box cmp-box" style="display:none;">
         <b id="label_detected_cmp" style="display:inline;">Erkannte CMP:</b>
         <span id="detected_cmp_name">Name</span> –
-        <a href="#" id="igtm_reset_specific">CMP Reset</a>
+        <a href="#" id="igtm_reset_specific">nur diese zurücksetzen</a>
       </div>
 
       <div id="gtm_detect_box" class="info-box gtm-box" style="display:none;">
@@ -122,15 +128,15 @@
           </div>
           <div class="checkbox-group">
             <input type="checkbox" id="igtm_feat_submit" data-feature="submitHint">
-            <label for="igtm_feat_submit" id="label_feat_submit">Hinweis im Sende-Dialog</label>
+            <label for="igtm_feat_submit" id="label_feat_submit">Sende-Dialog bei Erstellung ohne Veröffentlichung anpassen</label>
           </div>
           <div class="checkbox-group">
             <input type="checkbox" id="igtm_feat_chips" data-feature="chips">
-            <label for="igtm_feat_chips" id="label_feat_chips">Variablen aus Eingabefeldern bearbeiten</label>
+            <label for="igtm_feat_chips" id="label_feat_chips">Bearbeitung für Variablen in Eingabefeldern ermöglichen</label>
           </div>
           <div class="checkbox-group">
             <input type="checkbox" id="igtm_feat_sort" data-feature="sort">
-            <label for="igtm_feat_sort" id="label_feat_sort">Parametertabellen sortieren</label>
+            <label for="igtm_feat_sort" id="label_feat_sort">Buttons zum Sortieren von Parametertabellen</label>
           </div>
         </div>
         <p class="field-hint gtmui-note" id="gtmui_note" style="display:none;">Diese Einstellungen lassen sich nur ändern, während ein Tab mit tagmanager.google.com aktiv ist.</p>
@@ -139,8 +145,8 @@
 
     <footer>
       <div class="footer-actions">
-        <button id="igtm_save">💾 Speichern &amp; neu laden</button>
-        <button id="igtm_reset_consent">🗑️ Consent löschen</button>
+        <button id="igtm_save">🔄 Speichern &amp; neu laden</button>
+        <button id="igtm_reset_consent">🍪 Consent löschen</button>
       </div>
       <div class="help-link-container">
         <span class="utfs">&#9432;</span>
