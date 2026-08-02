@@ -21,6 +21,7 @@ Nicht-Laufzeit-Dateien (Doku wie diese Datei, README) brauchen nur (1).
 | GTM-Injektion, Popup-Logik | `popup.js` (Rest), `content.js`, `background.js` |
 | Tag-/Container-Erkennung | `detect/gtm-detect.js` (MAIN world), `detect/classify.js` (Lademethode), `detect/gtm-relay.js` (ISOLATED world → Bridge zum Background) |
 | CSS-Hinweis im GTM-UI (Sende-Dialog) | `gtm-ui.css`, injiziert nur auf `tagmanager.google.com` |
+| Schalter für die GTM-UI-Funktionen | `gtm-ui-features.js` (Zustand), Karte „GTM-Oberfläche" in `popup.html`/`popup.js` — s. u. |
 | Übersetzungen DE/EN | `translations.js` |
 | Design-/Plan-Dokumente | `docs/` |
 | Externe Datenimporte, nicht versioniert | `data/` |
@@ -51,17 +52,24 @@ Die öffentliche Doku liegt **nicht** in diesem Repo, sondern unter:
 ## Sprache im GTM-UI: nicht `<html lang>`
 Alles, was in die GTM-Oberfläche hineingeschrieben wird (`gtm-ui.js`, `gtm-var-edit.js`), folgt deren Sprache, nicht der Popup-Einstellung — die ist aus einem Content-Script dort auch gar nicht erreichbar. **`<html lang>` ist auf `tagmanager.google.com` leer**, ein Griff darauf fällt still auf `navigator.language` durch und fällt nur auf, wenn Browser- und GTM-Sprache auseinanderlaufen (`?hl=en`). Maßgeblich ist `preloadData.currentLocale` aus dem Seitencode; aus der ISOLATED world ist das Objekt unsichtbar, deshalb liest `detectGtmLanguage()` in `translations.js` den Inline-Code als Text. Immer diese Funktion verwenden.
 
-## Offen: GTM-UI-Funktionen einzeln abschaltbar machen
-**Vor der nächsten Veröffentlichung zu klären.** Die GTM-Oberfläche wird inzwischen von vielen Extensions erweitert; wer zwei davon installiert hat, bekommt doppelte oder kollidierende Bedienelemente. Schon heute überschneidet sich unser Ausblenden der integrierten Variablen mit `hideBuiltInVariables.js` des GTM Fixers, dazu greifen dessen `searchBoxes.js` und `filterTagTriggerVariable.js` in dieselben Listen.
+## GTM-UI-Funktionen sind einzeln abschaltbar
+Die GTM-Oberfläche wird von vielen Extensions erweitert; wer zwei davon installiert hat, bekommt doppelte oder kollidierende Bedienelemente (unser Ausblenden der integrierten Variablen überschneidet sich etwa mit `hideBuiltInVariables.js` des GTM Fixers). Deshalb ist jede Funktion einzeln schaltbar, dazu ein Hauptschalter — über die Karte **„GTM-Oberfläche"** unten im Popup.
 
-Ziel: **jede** Funktion einzeln schaltbar, mindestens so granular wie der GTM Fixer — der hält pro Funktion ein eigenes Flag (`variableQuickPicker`, `hideBuiltInVariables`, `searchBoxes`, `reorderTagParameters` …, zwölf insgesamt) und schaltet sie über sein Popup.
+Alles dazu in `gtm-ui-features.js`; die Datei wird vor `gtm-ui.js` geladen und stellt `igtmGtmUiFeatures` bereit (`read`, `write`, `isOn`, `onChange`).
 
-Randbedingungen:
-- **Keine neuen Permissions.** `chrome.storage` scheidet damit aus — der Weg des Fixers ist für uns versperrt. Aktuell: `activeTab`, `cookies`, `scripting`, `<all_urls>`.
-- Unser Zustand liegt im `localStorage` von `tagmanager.google.com` unter `igtm_gtm_ui` (bisher `stickyBar`, `hideBuiltInVars`). Aus dem Popup ist diese Origin nur über `chrome.scripting` erreichbar.
-- Ohne Schalter sind derzeit: Sortierung der Parametertabellen, fixierte Bereichsnavigation, Hinweis im Sende-Dialog, Variablen-Chips.
+**Zwei Ebenen, die nicht dasselbe sind.** `features.pin` entscheidet, ob es den Pin überhaupt gibt; `stickyBar`, ob er gedrückt ist. Wird eine Funktion abgeschaltet, verschwindet ihr Bedienelement mitsamt Wirkung — ihr eigener Zustand bleibt gespeichert und gilt wieder, sobald sie zurückkommt. Beides liegt unter `igtm_gtm_ui` im `localStorage` von `tagmanager.google.com`:
 
-Zu entscheiden ist vor allem, **wo** die Schalter sitzen. Die vorhandenen hängen in den Kartenkopfzeilen der Listen; für Funktionen ohne solchen Ort (Chips, Sende-Dialog) gibt es keine naheliegende Stelle, und ein Sammelort im Popup widerspräche dem bisherigen Grundsatz, GTM-Einstellungen nicht dorthin zu holen.
+```json
+{ "stickyBar": false, "hideBuiltInVars": false,
+  "enabled": true,
+  "features": { "nav": true, "pin": true, "builtIn": true,
+                "submitHint": true, "chips": true, "sort": true } }
+```
+
+- **Fehlt ein Schlüssel, ist die Funktion an.** Überall `!== false` prüfen, nie `=== true` — sonst ist bei jedem, der nie etwas geschaltet hat, alles aus.
+- Die beiden reinen CSS-Funktionen (`nav`, `submitHint`) hängen an einer Klasse am `<html>`-Element, die das **Aus**schalten markiert (`igtm-off-nav`, `igtm-off-submit`). Andersherum gäbe es im Normalfall bei jedem Seitenaufbau ein Aufblitzen, weil bis `document_idle` keine Klasse gesetzt ist.
+- Das Popup schreibt per `chrome.scripting` in **alle** offenen GTM-Tabs und löst dort `igtm-gtm-ui-changed` auf `window` aus. Der `localStorage` gehört zwar der Origin und ist für alle Tabs derselbe, aber die laufenden Content-Scripts erfahren von der Änderung nur durch das Ereignis. Ein `storage`-Ereignis taugt dafür nicht: Es feuert nur in *anderen* Dokumenten derselben Origin, und das injizierte Script läuft im selben.
+- **Die Karte ist nur bedienbar, während ein GTM-Tab aktiv ist.** Sonst kommt das Popup an die Origin nicht heran (`chrome.storage` scheidet aus, das wäre eine neue Permission). Auf anderen Seiten werden die Kästchen **ausgeblendet**, nicht ausgegraut — ein ausgegrautes Häkchen würde einen Zustand behaupten, der geraten wäre.
 
 ## Konventionen
 - Popup-Texte immer über `translations.js` (DE **und** EN), nie hart im HTML.

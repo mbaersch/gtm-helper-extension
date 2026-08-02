@@ -408,5 +408,42 @@ body.light-theme .gtm-box b {
   font-size: 1em;
 }
 
+/* Karte "GTM-Oberfläche": Hauptschalter oben, die einzelnen Funktionen darunter
+   eingerückt – die Einrückung zeigt, dass sie am Hauptschalter hängen. */
+.gtmui-features {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding-left: 26px;
+}
+
+.gtmui-features label {
+  font-weight: normal;
+  color: var(--text-color);
+  font-size: 0.9em;
+}
+
+/* Bei ausgeschaltetem Hauptschalter sind die Einzelschalter gesperrt. */
+.gtmui-section input[type="checkbox"]:disabled + label {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* Außerhalb von tagmanager.google.com kann das Popup den gespeicherten Stand
+   nicht lesen. Dann bleibt von der Karte nur die Überschrift und der Hinweis –
+   Kästchen würden hier einen Zustand behaupten, der geraten wäre. */
+.gtmui-section.gtmui-locked input[type="checkbox"],
+.gtmui-section.gtmui-locked .gtmui-features {
+  display: none;
+}
+
+.gtmui-section.gtmui-locked label {
+  cursor: default;
+}
+
+.gtmui-note {
+  margin: 14px 0 0;
+}
+
 #gtm_detect_box ul { list-style: disc; }
 #gtm_detect_box li { font-size: 0.85em; line-height: 1.5; word-break: break-all; }

@@ -47,7 +47,7 @@
       "run_at": "document_idle",
       "matches": ["https://tagmanager.google.com/*"],
       "css": ["gtm-ui.css"],
-      "js": ["translations.js", "gtm-ui.js", "gtm-var-edit.js"]
+      "js": ["translations.js", "gtm-ui-features.js", "gtm-ui.js", "gtm-var-edit.js"]
     }
   ],
   "manifest_version": 3

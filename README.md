@@ -49,6 +49,8 @@ Display and usability helpers on `tagmanager.google.com` — no extra permission
 - **Submit dialog warning:** colors the submit button orange whenever the selected action only creates a version instead of publishing.
 - **Edit variables straight from input fields:** when a field of a tag or trigger contains a reference such as `{{My Variable}}`, a chip appears below it for each variable. Clicking it opens the variable's definition right on top — closing it returns you to the tag, with no section switch and no detour through the variable picker. Combined references in one field are handled as well.
 
+- **Individually switchable:** the "GTM interface" card in the popup turns each of these features off on its own, plus a master switch for all of them. Off means gone: the controls in the interface disappear as well, so nothing collides with other GTM extensions. Everything is on by default. The card is operable while a `tagmanager.google.com` tab is active — that is where the settings live, and without a new permission there is no way in from outside.
+
 The toggles remember their state; their labels follow the language of the GTM interface.
 
 ### 5. User Interface

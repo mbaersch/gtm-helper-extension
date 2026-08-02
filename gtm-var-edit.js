@@ -17,6 +17,9 @@
  *
  * Das Script laeuft in der ISOLATED world, wie gtm-ui.js. Details und die
  * verworfenen Wege: docs/2026-08-01-variable-quick-edit-design.md
+ *
+ * Abschaltbar ueber die Karte "GTM-Oberflaeche" im Popup, Schluessel `chips` –
+ * siehe gtm-ui-features.js.
  */
 
 (function () {
@@ -296,6 +299,9 @@
   function showChips(field) {
     removeBar();
 
+    // Abgeschaltet in der Karte "GTM-Oberflaeche" des Popups: keine Chips.
+    if (!igtmGtmUiFeatures.isOn('chips')) return;
+
     // Waehrend ein Ablauf laeuft, gehoert keine Leiste ins Bild.
     if (busy || isCovered(field)) return;
 
@@ -369,4 +375,8 @@
   // scrollen, deren Ereignisse nicht bis zum Fenster steigen.
   document.addEventListener('scroll', removeBar, true);
   window.addEventListener('resize', removeBar);
+
+  // Wird die Funktion im Popup abgeschaltet, waehrend eine Leiste offen steht,
+  // verschwindet sie sofort statt erst beim naechsten Fokuswechsel.
+  igtmGtmUiFeatures.onChange(removeBar);
 })();

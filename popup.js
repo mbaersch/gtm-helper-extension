@@ -227,6 +227,15 @@ function updateUI(lang) {
     { id: 'igtm_reset_consent', key: 'reset_consent_btn', type: 'innerText' },
     { id: 'label_detected_cmp', key: 'detected_cmp', type: 'innerText' },
     { id: 'label_gtm_detect', key: 'gtm_detect_title', type: 'innerText' },
+    { id: 'label_igtm_gtmui_active', key: 'gtmui_active', type: 'innerText' },
+    { id: 'label_gtmui_hint', key: 'gtmui_hint', type: 'innerText' },
+    { id: 'label_feat_nav', key: 'gtmui_feat_nav', type: 'innerText' },
+    { id: 'label_feat_pin', key: 'gtmui_feat_pin', type: 'innerText' },
+    { id: 'label_feat_builtin', key: 'gtmui_feat_builtin', type: 'innerText' },
+    { id: 'label_feat_submit', key: 'gtmui_feat_submit', type: 'innerText' },
+    { id: 'label_feat_chips', key: 'gtmui_feat_chips', type: 'innerText' },
+    { id: 'label_feat_sort', key: 'gtmui_feat_sort', type: 'innerText' },
+    { id: 'gtmui_note', key: 'gtmui_note', type: 'innerText' },
     { id: 'igtm_help', key: 'help_link', type: 'innerText' }
   ];
 
@@ -412,6 +421,147 @@ function saveSettingsToPage(settings, callback) {
       args: [settings]
     }, function() {
       callback();
+    });
+  });
+}
+
+/* ------------------------------------------------- Karte "GTM-Oberfläche" */
+
+/*
+ * Die Komfortfunktionen in der GTM-Oberfläche sind einzeln abschaltbar, damit
+ * sich nichts mit anderen GTM-Extensions doppelt. Ihr Zustand gehört dorthin,
+ * wo er wirkt: in den localStorage von tagmanager.google.com, unter demselben
+ * Schlüssel, den auch die Schalter in der Oberfläche selbst benutzen
+ * (igtm_gtm_ui, siehe gtm-ui-features.js).
+ *
+ * Aus dem Popup ist diese Origin nur über chrome.scripting im aktiven Tab
+ * erreichbar — chrome.storage schiede eine neue Berechtigung ein, und die
+ * Extension kommt seit jeher ohne aus. Auf jeder anderen Seite bleibt die Karte
+ * deshalb deaktiviert und sagt das auch.
+ *
+ * Geschrieben wird in alle offenen GTM-Tabs: Der localStorage gehört zwar der
+ * Origin und ist damit für alle derselbe, aber die laufenden Content-Scripts
+ * erfahren von der Änderung nur durch das Ereignis, das dabei ausgelöst wird.
+ * Sonst zöge ein zweiter Tab erst beim nächsten Laden nach.
+ */
+
+const GTM_UI_ORIGIN = 'https://tagmanager.google.com/';
+const GTM_UI_STORAGE_KEY = 'igtm_gtm_ui';
+const GTM_UI_FEATURES = ['nav', 'pin', 'builtIn', 'submitHint', 'chips', 'sort'];
+
+function featureBoxes() {
+  return GTM_UI_FEATURES.map(name => document.querySelector('[data-feature="' + name + '"]'));
+}
+
+// Liest den gespeicherten Stand aus dem angegebenen Tab.
+function readGtmUiState(tabId, callback) {
+  chrome.scripting.executeScript({
+    target: { tabId: tabId },
+    func: function(key) {
+      return localStorage.getItem(key) || '{}';
+    },
+    args: [GTM_UI_STORAGE_KEY]
+  }, function(results) {
+    if (chrome.runtime.lastError || !results || !results[0]) {
+      callback({});
+      return;
+    }
+    try {
+      callback(JSON.parse(results[0].result) || {});
+    } catch (e) {
+      callback({});
+    }
+  });
+}
+
+// Schreibt Hauptschalter und Funktionsliste in alle GTM-Tabs und meldet die
+// Änderung den dort laufenden Scripts.
+function applyGtmUiState(enabled, features) {
+  chrome.tabs.query({ url: GTM_UI_ORIGIN + '*' }, function(tabs) {
+    (tabs || []).forEach(function(tab) {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        // Nur die beiden eigenen Felder überschreiben: stickyBar und
+        // hideBuiltInVars gehören den Schaltern in der Oberfläche und dürfen
+        // beim Speichern von hier aus nicht verloren gehen.
+        func: function(key, isEnabled, featureFlags) {
+          let state = {};
+          try {
+            state = JSON.parse(localStorage.getItem(key)) || {};
+          } catch (e) {
+            state = {};
+          }
+          state.enabled = isEnabled;
+          state.features = featureFlags;
+          localStorage.setItem(key, JSON.stringify(state));
+          window.dispatchEvent(new CustomEvent('igtm-gtm-ui-changed'));
+        },
+        args: [GTM_UI_STORAGE_KEY, enabled, features]
+      }, function() {
+        // Ein Tab, in den nicht injiziert werden kann (etwa direkt nach dem
+        // Öffnen), ist kein Fehler, der den Rest aufhalten dürfte.
+        void chrome.runtime.lastError;
+      });
+    });
+  });
+}
+
+/*
+ * Ohne gespeicherten Stand ist alles an: Wer nie etwas geschaltet hat, bekommt
+ * die Funktionen. Deshalb überall `!== false` statt `=== true` — dieselbe Regel
+ * wie in gtm-ui-features.js.
+ *
+ * Ist der Stand nicht lesbar, weil gerade kein GTM-Tab aktiv ist, werden die
+ * Kästchen ausgeblendet statt ausgegraut: Ein ausgegrautes Häkchen behauptet
+ * einen Zustand, und der wäre hier geraten.
+ */
+function paintGtmUiCard(state, editable) {
+  const master = document.getElementById('igtm_gtmui_active');
+  const enabled = state.enabled !== false;
+  const features = state.features || {};
+
+  master.checked = enabled;
+
+  featureBoxes().forEach((box, index) => {
+    box.checked = features[GTM_UI_FEATURES[index]] !== false;
+    box.disabled = !enabled;
+  });
+
+  document.getElementById('gtmui_section').classList.toggle('gtmui-locked', !editable);
+  document.getElementById('gtmui_note').style.display = editable ? 'none' : 'block';
+}
+
+function collectGtmUiState() {
+  const features = {};
+  featureBoxes().forEach((box, index) => {
+    features[GTM_UI_FEATURES[index]] = box.checked;
+  });
+  return { enabled: document.getElementById('igtm_gtmui_active').checked, features: features };
+}
+
+function initGtmUiCard() {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    const tab = tabs[0];
+    if (!tab || !(tab.url || '').startsWith(GTM_UI_ORIGIN)) {
+      paintGtmUiCard({}, false);
+      return;
+    }
+
+    readGtmUiState(tab.id, function(state) {
+      paintGtmUiCard(state, true);
+
+      // Erst nach dem Füllen verdrahten: Ein programmatisch gesetztes checked
+      // löst zwar kein change-Ereignis aus, aber die Reihenfolge macht die
+      // Absicht deutlich – geschaltet wird nur von Hand.
+      const controls = [document.getElementById('igtm_gtmui_active')].concat(featureBoxes());
+      controls.forEach(control => {
+        control.addEventListener('change', function() {
+          const next = collectGtmUiState();
+          // Neu zeichnen, damit die Einzelschalter dem Hauptschalter folgen.
+          paintGtmUiCard(next, true);
+          applyGtmUiState(next.enabled, next.features);
+        });
+      });
     });
   });
 }
@@ -687,6 +837,9 @@ window.onload = function() {
 
   // GTM-Erkennung anzeigen
   renderGtmDetections();
+
+  // Karte "GTM-Oberfläche"
+  initGtmUiCard();
 
   //Background-Script für Checkup-URL
   checkURL(function(response) {

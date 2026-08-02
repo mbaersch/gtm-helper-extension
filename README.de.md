@@ -49,6 +49,8 @@ Anzeige- und Bedienhilfen auf `tagmanager.google.com` — ohne zusätzliche Bere
 - **Warnung im Sende-Dialog:** Färbt den Senden-Button orange, sobald die gewählte Aktion nur eine Version erstellt statt zu veröffentlichen.
 - **Variablen aus Eingabefeldern heraus bearbeiten:** Enthält ein Feld eines Tags oder Triggers eine Referenz wie `{{Meine Variable}}`, erscheint darunter ein Chip pro Variable. Ein Klick öffnet deren Definition direkt darüber — nach dem Schließen steht man wieder im Tag, ohne Bereichswechsel und ohne Umweg über die Auswahlliste. Auch bei kombinierten Referenzen in einem Feld.
 
+- **Einzeln abschaltbar:** Die Karte „GTM-Oberfläche" im Popup schaltet jede dieser Funktionen für sich ab, dazu alle zusammen. Abgeschaltet heißt weg: Auch die Bedienelemente in der Oberfläche verschwinden, damit sich nichts mit anderen GTM-Extensions doppelt. Voreingestellt ist alles an. Die Karte lässt sich bedienen, während ein Tab mit `tagmanager.google.com` aktiv ist — dort liegen die Einstellungen, und ohne neue Berechtigung ist von außen kein Weg dorthin.
+
 Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache der GTM-Oberfläche.
 
 ### 5. Benutzeroberfläche

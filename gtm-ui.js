@@ -3,13 +3,20 @@
  * ausblendbare Liste der integrierten Variablen
  *
  * Fixierter Titelbalken und ausgeblendete Variablenliste sind Geschmackssache und
- * deshalb schaltbar – jeweils direkt an Ort und Stelle, damit das Popup frei von
- * Einstellungen bleibt, die ohnehin nur auf einer einzigen Domain wirken. Beide
- * Zustaende liegen unter einem Schluessel im localStorage von
- * tagmanager.google.com, analog zu igtm_settings auf den besuchten Seiten.
+ * deshalb an Ort und Stelle schaltbar: der Pin in der Suchleiste, der Schalter in
+ * der Kopfzeile der Variablenkarte. Beide Zustaende liegen unter einem Schluessel
+ * im localStorage von tagmanager.google.com, analog zu igtm_settings auf den
+ * besuchten Seiten.
  *
- * Die Sortierung laeuft ohne Schalter: Sie erscheint nur an Tabellen, die sich
- * verlustfrei sortieren lassen, und tut nichts, bis jemand sie anklickt.
+ * Ob es diese Bedienelemente ueberhaupt gibt, entscheidet eine Ebene darueber: die
+ * Karte "GTM-Oberflaeche" im Popup. Sie schaltet jede Funktion einzeln ab, damit
+ * sich nichts mit anderen GTM-Extensions doppelt. Abgeschaltet heisst hier
+ * wirklich weg — kein Pin, keine Sortierzeile, keine Wirkung; siehe
+ * gtm-ui-features.js.
+ *
+ * Die Sortierung hat keinen Schalter in der Oberflaeche: Sie erscheint nur an
+ * Tabellen, die sich verlustfrei sortieren lassen, und tut nichts, bis jemand sie
+ * anklickt.
  *
  * Das Script laeuft in der ISOLATED world. DOM und localStorage der Seite sind
  * erreichbar, ohne dass sich unsere Variablen mit dem AngularJS der GTM-
@@ -26,7 +33,6 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'igtm_gtm_ui';
   var CLASS_ON = 'igtm-sticky-bar';
   var CLASS_HIDE_BUILTIN = 'igtm-hide-builtin';
   var PIN_CLASS = 'igtm-pin-bar';
@@ -60,24 +66,14 @@
 
   /* ---------------------------------------------------------------- Titelbalken */
 
-  function readState() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    } catch (e) {
-      return {};
-    }
-  }
-
-  function writeState(state) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-      // Voller oder gesperrter Speicher: die Einstellung gilt dann nur fuer diese Sitzung.
-    }
-  }
+  // Gespeicherter Zustand und die Frage, ob eine Funktion ueberhaupt laeuft –
+  // beides kommt aus gtm-ui-features.js, das vor diesem Script geladen wird.
+  var readState = igtmGtmUiFeatures.read;
+  var writeState = igtmGtmUiFeatures.write;
+  var isOn = igtmGtmUiFeatures.isOn;
 
   function applyPinState() {
-    var active = readState().stickyBar === true;
+    var active = isOn('pin') && readState().stickyBar === true;
     document.documentElement.classList.toggle(CLASS_ON, active);
     var label = t(active ? 'gtm_ui_pin_off' : 'gtm_ui_pin_on');
     [].forEach.call(document.querySelectorAll('.' + PIN_CLASS), function (btn) {
@@ -133,10 +129,16 @@
     if (added) applyPinState();
   }
 
+  function removePins() {
+    [].forEach.call(document.querySelectorAll('.' + PIN_CLASS), function (btn) {
+      btn.remove();
+    });
+  }
+
   /* ------------------------------------------------ Integrierte Variablen */
 
   function applyBuiltInState() {
-    var hidden = readState().hideBuiltInVars === true;
+    var hidden = isOn('builtIn') && readState().hideBuiltInVars === true;
     document.documentElement.classList.toggle(CLASS_HIDE_BUILTIN, hidden);
     var sw = document.getElementById(SWITCH_ID);
     if (sw) {
@@ -165,6 +167,11 @@
     sw.addEventListener('click', makeToggle('hideBuiltInVars', applyBuiltInState));
     slot.appendChild(sw);
     applyBuiltInState();
+  }
+
+  function removeBuiltInSwitch() {
+    var sw = document.getElementById(SWITCH_ID);
+    if (sw) sw.remove();
   }
 
   /* ------------------------------------------------------ Parametertabellen */
@@ -387,6 +394,17 @@
     paintSortButtons(container);
   }
 
+  // Mit der Sortierzeile geht das <tfoot> mit, das sie bei echten Tabellen traegt:
+  // Ein leeres tfoot bliebe sonst stehen, und beim Wiedereinschalten haenge
+  // addSortRow() ein zweites daneben.
+  function removeSortRows() {
+    [].forEach.call(document.querySelectorAll('.' + SORT_ROW_CLASS), function (row) {
+      var parent = row.parentElement;
+      row.remove();
+      if (parent && parent.tagName === 'TFOOT' && !parent.children.length) parent.remove();
+    });
+  }
+
   function makeSortHandler(container, column) {
     return function (event) {
       event.preventDefault();
@@ -401,10 +419,18 @@
 
   /* ---------------------------------------------------------------- Anbindung */
 
+  // Abgeschaltete Funktionen werden nicht nur nicht mehr eingehaengt, sondern
+  // raeumen auch ab, was von ihnen im DOM steht: Der Schalter im Popup wirkt
+  // sofort, ohne dass die Seite neu geladen werden muss.
   function refresh() {
-    injectPin();
-    injectBuiltInSwitch();
-    findTables().forEach(addSortRow);
+    if (isOn('pin')) injectPin();
+    else { removePins(); applyPinState(); }
+
+    if (isOn('builtIn')) injectBuiltInSwitch();
+    else { removeBuiltInSwitch(); applyBuiltInState(); }
+
+    if (isOn('sort')) findTables().forEach(addSortRow);
+    else removeSortRows();
   }
 
   // AngularJS baut Listen und Dialoge bei jedem Wechsel neu auf; unsere Elemente
@@ -420,8 +446,27 @@
     });
   }
 
+  // Ist keine der drei Funktionen an, gibt es auch nichts nachzuziehen – dann
+  // wird gar nicht erst beobachtet. Wer alles abschaltet, soll die Extension in
+  // der Oberflaeche auch wirklich los sein.
+  var observer = new MutationObserver(scheduleRefresh);
+  var observing = false;
+
+  function syncObserver() {
+    var needed = isOn('pin') || isOn('builtIn') || isOn('sort');
+    if (needed === observing) return;
+    if (needed) observer.observe(document.body, { childList: true, subtree: true });
+    else observer.disconnect();
+    observing = needed;
+  }
+
   applyPinState();
   applyBuiltInState();
   refresh();
-  new MutationObserver(scheduleRefresh).observe(document.body, { childList: true, subtree: true });
+  syncObserver();
+
+  igtmGtmUiFeatures.onChange(function () {
+    refresh();
+    syncObserver();
+  });
 })();

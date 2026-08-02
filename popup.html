@@ -98,6 +98,43 @@
         </div>
         <textarea id="igtm_code"></textarea>
       </section>
+
+      <!-- GTM-Oberfläche: wirkt nur auf tagmanager.google.com und wird deshalb
+           auch nur dort bedienbar gemacht (siehe popup.js, initGtmUiCard). -->
+      <section id="gtmui_section" class="gtmui-section">
+        <div class="checkbox-group">
+          <input type="checkbox" id="igtm_gtmui_active" name="igtm_gtmui_active">
+          <label for="igtm_gtmui_active" id="label_igtm_gtmui_active">GTM-Oberfläche verbessern</label>
+        </div>
+        <p class="field-hint" id="label_gtmui_hint">GTM &amp; CMP Helper bietet optionale Verbesserungen zur effizienteren Bearbeitung von Google Tag Manager Containern.</p>
+        <div class="gtmui-features" id="gtmui_features">
+          <div class="checkbox-group">
+            <input type="checkbox" id="igtm_feat_nav" data-feature="nav">
+            <label for="igtm_feat_nav" id="label_feat_nav">Bereichsnavigation beim Scrollen fixieren</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="igtm_feat_pin" data-feature="pin">
+            <label for="igtm_feat_pin" id="label_feat_pin">Titelbalken der Listen fixierbar</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="igtm_feat_builtin" data-feature="builtIn">
+            <label for="igtm_feat_builtin" id="label_feat_builtin">Integrierte Variablen ausblendbar</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="igtm_feat_submit" data-feature="submitHint">
+            <label for="igtm_feat_submit" id="label_feat_submit">Hinweis im Sende-Dialog</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="igtm_feat_chips" data-feature="chips">
+            <label for="igtm_feat_chips" id="label_feat_chips">Variablen aus Eingabefeldern bearbeiten</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="igtm_feat_sort" data-feature="sort">
+            <label for="igtm_feat_sort" id="label_feat_sort">Parametertabellen sortieren</label>
+          </div>
+        </div>
+        <p class="field-hint gtmui-note" id="gtmui_note" style="display:none;">Diese Einstellungen lassen sich nur ändern, während ein Tab mit tagmanager.google.com aktiv ist.</p>
+      </section>
     </main>
 
     <footer>

@@ -25,6 +25,7 @@ const filesToInclude = [
   'popup.css',
   'gtm-ui.css',
   'gtm-ui.js',
+  'gtm-ui-features.js',
   'gtm-var-edit.js',
   'translations.js',
   'detect/classify.js',
