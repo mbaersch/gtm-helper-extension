@@ -14,7 +14,7 @@ Inject any GTM container code (GTM-XXXXXX) into any website. Test new tracking s
 - Flexible positioning in <head> or <body>.
 
 3. Google Tag & Container Detection
-Automatically detects Google tags loaded on the current page — always on, no configuration, no extra permissions. Classifies the load method — `standard` (googletagmanager.com), `first-party` (server-side GTM / Google Tag Gateway), `custom-path`, or `base64` tunnel.
+Automatically detects Google tags loaded on the current page — always on, no configuration, no extra permissions. Classifies the load method — standard (googletagmanager.com), first-party (server-side GTM / Google Tag Gateway), custom path, or base64 tunnel.
 
 Container count on the toolbar badge, a "Detected Google tags & containers" popup section (ID · method · host), and a console log per new detection.
 
@@ -30,6 +30,8 @@ When working in the GTM interface, the Helper detects this and provides a direct
 - Pinnable search bars: a toggle in the title bar of tag, trigger, and custom variable lists keeps title, search, and buttons at the top while scrolling.
 - Sorting for parameter tables: lookup tables, event parameters, and comparable key/value lists can be sorted alphabetically in both directions — by input or output column. 
 - Hide built-in variables: a switch permanently collapses the rarely needed list so the user-defined variables are reachable without scrolling.
+- Edit variables straight from input fields: when a field of a tag or trigger references {{a variable}}, a chip appears below it. One click opens that variable’s definition directly above the tag, so closing it puts you back where you were instead of in the variable list.
+- Everything switchable: each of these features can be turned off on its own — or all at once — in the popup, so nothing collides with other GTM extensions. All on by default.
 
 DESIGN & USABILITY:
 - Dark Mode by default (with Light Mode option).
@@ -40,8 +42,14 @@ DESIGN & USABILITY:
 CHANGELOG 
 ---------------------
 
+v3.6
+- Edit variables straight from input fields: a chip under any field that references {{a variable}} opens its definition directly above the tag; closing it returns you to your work instead of the variable list.
+- All GTM interface features can now be switched off individually — or all at once — in the popup, so nothing collides with other GTM extensions.
+- Reworked info page in the popup, switches instead of checkboxes, and clearer wording for the two consent resets: the detected CMP on its own versus every known one, which is often the only way when a CMP and the platform share entries.
+- Fixes: labels in the GTM interface follow its language again, and the help link points straight at the current address.
+
 v3.5
-- GTM interface improvements: permanently visible section navigation, optionally pinned title and search bar in the tag, trigger, and custom variable lists, alphabetical sorting for parameter tables (lookup tables, event parameters, custom templates...), and a switch to hide built-in variables. .
+- GTM interface improvements: permanently visible section navigation, optionally pinned title and search bar in the tag, trigger, and custom variable lists, alphabetical sorting for parameter tables (lookup tables, event parameters, custom templates...), and a switch to hide built-in variables.
 
 v3.4
 - the CMP reset now knows about 130 CMPs (previously 70+), including CookieAdmin, DSGVO-Pixelmate, Ezoic, clickskeks, Pressidium, Sellwerk, KookieTool, Cookie Cracker, LWD Cookie Master, several TYPO3 consent tools, and many more. h/t to Joachim Nickel who kindly provided a list of CMPs that was extracted from his tool "exatics".
@@ -82,7 +90,7 @@ Fügen Sie beliebigen GTM-Container-Code (GTM-XXXXXX) in jede beliebige Website 
 - Flexible Positionierung im <head> oder <body>.
 
 3. Google-Tag- & Container-Erkennung
-Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer aktiv, ohne Konfiguration und ohne zusätzliche Berechtigungen. Klassifiziert den Ladeweg — `standard` (googletagmanager.com), `first-party` (Server-side GTM / Google Tag Gateway), `custom-path` oder `base64`-Tunnel. 
+Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer aktiv, ohne Konfiguration und ohne zusätzliche Berechtigungen. Klassifiziert den Ladeweg — standard (googletagmanager.com), first-party (Server-side GTM / Google Tag Gateway), Custom Path oder base64-Tunnel. 
 
 Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Methode · Host) und ein Konsolen-Log pro neuem Fund.
 
@@ -98,6 +106,8 @@ Wenn Sie in der GTM-Oberfläche arbeiten, erkennt der Helper dies und bietet ein
 - Fixierbare Suchleiste: Ein Schalter in der Titelleiste von Tags, Triggern und Benutzerdefinierten Variablen hält Titel, Suche und Schaltflächen beim Scrollen oben.
 - Sortierung von Parametertabellen: Suchtabellen, Ereignisparameter und vergleichbare Schlüssel-Wert-Listen lassen sich alphabetisch auf- und absteigend sortieren — nach Eingabe- oder Ausgabespalte.
 - Integrierte Variablen ausblenden: Ein Schieberegler blendet die selten benötigte Liste dauerhaft aus, damit die benutzerdefinierten Variablen ohne Scrollen erreichbar sind.
+- Variablen aus Eingabefeldern heraus bearbeiten: Enthält ein Feld eines Tags oder Triggers eine Referenz wie {{Meine Variable}}, erscheint darunter ein Chip. Ein Klick öffnet deren Definition direkt darüber — nach dem Schließen steht man wieder im Tag statt in der Variablenliste.
+- Alles abschaltbar: Jede dieser Funktionen lässt sich einzeln — oder alle zusammen — im Popup abschalten, damit sich nichts mit anderen GTM-Extensions doppelt. Voreingestellt ist alles an.
 
 DESIGN & USABILITY:
 - Dark Mode Standard (mit Light Mode Option).

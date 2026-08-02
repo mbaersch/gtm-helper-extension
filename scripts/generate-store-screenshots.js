@@ -158,6 +158,16 @@ async function generateStoreScreenshots() {
         window.paintGtmDetections();
       }, recs)
     },
+    {
+      // Die Karte ist nur bedienbar, wenn ein GTM-Tab aktiv ist – hier gibt es
+      // keinen, deshalb wird der entsperrte Zustand direkt gezeichnet.
+      name: 'gtm-ui-options', bg: 'gtmpage.png',
+      afterOpen: async (p) => p.evaluate(() => {
+        window.paintGtmUiCard({ enabled: true, features: {} }, true);
+        const karte = document.getElementById('gtmui_section');
+        if (karte) karte.scrollIntoView({ block: 'end' });
+      })
+    },
   ];
 
   for (let i = 0; i < scenarios.length; i++) {
