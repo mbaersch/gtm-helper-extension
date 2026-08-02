@@ -1,33 +1,8 @@
 /*
  * GTM UI-Komfort: fixierbarer Titelbalken, Sortierung von Parametertabellen und
- * ausblendbare Liste der integrierten Variablen
- *
- * Fixierter Titelbalken und ausgeblendete Variablenliste sind Geschmackssache und
- * deshalb an Ort und Stelle schaltbar: der Pin in der Suchleiste, der Schalter in
- * der Kopfzeile der Variablenkarte. Beide Zustaende liegen unter einem Schluessel
- * im localStorage von tagmanager.google.com, analog zu igtm_settings auf den
- * besuchten Seiten.
- *
- * Ob es diese Bedienelemente ueberhaupt gibt, entscheidet eine Ebene darueber: die
- * Karte "GTM-Oberflaeche" im Popup. Sie schaltet jede Funktion einzeln ab, damit
- * sich nichts mit anderen GTM-Extensions doppelt. Abgeschaltet heisst hier
- * wirklich weg — kein Pin, keine Sortierzeile, keine Wirkung; siehe
- * gtm-ui-features.js.
- *
- * Die Sortierung hat keinen Schalter in der Oberflaeche: Sie erscheint nur an
- * Tabellen, die sich verlustfrei sortieren lassen, und tut nichts, bis jemand sie
- * anklickt.
- *
- * Das Script laeuft in der ISOLATED world. DOM und localStorage der Seite sind
- * erreichbar, ohne dass sich unsere Variablen mit dem AngularJS der GTM-
- * Oberflaeche mischen. An dessen $scope kommen wir umgekehrt aber auch nicht
- * heran – Details zur Sortierung siehe bei sortTable().
- *
- * Sprache: Beschriftungen, die IN einer fremden Seite landen, folgen deren
- * Sprache, nicht der im Popup gewaehlten. Die liegt im localStorage der
- * Extension und ist von hier aus nicht erreichbar, und ein deutscher Tooltip
- * neben englischen GTM-Schaltflaechen waere ohnehin verkehrt. Die Texte selbst
- * stehen wie alle anderen in translations.js.
+ * ausblendbare Liste der integrierten Variablen. Laeuft in der ISOLATED world;
+ * an den $scope des AngularJS der Seite kommt man von dort nicht heran.
+ * Abschaltbar ueber gtm-ui-features.js.
  */
 
 (function () {
@@ -39,11 +14,9 @@
   var SWITCH_ID = 'igtm-builtin-switch';
   var BUILTIN_SELECTOR = 'div[data-items="ctrl.builtInVariables"]';
 
-  // Die Listen mit fixierbarem Titelbalken – jede bekommt ihren eigenen Pin,
-  // alle schalten denselben gespeicherten Zustand. Einzeln benannt statt ueber
-  // einen Sammelselektor, weil die Variablenseite mit ctrl.builtInVariables eine
-  // zweite Karte enthaelt, die sonst einen zweiten Balken an dieselbe Kante
-  // haengen wuerde.
+  // Einzeln benannt statt ueber einen Sammelselektor: Die Variablenseite enthaelt
+  // mit ctrl.builtInVariables eine zweite Karte, die sonst einen zweiten Balken
+  // an dieselbe Kante haengen wuerde.
   var LIST_SELECTORS = [
     'gtm-tag-list-table',
     'div[data-items="ctrl.triggerList"]',
@@ -51,9 +24,9 @@
   ];
   var SORT_ROW_CLASS = 'igtm-sort-row';
 
-  // Duenne Huelle um getTranslation() aus translations.js, ergaenzt um Platzhalter.
-  // Die Sprache ermittelt detectGtmLanguage() dort ebenfalls – erst bei Bedarf,
-  // damit der Seitencode zum Zeitpunkt der Auswertung vollstaendig ist.
+  // Beschriftungen folgen der Sprache der GTM-Oberflaeche, nicht der im Popup
+  // gewaehlten — detectGtmLanguage() erst bei Bedarf, damit der Seitencode zum
+  // Zeitpunkt der Auswertung vollstaendig ist.
   function t(key, vars) {
     var text = getTranslation(detectGtmLanguage(), key);
     if (vars) {
@@ -66,8 +39,6 @@
 
   /* ---------------------------------------------------------------- Titelbalken */
 
-  // Gespeicherter Zustand und die Frage, ob eine Funktion ueberhaupt laeuft –
-  // beides kommt aus gtm-ui-features.js, das vor diesem Script geladen wird.
   var readState = igtmGtmUiFeatures.read;
   var writeState = igtmGtmUiFeatures.write;
   var isOn = igtmGtmUiFeatures.isOn;
@@ -78,14 +49,13 @@
     var label = t(active ? 'gtm_ui_pin_off' : 'gtm_ui_pin_on');
     [].forEach.call(document.querySelectorAll('.' + PIN_CLASS), function (btn) {
       btn.title = label;
-      // Der Button traegt nur ein Icon – ohne aria-label bliebe er unbeschriftet.
       btn.setAttribute('aria-label', label);
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
   }
 
-  // Klick-Handler fuer einen gespeicherten Schalter. Die Elemente von GTM tragen
-  // eigene AngularJS-Handler – der Klick darf deshalb nicht weiterlaufen.
+  // Die Elemente von GTM tragen eigene AngularJS-Handler – der Klick darf
+  // deshalb nicht weiterlaufen.
   function makeToggle(field, apply) {
     return function (event) {
       event.preventDefault();
@@ -107,13 +77,11 @@
       if (!bar || bar.querySelector('.' + PIN_CLASS)) return;
 
       var btn = document.createElement('button');
-      // Klasse statt ID: Der Pin sitzt in jeder der drei Listen, IDs waeren
-      // dann mehrfach vergeben.
+      // Klasse statt ID: Der Pin sitzt in jeder der drei Listen.
       btn.className = PIN_CLASS;
       btn.type = 'button';
-      // Inline-SVG statt Emoji: ein Emoji rendert je nach Betriebssystem anders
-      // und bringt eine eigene Farbe mit. Das Motiv zeigt einen fixierten Balken
-      // ueber mitscrollenden Listenzeilen; eingefaerbt wird ueber currentColor.
+      // Inline-SVG statt Emoji: Das rendert je nach Betriebssystem anders und
+      // bringt eine eigene Farbe mit.
       btn.innerHTML =
         '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
         '<rect x="3" y="4" width="18" height="3.2" rx="1.6"/>' +
@@ -143,7 +111,6 @@
     var sw = document.getElementById(SWITCH_ID);
     if (sw) {
       var label = t(hidden ? 'gtm_ui_builtin_show' : 'gtm_ui_builtin_hide');
-      // Eingeschaltet heisst sichtbar – die Voreinstellung.
       sw.setAttribute('aria-checked', hidden ? 'false' : 'true');
       sw.title = label;
       sw.setAttribute('aria-label', label);
@@ -154,8 +121,7 @@
     var container = document.querySelector(BUILTIN_SELECTOR);
     if (!container || container.querySelector('#' + SWITCH_ID)) return;
 
-    // Der Schalter gehoert in die Kopfzeile der Karte, damit er auch dann noch
-    // erreichbar ist, wenn die Tabelle darunter ausgeblendet ist.
+    // In die Kopfzeile, damit er auch bei ausgeblendeter Tabelle erreichbar bleibt.
     var slot = container.querySelector('div.card-actions') ||
                container.querySelector('div.card-title');
     if (!slot) return;
@@ -176,15 +142,9 @@
 
   /* ------------------------------------------------------ Parametertabellen */
 
-  /*
-   * GTM rendert dieselbe Tabelle in zwei Gattungen: als echte <table> (die
-   * Suchtabelle in Vendor-Templates) und als reines div-Geruest (etwa die
-   * Ereignisparameter in gtm-inherited-params-table). Die Klassennamen sind in
-   * beiden Faellen identisch – nur tr/td werden durch div ersetzt. Zeilen und
-   * Zellen werden deshalb ueber Klassen erkannt, nicht ueber Tag-Namen; damit
-   * braucht es keine Liste von Tabellen-Selektoren, die bei der naechsten
-   * GTM-Komponente ohnehin unvollstaendig waere.
-   */
+  // GTM rendert dieselbe Tabelle als echte <table> und als div-Geruest, mit
+  // identischen Klassen. Zeilen und Zellen deshalb ueber Klassen erkennen,
+  // nie ueber Tag-Namen.
   var ROW_CLASS = 'simple-table-row';
   var CELL_CLASS = 'simple-table-row__cell';
   var HEADER_CELL_CLASS = 'simple-table-row__cell--header';
@@ -205,9 +165,8 @@
     return containers;
   }
 
-  // Datenzeilen des Containers. Die eigene Sortierzeile traegt dieselbe Klasse –
-  // sie braucht sie fuers Spaltenraster – und muss hier ausgeschlossen werden,
-  // sonst zaehlt sie als Zeile ohne Textfelder und die Sortierung bricht ab.
+  // Die eigene Sortierzeile traegt dieselbe Klasse (fuers Spaltenraster) und muss
+  // ausgeschlossen werden, sonst bricht die Sortierung ab.
   function rowsOf(container) {
     return [].filter.call(container.children, function (el) {
       return el.classList.contains(ROW_CLASS) &&
@@ -227,15 +186,8 @@
     });
   }
 
-  /*
-   * Sortierbar ist eine Tabelle nur, wenn jede Datenzelle genau ein Textfeld
-   * enthaelt und sonst kein Eingabeelement. Sortiert wird ueber die Textfelder;
-   * alles andere – eine Auswahlliste etwa – wuerde beim Umsortieren nicht
-   * mitwandern und in seiner Zeile stehen bleiben. Der Datensatz zerfiele, ohne
-   * dass man es der Tabelle ansieht. Geprueft wird die erste Zeile, weil alle
-   * Zeilen aus demselben ng-repeat-Template stammen; vor dem Schreiben
-   * kontrolliert sortTable() zusaetzlich jede einzelne Zeile.
-   */
+  // Nur Tabellen mit genau einem Textfeld je Zelle: Eine Auswahlliste wuerde beim
+  // Umsortieren nicht mitwandern und der Datensatz zerfiele unbemerkt.
   function isSortable(table) {
     var first = rowsOf(table)[0];
     if (!first) return false;
@@ -251,10 +203,8 @@
     return true;
   }
 
-  /*
-   * Die Kopfzeile liegt je nach Gattung im Container selbst (div-Geruest) oder
-   * eine Ebene hoeher im <thead>, waehrend der Container das <tbody> ist.
-   */
+  // Die Kopfzeile liegt im Container selbst (div-Geruest) oder eine Ebene
+  // hoeher im <thead>, wenn der Container das <tbody> ist.
   function columnNames(container) {
     var scope = container.querySelector('.' + HEADER_CELL_CLASS)
       ? container
@@ -269,22 +219,15 @@
       });
   }
 
-  /*
-   * An ctrl.tableHelper.rows kommen wir aus der ISOLATED world nicht heran, also
-   * wird ueber die sichtbaren Felder sortiert: Werte lesen, sortieren, in die
-   * unveraenderten Zeilen zurueckschreiben. Das native input-Event ist dabei
-   * entscheidend – ohne es bekaeme ng-model die Aenderung nicht mit und AngularJS
-   * wuerde die alten Werte zurueckschreiben. Die Zeilen selbst bleiben stehen
-   * (ng-repeat haelt sie ueber row.id), es wandert nur ihr Inhalt; Eingabe und
-   * Ausgabe bleiben zusammen, weil pro Zeile das komplette Werte-Array umzieht.
-   */
+  // Sortiert wird ueber die sichtbaren Felder – an ctrl.tableHelper.rows kommt
+  // die ISOLATED world nicht heran. Das native input-Event ist Pflicht, sonst
+  // schreibt AngularJS die alten Werte zurueck.
   function sortTable(table, column, direction) {
     var rows = rowsOf(table);
     if (!rows.length) return;
 
-    // Letzte Sicherung unmittelbar vor dem Schreiben: Weicht auch nur eine Zeile
-    // vom erwarteten Aufbau ab, wird gar nicht sortiert. Eine unsortierte Tabelle
-    // ist harmlos, ein halb umsortierter Datensatz nicht.
+    // Weicht auch nur eine Zeile ab, wird gar nicht sortiert: Eine unsortierte
+    // Tabelle ist harmlos, ein halb umsortierter Datensatz nicht.
     var expected = dataCells(rows[0]).length;
     var values = [];
     for (var i = 0; i < rows.length; i++) {
@@ -319,14 +262,12 @@
     });
   }
 
-  // Bei einer echten Tabelle ist der Container das <tbody>; die Sortierzeile
-  // gehoert dann in ein <tfoot>, das ng-repeat im Gegensatz zum <tbody> nicht
-  // anfasst. Beim div-Geruest ist der Container selbst der richtige Ort.
+  // Bei echten Tabellen gehoert die Sortierzeile ins <tfoot>: Das <tbody> baut
+  // ng-repeat neu auf.
   function hostOf(container) {
     return container.tagName === 'TBODY' ? container.parentElement : container;
   }
 
-  // Beschriftung und Tooltip beschreiben immer, was der naechste Klick tut.
   function paintSortButtons(container) {
     var host = hostOf(container);
     if (!host) return;
@@ -335,7 +276,6 @@
     var buttons = host.querySelectorAll('.' + SORT_ROW_CLASS + ' button');
     [].forEach.call(buttons, function (btn, index) {
       var ascending = !(state.column === index && state.direction === 1);
-      // Nicht jede Tabelle hat Spaltenueberschriften – dann die Nummer nennen.
       var name = names[index] || t('gtm_ui_sort_column', { n: index + 1 });
       var label = t(ascending ? 'gtm_ui_sort_asc' : 'gtm_ui_sort_desc', { col: name });
       btn.textContent = ascending ? 'A→Z' : 'Z→A';
@@ -348,8 +288,6 @@
     var host = hostOf(container);
     if (!host || host.querySelector('.' + SORT_ROW_CLASS)) return;
 
-    // Ohne Eingabefelder ist die Tabelle schreibgeschuetzt, mit fremden
-    // Eingabeelementen nicht verlustfrei sortierbar – in beiden Faellen kein Schalter.
     if (!isSortable(container)) return;
 
     var first = rowsOf(container)[0];
@@ -361,13 +299,12 @@
     sortRow.className = ROW_CLASS + ' ' + SORT_ROW_CLASS;
 
     for (var c = 0; c < cells.length; c++) {
-      // Die Zellklassen stammen aus der Datenzeile: nur so sitzen die Schalter im
-      // Spaltenraster, statt an den rechten Rand zu rutschen.
+      // Zellklassen aus der Datenzeile uebernehmen, sonst sitzen die Schalter
+      // nicht im Spaltenraster.
       var cell = document.createElement(cellTag);
       cell.className = cells[c].className;
       var btn = document.createElement('button');
       btn.type = 'button';
-      // btn ist die Schaltflaechenklasse der GTM-Oberflaeche – kein eigenes Styling noetig.
       btn.className = 'btn igtm-sort-btn';
       btn.addEventListener('click', makeSortHandler(container, c));
       cell.appendChild(btn);
@@ -394,9 +331,8 @@
     paintSortButtons(container);
   }
 
-  // Mit der Sortierzeile geht das <tfoot> mit, das sie bei echten Tabellen traegt:
-  // Ein leeres tfoot bliebe sonst stehen, und beim Wiedereinschalten haenge
-  // addSortRow() ein zweites daneben.
+  // Das leere <tfoot> muss mit weg, sonst haengt addSortRow() beim
+  // Wiedereinschalten ein zweites daneben.
   function removeSortRows() {
     [].forEach.call(document.querySelectorAll('.' + SORT_ROW_CLASS), function (row) {
       var parent = row.parentElement;
@@ -419,9 +355,8 @@
 
   /* ---------------------------------------------------------------- Anbindung */
 
-  // Abgeschaltete Funktionen werden nicht nur nicht mehr eingehaengt, sondern
-  // raeumen auch ab, was von ihnen im DOM steht: Der Schalter im Popup wirkt
-  // sofort, ohne dass die Seite neu geladen werden muss.
+  // Abgeschaltete Funktionen raeumen auch ab, was im DOM steht – sonst wirkt der
+  // Schalter im Popup erst nach einem Neuladen.
   function refresh() {
     if (isOn('pin')) injectPin();
     else { removePins(); applyPinState(); }
@@ -433,9 +368,8 @@
     else removeSortRows();
   }
 
-  // AngularJS baut Listen und Dialoge bei jedem Wechsel neu auf; unsere Elemente
-  // muessen dann nachgezogen werden. Ein Frame Entprellung genuegt, damit die
-  // vielen Einzelmutationen der SPA nicht jeweils eine eigene Abfrage ausloesen.
+  // AngularJS baut Listen bei jedem Wechsel neu auf. Ein Frame Entprellung, damit
+  // nicht jede Einzelmutation der SPA eine eigene Abfrage ausloest.
   var pending = false;
   function scheduleRefresh() {
     if (pending) return;
@@ -446,9 +380,7 @@
     });
   }
 
-  // Ist keine der drei Funktionen an, gibt es auch nichts nachzuziehen – dann
-  // wird gar nicht erst beobachtet. Wer alles abschaltet, soll die Extension in
-  // der Oberflaeche auch wirklich los sein.
+  // Ist keine Funktion an, wird gar nicht erst beobachtet.
   var observer = new MutationObserver(scheduleRefresh);
   var observing = false;
 

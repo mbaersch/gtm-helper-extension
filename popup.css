@@ -10,7 +10,6 @@
   --border-color: #333333;
   --input-bg: #252525;
   --box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  /* Knopf der Schalter: hell genug, um auf der dunklen Schiene zu stehen. */
   --switch-knob: #9aa0a6;
 }
 
@@ -124,8 +123,7 @@ label {
   margin-bottom: 8px;
   color: var(--secondary-color);
   font-size: 1em;
-  /* Ein Doppelklick auf die Beschriftung soll den Schalter zweimal umlegen und
-     nicht den Text markieren. */
+  /* Sonst markiert ein Doppelklick auf die Beschriftung den Text. */
   user-select: none;
 }
 
@@ -168,8 +166,6 @@ textarea:focus, input[type="text"]:focus {
   margin-bottom: 0;
 }
 
-/* Der Schalter in der Kopfzeile einer Karte schaltet die ganze Karte und darf
-   das auch zeigen – die Beschriftungen darunter bleiben kleiner. */
 section > .checkbox-group {
   margin-bottom: 6px;
 }
@@ -178,17 +174,9 @@ section > .checkbox-group label {
   font-size: 1.15em;
 }
 
-/*
- * Schalter statt Kästchen
- *
- * Gebaut wie der Schieberegler, den die Extension in die GTM-Oberfläche setzt
- * (gtm-ui.css): schmale Schiene, darüber ein größerer Knopf, der beim
- * Einschalten nach rechts wandert. Nur die Farben kommen von hier.
- *
- * Kein zusätzliches Markup: appearance:none nimmt dem Kästchen sein Aussehen,
- * der Knopf ist ein ::after. Das Element bleibt eine Checkbox — Tastatur,
- * Beschriftung und :checked funktionieren unverändert.
- */
+/* Schalter statt Kästchen, gebaut wie der in gtm-ui.css. appearance:none plus
+   ein ::after als Knopf — das Element bleibt eine Checkbox mit allem, was
+   Tastatur und Beschriftung daran können. */
 .checkbox-group input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -219,7 +207,7 @@ section > .checkbox-group label {
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-/* Die erste Farbangabe ist der Rückfall für Umgebungen ohne color-mix(). */
+/* Erste Angabe: Rückfall ohne color-mix(). */
 .checkbox-group input[type="checkbox"]:checked {
   background: rgba(0,163,131,0.4);
   background: color-mix(in srgb, var(--secondary-color) 40%, transparent);
@@ -372,8 +360,6 @@ a:hover {
   margin: 0;
 }
 
-/* Head/Body bleibt eine Auswahl und damit ein Radio – nur eben eines, das
-   neben den Schaltern nicht wie aus einem anderen Jahrzehnt aussieht. */
 .radio-group input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
@@ -473,14 +459,10 @@ body.light-theme .gtm-box b {
   color: #274b8f;
 }
 
-/* Info: eine eigene Ansicht, kein Overlay.
-   Der Text ist zu lang für einen zentrierten Kasten – er bekommt den ganzen
-   Inhaltsbereich und scrollt mit main. Beim Öffnen wird der übrige Inhalt
-   ausgeblendet; !important, weil die Info-Boxen ihr display inline setzen. */
+/* Info als eigene Ansicht statt Overlay. !important, weil die Info-Boxen ihr
+   display inline setzen. */
 #info_page {
   display: none;
-  /* Die übrigen Abschnitte sind Karten mit eigenem Innenabstand; der Fließtext
-     braucht seinen eigenen, sonst steht er direkt an der Bildlaufleiste. */
   padding: 0 8px 10px;
 }
 
@@ -547,8 +529,6 @@ main.info-open #info_page {
   border-color: var(--text-dim);
 }
 
-/* Karte "GTM-Oberfläche": Hauptschalter oben, die einzelnen Funktionen darunter
-   eingerückt – die Einrückung zeigt, dass sie am Hauptschalter hängen. */
 .gtmui-features {
   display: flex;
   flex-direction: column;
@@ -562,15 +542,13 @@ main.info-open #info_page {
   font-size: 0.9em;
 }
 
-/* Bei ausgeschaltetem Hauptschalter sind die Einzelschalter gesperrt. */
 .gtmui-section input[type="checkbox"]:disabled + label {
   opacity: 0.45;
   cursor: default;
 }
 
-/* Außerhalb von tagmanager.google.com kann das Popup den gespeicherten Stand
-   nicht lesen. Dann bleibt von der Karte nur die Überschrift und der Hinweis –
-   Kästchen würden hier einen Zustand behaupten, der geraten wäre. */
+/* Außerhalb von tagmanager.google.com ist der Stand nicht lesbar. Kästchen
+   würden dort einen Zustand behaupten, der geraten wäre. */
 .gtmui-section.gtmui-locked input[type="checkbox"],
 .gtmui-section.gtmui-locked .gtmui-features {
   display: none;

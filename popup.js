@@ -296,6 +296,10 @@ function identifyCMP(callback) {
 
     // 1. Check Cookies
     chrome.cookies.getAll({ url: tab.url }, function(cookies) {
+      // Zu einer chrome://-URL gibt es keine Cookies; die Abfrage meldet das
+      // als Fehler, der gelesen werden muss.
+      if (chrome.runtime.lastError || !cookies) return callback(null);
+
       for (let cookie of cookies) {
         if (CMP_COOKIES[cookie.name]) {
           return callback(CMP_COOKIES[cookie.name]);
@@ -320,6 +324,7 @@ function identifyCMP(callback) {
         },
         args: [Object.keys(CMP_LOCAL_STORAGE)]
       }, function(results) {
+        if (chrome.runtime.lastError) return callback(null);
         if (results && results[0] && results[0].result) {
           return callback(CMP_LOCAL_STORAGE[results[0].result]);
         }
@@ -336,6 +341,7 @@ function identifyCMP(callback) {
           },
           args: [Object.keys(CMP_SESSION_STORAGE)]
         }, function(results) {
+          if (chrome.runtime.lastError) return callback(null);
           if (results && results[0] && results[0].result) {
             return callback(CMP_SESSION_STORAGE[results[0].result]);
           }
@@ -349,7 +355,10 @@ function identifyCMP(callback) {
 // Funktion, um den Checkup-Status (und die Checkup-URL) vom Background abzufragen
 function checkURL(callback) {
   chrome.runtime.sendMessage({ action: "checkURL" }, function(response) {
-    callback(response);
+    // Antwortet der Service Worker nicht, ist response undefined — sonst
+    // scheitern die Aufrufer an response.hasCheckup.
+    if (chrome.runtime.lastError) return callback({});
+    callback(response || {});
   });
 }
 
@@ -401,54 +410,60 @@ function renderGtmDetections() {
   });
 }
 
+// Auf chrome://-Seiten, im Web Store und auf Extension-Seiten ist Injizieren
+// nicht erlaubt: lastError muss gelesen werden, sonst loggt Chrome, und results
+// ist dort undefined. Der Callback bekommt in dem Fall null.
+function runInActiveTab(details, callback) {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    const tab = tabs[0];
+    if (!tab) return callback(null);
+
+    chrome.scripting.executeScript(
+      Object.assign({ target: { tabId: tab.id } }, details),
+      function(results) {
+        if (chrome.runtime.lastError || !results || !results[0]) return callback(null);
+        callback(results[0].result);
+      }
+    );
+  });
+}
+
 // Liest die Einstellungen aus dem localStorage der aktiven Seite
 function getSettingsFromPage(callback) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: function() {
-        return localStorage.getItem("igtm_settings") || "{}";
-      }
-    }, function(results) {
-      var settings = JSON.parse(results[0].result);
-      callback(settings);
-    });
+  runInActiveTab({
+    func: function() {
+      return localStorage.getItem("igtm_settings") || "{}";
+    }
+  }, function(raw) {
+    var settings = {};
+    try {
+      settings = JSON.parse(raw || "{}") || {};
+    } catch (e) {
+      settings = {};
+    }
+    callback(settings);
   });
 }
 
 // Speichert die Einstellungen im localStorage der aktiven Seite
 function saveSettingsToPage(settings, callback) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: function(newSettings) {
-        localStorage.setItem("igtm_settings", JSON.stringify(newSettings));
-      },
-      args: [settings]
-    }, function() {
-      callback();
-    });
+  runInActiveTab({
+    func: function(newSettings) {
+      localStorage.setItem("igtm_settings", JSON.stringify(newSettings));
+    },
+    args: [settings]
+  }, function() {
+    callback();
   });
 }
 
 /* ------------------------------------------------- Karte "GTM-Oberfläche" */
 
 /*
- * Die Komfortfunktionen in der GTM-Oberfläche sind einzeln abschaltbar, damit
- * sich nichts mit anderen GTM-Extensions doppelt. Ihr Zustand gehört dorthin,
- * wo er wirkt: in den localStorage von tagmanager.google.com, unter demselben
- * Schlüssel, den auch die Schalter in der Oberfläche selbst benutzen
- * (igtm_gtm_ui, siehe gtm-ui-features.js).
- *
- * Aus dem Popup ist diese Origin nur über chrome.scripting im aktiven Tab
- * erreichbar — chrome.storage schiede eine neue Berechtigung ein, und die
- * Extension kommt seit jeher ohne aus. Auf jeder anderen Seite bleibt die Karte
- * deshalb deaktiviert und sagt das auch.
- *
- * Geschrieben wird in alle offenen GTM-Tabs: Der localStorage gehört zwar der
- * Origin und ist damit für alle derselbe, aber die laufenden Content-Scripts
- * erfahren von der Änderung nur durch das Ereignis, das dabei ausgelöst wird.
- * Sonst zöge ein zweiter Tab erst beim nächsten Laden nach.
+ * Schalter für die Komfortfunktionen im GTM. Der Zustand liegt im localStorage
+ * von tagmanager.google.com (igtm_gtm_ui, siehe gtm-ui-features.js) und ist von
+ * hier nur über chrome.scripting im aktiven Tab erreichbar — chrome.storage
+ * wäre eine neue Berechtigung.
  */
 
 const GTM_UI_ORIGIN = 'https://tagmanager.google.com/';
@@ -459,7 +474,6 @@ function featureBoxes() {
   return GTM_UI_FEATURES.map(name => document.querySelector('[data-feature="' + name + '"]'));
 }
 
-// Liest den gespeicherten Stand aus dem angegebenen Tab.
 function readGtmUiState(tabId, callback) {
   chrome.scripting.executeScript({
     target: { tabId: tabId },
@@ -480,16 +494,15 @@ function readGtmUiState(tabId, callback) {
   });
 }
 
-// Schreibt Hauptschalter und Funktionsliste in alle GTM-Tabs und meldet die
-// Änderung den dort laufenden Scripts.
+// In alle GTM-Tabs schreiben: Der localStorage ist für alle derselbe, aber die
+// laufenden Scripts erfahren von der Änderung nur durch das Ereignis.
 function applyGtmUiState(enabled, features) {
   chrome.tabs.query({ url: GTM_UI_ORIGIN + '*' }, function(tabs) {
     (tabs || []).forEach(function(tab) {
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        // Nur die beiden eigenen Felder überschreiben: stickyBar und
-        // hideBuiltInVars gehören den Schaltern in der Oberfläche und dürfen
-        // beim Speichern von hier aus nicht verloren gehen.
+        // Nur die eigenen Felder überschreiben: stickyBar und hideBuiltInVars
+        // gehören den Schaltern in der Oberfläche.
         func: function(key, isEnabled, featureFlags) {
           let state = {};
           try {
@@ -504,23 +517,15 @@ function applyGtmUiState(enabled, features) {
         },
         args: [GTM_UI_STORAGE_KEY, enabled, features]
       }, function() {
-        // Ein Tab, in den nicht injiziert werden kann (etwa direkt nach dem
-        // Öffnen), ist kein Fehler, der den Rest aufhalten dürfte.
         void chrome.runtime.lastError;
       });
     });
   });
 }
 
-/*
- * Ohne gespeicherten Stand ist alles an: Wer nie etwas geschaltet hat, bekommt
- * die Funktionen. Deshalb überall `!== false` statt `=== true` — dieselbe Regel
- * wie in gtm-ui-features.js.
- *
- * Ist der Stand nicht lesbar, weil gerade kein GTM-Tab aktiv ist, werden die
- * Kästchen ausgeblendet statt ausgegraut: Ein ausgegrautes Häkchen behauptet
- * einen Zustand, und der wäre hier geraten.
- */
+// Fehlender Schlüssel heißt an — `!== false` wie in gtm-ui-features.js. Ohne
+// GTM-Tab werden die Kästchen ausgeblendet statt ausgegraut: Ein ausgegrautes
+// Häkchen behauptete einen Zustand, der geraten wäre.
 function paintGtmUiCard(state, editable) {
   const master = document.getElementById('igtm_gtmui_active');
   const enabled = state.enabled !== false;
@@ -556,14 +561,10 @@ function initGtmUiCard() {
     readGtmUiState(tab.id, function(state) {
       paintGtmUiCard(state, true);
 
-      // Erst nach dem Füllen verdrahten: Ein programmatisch gesetztes checked
-      // löst zwar kein change-Ereignis aus, aber die Reihenfolge macht die
-      // Absicht deutlich – geschaltet wird nur von Hand.
       const controls = [document.getElementById('igtm_gtmui_active')].concat(featureBoxes());
       controls.forEach(control => {
         control.addEventListener('change', function() {
           const next = collectGtmUiState();
-          // Neu zeichnen, damit die Einzelschalter dem Hauptschalter folgen.
           paintGtmUiCard(next, true);
           applyGtmUiState(next.enabled, next.features);
         });
@@ -588,15 +589,12 @@ function updateBadge(status, checkupUrl) {
 }
 
 function getCheckupUrl(callback) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: function() {
-        return localStorage.getItem("igtm_checkup") || "";
-      }
-    }, function(results) {
-      callback(results[0].result);
-    });
+  runInActiveTab({
+    func: function() {
+      return localStorage.getItem("igtm_checkup") || "";
+    }
+  }, function(url) {
+    callback(url || "");
   });
 }
 
@@ -612,6 +610,8 @@ function deleteConsentSettings() {
         }
       }, function(results) {
         var ppCookie = "noPPCookie";
+        // Nicht injizierbare Seite: nichts zu löschen.
+        if (chrome.runtime.lastError) return;
         if (results && results[0] && results[0].result) {
           var ppobj;
           try {ppobj = JSON.parse(results[0].result); } catch(e) {ppobj = []}
@@ -621,6 +621,7 @@ function deleteConsentSettings() {
 
         chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
           let tab = tabs[0];
+          if (!tab) return;
           let tabId = tab.id;
           let currentUrl = tab.url;
           
@@ -635,6 +636,7 @@ function deleteConsentSettings() {
 
           //Dynamische Namen von Cookies suchen und anhängen...
           chrome.cookies.getAll({url: tabs[0].url}, function(results) {
+            if (chrome.runtime.lastError || !results) return;
             //Real Cookie Banner: Praefix ohne "v:", es gibt beide Varianten
             //(real_cookie_banner-v:3_blog:1_path:... und real_cookie_banner-blog:1)
             let realCookiesFound = results.filter(x=>x.name.indexOf("real_cookie_banner-")>=0);
@@ -700,7 +702,7 @@ function deleteConsentSettings() {
               },
               args: [localStorageKeys]
             }, function() {
-              //chrome.tabs.reload(tabId);
+              void chrome.runtime.lastError;
             });
 
             //SessionStorage Einträge entfernen, wenn vorhanden (Danke, CCM19 :|)
@@ -713,6 +715,7 @@ function deleteConsentSettings() {
               },
               args: [sessionStorageKeys]
             }, function() {
+              void chrome.runtime.lastError;
               chrome.tabs.reload(tabId);
               // Popup erst schließen, wenn die gesamte Async-Kette (Cookies,
               // LS/SS, Reload) durchgelaufen ist. Ein früheres window.close()
@@ -732,13 +735,11 @@ function deleteConsentSettings() {
 }
 
 function deleteSpecificConsentSettings(cmpName) {
-  // Eigener Text: Hier gehen nur die Einträge dieser einen CMP weg — der
-  // Unterschied zum Rundumschlag unten im Footer ist genau das, was vor dem
-  // Klick klar sein muss.
   const frage = getTranslation(currentLang, "confirm_reset_specific").replace("{cmp}", cmpName);
   if (confirm(frage)) {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       const tab = tabs[0];
+      if (!tab) return;
       const currentUrl = tab.url;
 
       // Filter keys for this specific CMP
@@ -760,6 +761,7 @@ function deleteSpecificConsentSettings(cmpName) {
         },
         args: [localStorageKeys, sessionStorageKeys]
       }, function() {
+        void chrome.runtime.lastError;
         chrome.tabs.reload(tab.id);
         window.close();
       });
@@ -848,7 +850,6 @@ window.onload = function() {
   // GTM-Erkennung anzeigen
   renderGtmDetections();
 
-  // Karte "GTM-Oberfläche"
   initGtmUiCard();
 
   //Background-Script für Checkup-URL
@@ -901,14 +902,12 @@ window.onload = function() {
     chrome.tabs.create({ active: true, url: helpLnk.href });
   });
 
-  // Info-Ansicht: tauscht den Inhalt von main aus, statt sich darüberzulegen.
   const infoBtn = document.getElementById('info_btn');
   const mainEl = document.querySelector('main');
 
   if (infoBtn && mainEl) {
     infoBtn.addEventListener('click', () => {
       mainEl.classList.add('info-open');
-      // Der Text beginnt oben, auch wenn vorher weit unten gescrollt war.
       mainEl.scrollTop = 0;
     });
 
@@ -920,8 +919,6 @@ window.onload = function() {
       });
     });
 
-    // Escape schließt ebenfalls – der Weg, den man bei einer eingeblendeten
-    // Ansicht zuerst probiert.
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mainEl.classList.contains('info-open')) {
         mainEl.classList.remove('info-open');

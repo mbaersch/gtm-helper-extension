@@ -30,10 +30,7 @@
     </header>
 
     <main>
-      <!-- Info: ersetzt den Inhalt von main, statt sich als Overlay darüberzulegen.
-           Der Zurück-Schalter steht oben und unten, damit er nach dem Lesen nicht
-           erst wieder gesucht werden muss. Umgeschaltet wird über die Klasse
-           info-open an main (siehe popup.css). -->
+      <!-- Ersetzt den Inhalt von main; umgeschaltet über die Klasse info-open. -->
       <div id="info_page">
         <div class="info-nav">
           <button id="info_back_top" class="info-back">← Zurück</button>
@@ -105,8 +102,7 @@
         <textarea id="igtm_code"></textarea>
       </section>
 
-      <!-- GTM-Oberfläche: wirkt nur auf tagmanager.google.com und wird deshalb
-           auch nur dort bedienbar gemacht (siehe popup.js, initGtmUiCard). -->
+      <!-- Nur auf tagmanager.google.com bedienbar, siehe initGtmUiCard(). -->
       <section id="gtmui_section" class="gtmui-section">
         <div class="checkbox-group">
           <input type="checkbox" id="igtm_gtmui_active" name="igtm_gtmui_active">

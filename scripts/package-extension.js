@@ -1,6 +1,8 @@
 const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const vm = require('vm');
+const { stripJs, stripCss, stripHtml } = require('./strip-comments');
 
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.resolve(rootDir, 'dist');
@@ -35,18 +37,45 @@ const filesToInclude = [
   'images/injectGTM_big.png'
 ];
 
+// Jede gestrippte JS-Datei gegen den Parser prüfen: Bei Zweifeln lieber das
+// Original ins Paket als eine kaputte Extension.
+function strip(file, inhalt) {
+  if (file.endsWith('.js')) {
+    const kurz = stripJs(inhalt);
+    try {
+      new vm.Script(kurz, { filename: file });
+    } catch (e) {
+      console.warn(`Warning: ${file} nach dem Entfernen der Kommentare nicht mehr parsebar (${e.message}) – Original übernommen.`);
+      return inhalt;
+    }
+    return kurz;
+  }
+  if (file.endsWith('.css')) return stripCss(inhalt);
+  if (file.endsWith('.html')) return stripHtml(inhalt);
+  return inhalt;
+}
+
 console.log('Copying files to dist...');
+let bytesVorher = 0;
+let bytesNachher = 0;
+
 filesToInclude.forEach(file => {
   const src = path.join(rootDir, file);
-  
+
   const dest = path.join(distDir, file.replace('/', path.sep));
   const destDir = path.dirname(dest);
-  
+
   if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
-  
+
   if (fs.existsSync(src)) {
     if (fs.lstatSync(src).isDirectory()) {
        // logic for directories if needed, but we specify files
+    } else if (/\.(js|css|html)$/.test(file)) {
+       const inhalt = fs.readFileSync(src, 'utf8');
+       const kurz = strip(file, inhalt);
+       fs.writeFileSync(dest, kurz);
+       bytesVorher += Buffer.byteLength(inhalt);
+       bytesNachher += Buffer.byteLength(kurz);
     } else {
        fs.copyFileSync(src, dest);
     }
@@ -55,7 +84,20 @@ filesToInclude.forEach(file => {
   }
 });
 
+if (bytesVorher > 0) {
+  const kb = (n) => (n / 1024).toFixed(1) + ' KB';
+  const anteil = Math.round((1 - bytesNachher / bytesVorher) * 100);
+  console.log(`Kommentare entfernt: ${kb(bytesVorher)} -> ${kb(bytesNachher)} (${anteil}% weniger)`);
+}
+
 // 3. Zip it using PowerShell (since we are on Windows)
+// Mit --no-zip bleibt dist/ stehen: die Extension in Auslieferungsform, ladbar
+// und testbar.
+if (process.argv.includes('--no-zip')) {
+  console.log(`Fertig ohne ZIP – die entpackte Extension liegt in: ${distDir}`);
+  return;
+}
+
 console.log('Creating ZIP archive...');
 try {
   // Compress-Archive expects absolute paths on Windows.

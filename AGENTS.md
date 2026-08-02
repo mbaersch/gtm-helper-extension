@@ -5,7 +5,15 @@ Chrome Extension (Manifest V3) mit drei Funktionen: GTM-Container in beliebige S
 ## Umgebung
 - Windows, PowerShell als primäre Shell. Das Build-Skript ruft `Compress-Archive` auf — kein zip-Binary nötig.
 - Node nur für Build/Tests, nicht zur Laufzeit. `npm run build` erzeugt `gtm-cmp-helper-v<version>.zip` aus `manifest.json`-Version.
+- `node scripts/package-extension.js --no-zip` baut nur `dist/` und lässt es stehen — die Extension in Auslieferungsform, ladbar über „Entpackte Erweiterung laden".
 - Tests: Playwright (`npm test`). `package.json` und Tests sind bewusst **nicht** versioniert (siehe .gitignore-Whitelist).
+
+## Kommentare gehen nicht mit ins Paket
+`scripts/strip-comments.js` entfernt beim Packen alle Kommentare aus JS, CSS und HTML — rund 29 % der Dateigröße. Die Quellen bleiben unverändert: Die Begründungen zu Randbedingungen und verworfenen Wegen sind fürs Repo gedacht, nicht für den Web Store.
+
+- **Kein Minifier als Abhängigkeit.** `package.json` ist nicht versioniert; ein npm-Paket wäre nach dem nächsten Aufsetzen weg und der Build kaputt. Für JS läuft deshalb ein eigener Zustandsautomat, der Zeichenketten, Template-Literale und reguläre Ausdrücke ausspart — ein Regex über den Quelltext würde an `//` in einer URL (`gtmSnippetFromId`) oder an einem Regex-Literal scheitern.
+- **Abgesichert:** Jede gestrippte JS-Datei wird gegen `vm.Script` geprüft. Schlägt das fehl, wandert das Original ins Paket und der Build sagt es.
+- **Prüfen lässt sich das Ergebnis:** `node scripts/package-extension.js --no-zip`, dann die Playwright-Suite mit `IGTM_EXT_PATH=<pfad>/dist` gegen das Paket statt gegen den Quellordner laufen lassen.
 
 ## Zwei Whitelists — die häufigste Fehlerquelle
 `.gitignore` ignoriert per `*` **alles** und erlaubt einzeln zurück. Eine neue Laufzeit-Datei muss deshalb an **zwei** Stellen eingetragen werden, sonst fehlt sie still in git und/oder im ZIP:

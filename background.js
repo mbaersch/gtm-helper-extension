@@ -47,11 +47,17 @@ function buildCheckupUrl(url) {
 		  return localStorage.getItem("igtm_settings") || "{}";
 		}
 	  }, function(results) {
-		if (chrome.runtime.lastError) {
+		// Nicht injizierbare Seite oder Frame inzwischen weg.
+		if (chrome.runtime.lastError || !results || !results[0]) {
 		  chrome.action.setBadgeText({ text: "" });
 		  return;
 		}
-		let settings = JSON.parse(results[0].result)||{};
+		let settings;
+		try {
+		  settings = JSON.parse(results[0].result) || {};
+		} catch (e) {
+		  settings = {};
+		}
 		let active = settings.igtm_Status || settings.igtmAddInit || settings.igtmAddCode;
 		let gtmCount = gtmRecordsForTab(tabId).length;
 		if (checkupUrl && checkupUrl !== "") {
