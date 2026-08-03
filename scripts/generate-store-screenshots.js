@@ -4,10 +4,15 @@ const fs = require('fs');
 
 // Chrome-Web-Store-Screenshots müssen exakt 1280x800 sein. Aufbau: eine echte Seite
 // als Vollbild-Hintergrund (statischer Screenshot in images/), darüber das Popup als
-// rechts angedocktes Panel voller Höhe (scrollt intern) — wie ein reales Extension-Popup.
+// schwebendes Fenster in den Originalmaßen aus popup.css.
 const VIEW_W = 1280;
 const VIEW_H = 800;
-const PANEL_W = 480;
+// Müssen den Werten in popup.css folgen — bei kleinerer Breite brechen die Footer-Buttons um.
+const PANEL_W = 550;
+const PANEL_H = 580;
+const PANEL_RIGHT = 48;
+// Ein Popup hängt unter dem Toolbar-Icon; die Toolbar ist hier nicht im Bild, also bündig oben.
+const PANEL_TOP = 0;
 const imagesDir = path.resolve(__dirname, '..', 'images');
 
 const bgCache = {};
@@ -19,29 +24,37 @@ function staticBg(file) {
   return bgCache[file];
 }
 
+// Der Hintergrund liegt auf <html>, damit <body> das Popup-Fenster selbst bleibt und
+// seine Theme-Farbe (--bg-color) als Fensterfüllung behält.
 function storeCss(bgDataUri) {
   return `
-    html, body {
+    html {
       margin: 0 !important; padding: 0 !important;
       width: ${VIEW_W}px !important; height: ${VIEW_H}px !important;
       overflow: hidden !important;
-    }
-    body {
       background-image: url("${bgDataUri}") !important;
       background-size: cover !important;
       background-position: left top !important;
       background-repeat: no-repeat !important;
     }
-    .container {
+    body {
       position: fixed !important;
-      top: 0 !important; right: 0 !important;
-      width: ${PANEL_W}px !important; height: ${VIEW_H}px !important;
-      overflow-y: auto !important; overflow-x: hidden !important;
-      background: #111 !important;
-      border-left: 2px solid #C44E00 !important;
-      box-shadow: -14px 0 60px rgba(0,0,0,0.75) !important;
+      top: ${PANEL_TOP}px !important; right: ${PANEL_RIGHT}px !important;
+      left: auto !important; bottom: auto !important;
+      margin: 0 !important;
+      width: ${PANEL_W}px !important; height: ${PANEL_H}px !important;
+      overflow: hidden !important;
+      border-radius: 0 0 14px 14px !important;
+      border: 1px solid rgba(255,255,255,0.10) !important;
+      border-top: none !important;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.65) !important;
       box-sizing: border-box !important;
     }
+    body.light-theme {
+      border-color: rgba(0,0,0,0.16) !important;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45) !important;
+    }
+    .container { height: 100% !important; }
     ::-webkit-scrollbar { display: none; }
   `;
 }
@@ -133,10 +146,12 @@ async function generateStoreScreenshots() {
   const popupUrl = `chrome-extension://${extensionId}/popup.html`;
 
   // Zustände werden deterministisch per DOM eingeblendet (kein echter Tab/State nötig).
+  // Store-Sprache ist Englisch wie die Beschreibung; nur das Checkup-Motiv bleibt deutsch,
+  // weil es auf das deutschsprachige Analytrix verlinkt.
   const scenarios = [
-    { name: 'overview', bg: 'analytrixpage.png' },
+    { name: 'overview', bg: 'analytrixpage.png', lang: 'en', theme: 'dark' },
     {
-      name: 'cmp-reset', bg: 'analytrixpage.png',
+      name: 'cmp-reset', bg: 'analytrixpage.png', lang: 'en', theme: 'light',
       afterOpen: async (p) => p.evaluate(() => {
         const el = document.getElementById('detected_cmp_name');
         if (el) el.innerText = 'CookieBot';
@@ -145,14 +160,14 @@ async function generateStoreScreenshots() {
       })
     },
     {
-      name: 'checkup', bg: 'gtmpage.png',
+      name: 'checkup', bg: 'gtmpage.png', lang: 'de', theme: 'dark',
       afterOpen: async (p) => p.evaluate(() => {
         const box = document.getElementById('show_checkup');
         if (box) box.style.display = 'block';
       })
     },
     {
-      name: 'tags-detected', bg: 'analytrixpage.png',
+      name: 'tags-detected', bg: 'analytrixpage.png', lang: 'en', theme: 'dark',
       afterOpen: async (p, recs) => p.evaluate((records) => {
         window.gtmDetectRecords = records;
         window.paintGtmDetections();
@@ -161,11 +176,11 @@ async function generateStoreScreenshots() {
     {
       // Die Karte ist nur bedienbar, wenn ein GTM-Tab aktiv ist – hier gibt es
       // keinen, deshalb wird der entsperrte Zustand direkt gezeichnet.
-      name: 'gtm-ui-options', bg: 'gtmpage.png',
+      name: 'gtm-ui-options', bg: 'gtmpage.png', lang: 'en', theme: 'light',
       afterOpen: async (p) => p.evaluate(() => {
         window.paintGtmUiCard({ enabled: true, features: {} }, true);
-        const karte = document.getElementById('gtmui_section');
-        if (karte) karte.scrollIntoView({ block: 'end' });
+        const scroller = document.querySelector('main');
+        if (scroller) scroller.scrollTop = scroller.scrollHeight;
       })
     },
   ];
@@ -174,6 +189,12 @@ async function generateStoreScreenshots() {
     const s = scenarios[i];
     console.log(`Generating store screenshot: ${s.name}...`);
     await page.goto(popupUrl);
+    // Sprache und Theme liest window.onload aus dem localStorage — also setzen, dann neu laden.
+    await page.evaluate(({ lang, theme }) => {
+      localStorage.setItem('igtm_lang', lang);
+      localStorage.setItem('igtm_theme', theme);
+    }, { lang: s.lang, theme: s.theme });
+    await page.reload();
     await page.waitForSelector('#hdng');
     await page.addStyleTag({ content: storeCss(staticBg(s.bg)) });
     // Init-Callbacks (identifyCMP/checkURL/renderGtmDetections) abwarten, bevor wir mocken.
