@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Installieren-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.6-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.7-blue.svg)](#)
 
 GTM & CMP Helper ist eine Chrome-Extension zum Verwalten von Consent Management Platform (CMP) Daten, Injizieren von Google Tag Manager Containern und zum Debugging während der Entwicklung.
 
@@ -70,6 +70,11 @@ Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache d
 ## Changelog
 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
+
+### 3.7
+- **Neu — Zeile in Parametertabellen darunter einfügen:** GTM erweitert Parametertabellen nur am Ende. Wo die Reihenfolge zählt — etwa in RegEx-Tabellen, in denen der erste Treffer gewinnt —, musste eine freie Zeile bisher von Hand erzeugt werden: unten anhängen, dann jeden Wert ab der Zielposition einzeln nach unten kopieren. Steht der Cursor jetzt in der ersten Spalte einer Zeile, auf die weitere folgen, erscheint dort „+ Neue Zeile unterhalb" und erledigt das mit einem Klick. Die Zeile, in der gearbeitet wird, bleibt unangetastet; ein Fehlklick kostet einen Klick auf GTMs Entfernen-Symbol. In der letzten Zeile erscheint nichts — dort genügt die native Schaltfläche.
+- **Fix:** Die Metadata-Tabellen der Tags hatten nie Sortierschaltflächen. Sie verwenden ein anderes Textfeld als die übrigen Parametertabellen und fielen deshalb aus der Prüfung, die Tabellen mit Auswahllisten fernhält. Beide Funktionen stehen dort jetzt zur Verfügung.
+- **Änderung:** Der Schalter „Buttons zum Sortieren von Parametertabellen" heißt jetzt „Erweiterungen für Parametertabellen (sortieren, Zeile einfügen)" und deckt beide Funktionen ab. Wer ihn abgeschaltet hatte, findet ihn unverändert abgeschaltet vor.
 
 ### 3.6
 - **Neu — Komfortfunktionen im GTM einzeln abschaltbar:** Die Karte „GTM-Oberfläche verbessern" unten im Popup schaltet jede der sechs Funktionen für sich ab, dazu eine für alle zusammen. Abgeschaltet heißt weg: Pin, Variablen-Schalter und Sortierzeilen verschwinden mitsamt Wirkung aus der Oberfläche, damit sich nichts mit anderen GTM-Extensions doppelt. Voreingestellt ist alles an. Bedienbar ist die Karte, während ein Tab mit `tagmanager.google.com` aktiv ist — dort liegen die Einstellungen, und ohne neue Berechtigung führt kein Weg von außen dorthin.

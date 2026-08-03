@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.6-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.7-blue.svg)](#)
 
 GTM & CMP Helper is a Chrome Extension for resetting Consent Management Platform (CMP) data, injecting Google Tag Manager containers, and managing data during development and debugging.
 
@@ -70,6 +70,11 @@ The toggles remember their state; their labels follow the language of the GTM in
 ## Changelog
 
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
+
+### 3.7
+- **New — Insert a row below in parameter tables:** GTM only extends parameter tables at the end. Where the order matters — such as in RegEx tables, where the first match wins — a free row had to be made by hand: append at the bottom, then copy every value from the target position downwards, one by one. Now, with the cursor in the first column of a row that has further rows below it, "+ Add row below" appears and does the job in one click. The row you are working in stays untouched; a misclick costs one click on GTM's remove icon. Nothing appears in the last row — the native button already covers that.
+- **Fix:** the metadata tables in tags never had sort buttons. They use a different text field from the other parameter tables and therefore fell out of the check that keeps tables with dropdowns away. Both features are now available there.
+- **Change:** the switch "Buttons for sorting parameter tables" is now called "Enhancements for parameter tables (sorting, inserting rows)" and covers both features. Anyone who had switched it off will find it still switched off.
 
 ### 3.6
 - **New — GTM comfort features can be switched off individually:** the "Enhance the GTM interface" card at the bottom of the popup turns each of the six features off on its own, plus one switch for all of them. Off means gone: the pin, the variable switch, and the sort rows disappear from the interface along with their effect, so nothing collides with other GTM extensions. Everything is on by default. The card is operable while a `tagmanager.google.com` tab is active — that is where the settings live, and without a new permission there is no way in from outside.
