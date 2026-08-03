@@ -1,6 +1,16 @@
 const { chromium } = require('@playwright/test');
+const { spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+
+// imgopt ist ein global installiertes CLI, bewusst kein Dependency — fehlt es, bleiben
+// die Bilder unoptimiert statt den Lauf abzubrechen.
+function optimizeImages(dir) {
+  const result = spawnSync('imgopt', [dir], { stdio: 'inherit', shell: true });
+  if (result.error || result.status !== 0) {
+    console.log('⚠️  imgopt nicht ausgeführt — Bilder bleiben unoptimiert.');
+  }
+}
 
 async function generateScreenshots() {
   const extensionPath = path.resolve(__dirname, '..');
@@ -33,6 +43,7 @@ async function generateScreenshots() {
     { name: 'light_de', lang: 'de', theme: 'light', advanced: false },
     { name: 'advanced_open', lang: 'de', theme: 'dark', advanced: true },
     { name: 'detection_de', lang: 'de', theme: 'dark', advanced: false, detection: true },
+    { name: 'gtmui_de', lang: 'de', theme: 'dark', advanced: false, gtmui: true },
   ];
 
   for (const scenario of scenarios) {
@@ -43,8 +54,9 @@ async function generateScreenshots() {
     await page.evaluate((s) => {
       localStorage.setItem('igtm_lang', s.lang);
       localStorage.setItem('igtm_theme', s.theme);
-      window.location.reload(); // Neu laden, um Einstellungen anzuwenden
     }, scenario);
+    // Reload über Playwright, sonst kann ein Mock noch vor dem Neuladen laufen und verpuffen.
+    await page.reload();
 
     // Warten bis geladen
     await page.waitForSelector('#hdng');
@@ -68,10 +80,24 @@ async function generateScreenshots() {
       });
     }
 
+    // Die GTM-UI-Karte ist nur bedienbar, wenn ein GTM-Tab aktiv ist – hier gibt es
+    // keinen, deshalb wird der entsperrte Zustand direkt gezeichnet.
+    if (scenario.gtmui) {
+      await page.evaluate(() => {
+        window.paintGtmUiCard({ enabled: true, features: {} }, true);
+        const scroller = document.querySelector('main');
+        if (scroller) scroller.scrollTop = scroller.scrollHeight;
+      });
+      await page.waitForTimeout(250);
+    }
+
     // Screenshot nur vom Container-Div machen (für saubere Ränder)
     const element = await page.$('.container');
     await element.screenshot({ path: path.join(screenshotDir, `popup_${scenario.name}.png`) });
   }
+
+  console.log('Optimiere Bilder...');
+  optimizeImages(screenshotDir);
 
   console.log('✅ Alle Screenshots wurden im Ordner /screenshots gespeichert!');
   await browserContext.close();
