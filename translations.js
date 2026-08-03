@@ -15,7 +15,7 @@ const translations = {
 <p>Geladene GTM-Container und gtag.js-Tags werden von selbst erkannt, samt Ladeweg: Standard, first-party (Server-side GTM), eigener Pfad oder base64-Tunnel. Die Zahl am Symbol in der Symbolleiste nennt die Container auf der Seite; zu erkannten Containern führt ein Link zum Container-Checkup.</p>
 
 <h3>Komfort in der GTM-Oberfläche</h3>
-<p>Auf <code>tagmanager.google.com</code> kommen Bedienhilfen dazu: mitlaufende Bereichsnavigation, fixierbare Titelbalken, sortierbare Parametertabellen, ausblendbare integrierte Variablen, eine Warnung im Sende-Dialog und Chips, über die sich Variablen direkt aus einem Eingabefeld heraus bearbeiten lassen. Jede Funktion ist in der Karte <b>GTM-Oberfläche verbessern</b> einzeln abschaltbar.</p>
+<p>Auf <code>tagmanager.google.com</code> kommen Bedienhilfen dazu: mitlaufende Bereichsnavigation, fixierbare Titelbalken, Parametertabellen zum Sortieren und Einfügen von Zeilen, ausblendbare integrierte Variablen, eine Warnung im Sende-Dialog und Chips, über die sich Variablen direkt aus einem Eingabefeld heraus bearbeiten lassen. Jede Funktion ist in der Karte <b>GTM-Oberfläche verbessern</b> einzeln abschaltbar.</p>
 
 <h3>Wo die Einstellungen liegen</h3>
 <p>Im <code>localStorage</code> der geöffneten Seite, getrennt nach Domain — was hier eingetragen wird, gilt also nur dort. Es werden keine Daten übertragen; die Extension kommt mit <code>activeTab</code>, <code>cookies</code> und <code>scripting</code> aus.</p>`,
@@ -55,7 +55,7 @@ const translations = {
     gtmui_feat_builtin: "Integrierte Variablen ausblendbar",
     gtmui_feat_submit: "Sende-Dialog bei Erstellung ohne Veröffentlichung anpassen",
     gtmui_feat_chips: "Bearbeitung für Variablen in Eingabefeldern ermöglichen",
-    gtmui_feat_sort: "Buttons zum Sortieren von Parametertabellen",
+    gtmui_feat_sort: "Erweiterungen für Parametertabellen (sortieren, Zeile einfügen)",
     gtmui_note: "Diese Einstellungen lassen sich nur ändern, während ein Tab mit tagmanager.google.com aktiv ist.",
     "gtm_method_standard": "Standard (googletagmanager.com)",
     "gtm_method_first-party": "first-party (sGTM)",
@@ -67,6 +67,8 @@ const translations = {
     gtm_ui_sort_asc: "Tabelle nach „{col}“ aufsteigend sortieren",
     gtm_ui_sort_desc: "Tabelle nach „{col}“ absteigend sortieren",
     gtm_ui_sort_column: "Spalte {n}",
+    gtm_ui_insert_row: "+ Neue Zeile unterhalb",
+    gtm_ui_insert_row_title: "Leere Zeile unterhalb dieser Zeile einfügen",
     gtm_ui_builtin_hide: "Integrierte Variablen ausblenden",
     gtm_ui_builtin_show: "Integrierte Variablen einblenden",
     gtm_ui_var_edit: "Variable „{name}“ bearbeiten",
@@ -90,7 +92,7 @@ const translations = {
 <p>Loaded GTM containers and gtag.js tags are detected on their own, including the load method: standard, first-party (server-side GTM), custom path or base64 tunnel. The number on the toolbar icon counts the containers on the page; detected containers come with a link to the container checkup.</p>
 
 <h3>Comfort in the GTM interface</h3>
-<p>On <code>tagmanager.google.com</code> you get extra usability helpers: section navigation that stays in view, pinnable title bars, sortable parameter tables, collapsible built-in variables, a warning in the submit dialog, and chips that let you edit a variable straight from an input field. Every one of them can be switched off individually in the <b>Enhance the GTM interface</b> card.</p>
+<p>On <code>tagmanager.google.com</code> you get extra usability helpers: section navigation that stays in view, pinnable title bars, parameter tables you can sort and insert rows into, collapsible built-in variables, a warning in the submit dialog, and chips that let you edit a variable straight from an input field. Every one of them can be switched off individually in the <b>Enhance the GTM interface</b> card.</p>
 
 <h3>Where the settings live</h3>
 <p>In the <code>localStorage</code> of the page you have open, separately per domain — whatever you enter here applies there and nowhere else. No data is transmitted; the extension gets by with <code>activeTab</code>, <code>cookies</code> and <code>scripting</code>.</p>`,
@@ -130,7 +132,7 @@ const translations = {
     gtmui_feat_builtin: "Built-in variables can be hidden",
     gtmui_feat_submit: "Mark the submit dialog when creating without publishing",
     gtmui_feat_chips: "Allow editing variables from within input fields",
-    gtmui_feat_sort: "Buttons for sorting parameter tables",
+    gtmui_feat_sort: "Enhancements for parameter tables (sorting, inserting rows)",
     gtmui_note: "These settings can only be changed while a tagmanager.google.com tab is active.",
     "gtm_method_standard": "standard (googletagmanager.com)",
     "gtm_method_first-party": "first-party (sGTM)",
@@ -142,6 +144,8 @@ const translations = {
     gtm_ui_sort_asc: "Sort table by “{col}” in ascending order",
     gtm_ui_sort_desc: "Sort table by “{col}” in descending order",
     gtm_ui_sort_column: "Column {n}",
+    gtm_ui_insert_row: "+ Add row below",
+    gtm_ui_insert_row_title: "Insert an empty row below this one",
     gtm_ui_builtin_hide: "Hide built-in variables",
     gtm_ui_builtin_show: "Show built-in variables",
     gtm_ui_var_edit: "Edit variable “{name}”",

@@ -219,25 +219,16 @@
     bar.style.top = (box.bottom + window.scrollY + 4) + 'px';
   }
 
-  function showChips(field) {
-    removeBar();
-
-    if (!igtmGtmUiFeatures.isOn('chips')) return;
-
-    if (busy || isCovered(field)) return;
+  // Diese Bedingungen gehoeren den Variablen-Chips, nicht der Leiste: Ohne
+  // nativen Knopf fuehrt kein Weg zur Auswahlliste, ohne {{Name}} gibt es
+  // nichts zu oeffnen. Ein Beitrag aus gtm-ui.js kann trotzdem anfallen.
+  function variableChips(field) {
+    if (!igtmGtmUiFeatures.isOn('chips')) return [];
 
     var container = field.closest(FIELD_CONTAINER);
-    if (!container) return;
-    // Ohne nativen Knopf fuehrt kein Weg zur Auswahlliste.
-    if (!container.querySelector(NATIVE_BTN)) return;
+    if (!container || !container.querySelector(NATIVE_BTN)) return [];
 
-    var names = variableNames(field.value);
-    if (!names.length) return;
-
-    var bar = document.createElement('div');
-    bar.className = CHIP_BAR_CLASS;
-
-    names.forEach(function (name) {
+    return variableNames(field.value).map(function (name) {
       var state = known[name];
       var chip = document.createElement('button');
       chip.type = 'button';
@@ -258,8 +249,27 @@
           openVariable(field, container, name);
         });
       }
-      bar.appendChild(chip);
+      return chip;
     });
+  }
+
+  // Die Leiste gehoert nicht mehr allein den Variablen: gtm-ui.js steuert in
+  // Parametertabellen ein eigenes Bedienelement bei. Es steht vorne, weil die
+  // Zahl der Variablen-Chips schwankt und der Platz sonst mitwanderte.
+  function showChips(field) {
+    removeBar();
+
+    if (busy || isCovered(field)) return;
+
+    var parts = [];
+    var extra = window.igtmTableInsert && window.igtmTableInsert.chipFor(field);
+    if (extra) parts.push(extra);
+    parts = parts.concat(variableChips(field));
+    if (!parts.length) return;
+
+    var bar = document.createElement('div');
+    bar.className = CHIP_BAR_CLASS;
+    parts.forEach(function (part) { bar.appendChild(part); });
 
     placeBar(bar, field);
   }
@@ -284,6 +294,9 @@
 
   // capture, weil in den Sheets innere Bereiche scrollen, deren Ereignisse
   // nicht bis zum Fenster steigen.
+  // Die Leiste beim Scrollen mitwandern zu lassen statt sie zu entfernen wurde
+  // versucht und wieder verworfen: Im GTM kostete das den Fokus im Feld und
+  // warf die Tabelle aus dem Bearbeitungsmodus.
   document.addEventListener('scroll', removeBar, true);
   window.addEventListener('resize', removeBar);
 

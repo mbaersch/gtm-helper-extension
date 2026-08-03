@@ -240,3 +240,27 @@ html.igtm-hide-builtin div[data-items="ctrl.builtInVariables"] table.gtm-table--
   color: #c5221f;
   color: light-dark(#c5221f, #f28b82);
 }
+
+/*
+ * Zeile in einer Parametertabelle darunter einfuegen – teilt sich die Leiste mit
+ * den Variablen-Chips und steht immer vorne. Bewusst eine Schaltflaeche und kein
+ * Chip: Die Chips daneben oeffnen etwas, dieses hier veraendert die Tabelle.
+ * Masse wie bei den Sortierknoepfen.
+ */
+.igtm-var-chips button.igtm-insert-row {
+  /* .btn erbt seinen Hintergrund von der Karte – die Leiste haengt aber am
+     <body> und bliebe sonst durchsichtig. Canvas statt #fff, damit sie im
+     dunklen GTM nicht weiss aufblitzt (wie bei den Chips daneben). */
+  background: #fff;
+  background: Canvas;
+  padding: 2px 8px;
+  height: auto;
+  width: auto;
+  min-width: auto;
+  max-width: none;
+  /* .btn setzt eine feste Zeilenhoehe fuer grosse Schaltflaechen – zurueck auf
+     die der Leiste, sonst baut der Knopf unnoetig hoch auf. */
+  line-height: unset;
+  font-size: 12px;
+  white-space: nowrap;
+}
