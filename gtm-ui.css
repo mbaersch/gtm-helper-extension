@@ -264,3 +264,10 @@ html.igtm-hide-builtin div[data-items="ctrl.builtInVariables"] table.gtm-table--
   font-size: 12px;
   white-space: nowrap;
 }
+
+/* Wiederhergestellter Suchbegriff: Ohne Markierung wirkt die verkuerzte Liste
+   wie ein Fehler. */
+input.blg-input.igtm-restored {
+  background-color: #fef7e0;
+  box-shadow: inset 2px 0 0 #f9ab00;
+}

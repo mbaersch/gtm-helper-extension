@@ -29,7 +29,7 @@ const filesToInclude = [
   'gtm-ui.js',
   'gtm-ui-features.js',
   'gtm-var-edit.js',
-  'gtm-list-sort.js',
+  'gtm-list-state.js',
   'translations.js',
   'detect/classify.js',
   'detect/gtm-detect.js',

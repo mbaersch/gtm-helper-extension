@@ -241,6 +241,7 @@ function updateUI(lang) {
     { id: 'label_feat_chips', key: 'gtmui_feat_chips', type: 'innerText' },
     { id: 'label_feat_sort', key: 'gtmui_feat_sort', type: 'innerText' },
     { id: 'label_feat_listsort', key: 'gtmui_feat_listsort', type: 'innerText' },
+    { id: 'label_feat_listsearch', key: 'gtmui_feat_listsearch', type: 'innerText' },
     { id: 'gtmui_note', key: 'gtmui_note', type: 'innerText' },
     { id: 'igtm_help', key: 'help_link', type: 'innerText' }
   ];
@@ -469,7 +470,7 @@ function saveSettingsToPage(settings, callback) {
 
 const GTM_UI_ORIGIN = 'https://tagmanager.google.com/';
 const GTM_UI_STORAGE_KEY = 'igtm_gtm_ui';
-const GTM_UI_FEATURES = ['nav', 'pin', 'builtIn', 'submitHint', 'chips', 'sort', 'listSort'];
+const GTM_UI_FEATURES = ['nav', 'pin', 'builtIn', 'submitHint', 'chips', 'sort', 'listSort', 'listSearch'];
 
 function featureBoxes() {
   return GTM_UI_FEATURES.map(name => document.querySelector('[data-feature="' + name + '"]'));
@@ -524,7 +525,8 @@ function applyGtmUiState(enabled, features) {
   });
 }
 
-// Fehlender Schlüssel heißt an — `!== false` wie in gtm-ui-features.js. Ohne
+// Fehlender Schlüssel heißt an — `!== false` wie in gtm-ui-features.js, mit
+// listSearch als einziger Ausnahme. Ohne
 // GTM-Tab werden die Kästchen ausgeblendet statt ausgegraut: Ein ausgegrautes
 // Häkchen behauptete einen Zustand, der geraten wäre.
 function paintGtmUiCard(state, editable) {
@@ -535,7 +537,13 @@ function paintGtmUiCard(state, editable) {
   master.checked = enabled;
 
   featureBoxes().forEach((box, index) => {
-    box.checked = features[GTM_UI_FEATURES[index]] !== false;
+    const name = GTM_UI_FEATURES[index];
+    // listSearch ist die einzige Funktion, die ohne Zutun aus ist — siehe
+    // isOn() in gtm-ui-features.js. Ohne diese Ausnahme zeigte das Popup ein
+    // Häkchen für eine Funktion, die nicht läuft.
+    box.checked = name === 'listSearch'
+      ? features[name] === true
+      : features[name] !== false;
     box.disabled = !enabled;
   });
 

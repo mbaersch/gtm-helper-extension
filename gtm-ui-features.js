@@ -41,7 +41,11 @@ var igtmGtmUiFeatures = (function () {
   function isOn(name) {
     var state = read();
     if (state.enabled === false) return false;
-    return (state.features || {})[name] !== false;
+    var value = (state.features || {})[name];
+    // Einzige Ausnahme von "fehlender Schluessel heisst an": Diese Funktion
+    // blendet Zeilen aus und darf niemandem ungefragt zustossen.
+    if (name === 'listSearch') return value === true;
+    return value !== false;
   }
 
   // Die Klasse markiert das AUSschalten: Bis dieses Script laeuft, traegt das
