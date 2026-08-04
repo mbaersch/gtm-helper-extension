@@ -28,10 +28,12 @@ When working in the GTM interface, the Helper detects this and provides a direct
 - Submit dialog warning: colors the submit button orange whenever the selected action only creates a version instead of publishing.
 - Pinned navigation: navigation stays visible while scrolling long lists instead of scrolling out of view.
 - Pinnable search bars: a toggle in the title bar of tag, trigger, and custom variable lists keeps title, search, and buttons at the top while scrolling.
-- Sorting for parameter tables: lookup tables, event parameters, and comparable key/value lists can be sorted alphabetically in both directions — by input or output column. 
+- Sorting for parameter tables: lookup tables, event parameters, and comparable key/value lists can be sorted alphabetically in both directions — by input or output column. A control inserts an empty row below the current one, where appending at the end is not enough.
+- Remembered list state: the sort order of tag, trigger, and variable lists survives a section change instead of falling back to name-ascending. Search terms optionally do too, for as long as the tab stays open.
+- Clear origin: every control the extension adds names itself in its tooltip, so it stays apparent which extension a button belongs to.
 - Hide built-in variables: a switch permanently collapses the rarely needed list so the user-defined variables are reachable without scrolling.
 - Edit variables straight from input fields: when a field of a tag or trigger references a {{variable}}, a chip appears below it. One click opens that variable’s definition directly above the tag, so closing it puts you back where you were instead of in the variable list.
-- Everything switchable: each of these features can be turned off on its own — or all at once — in the popup. All on by default.
+- Everything switchable: each of these features can be turned off on its own — or all at once — in the popup. All on by default, except remembering search terms — that one hides rows, so it ships off.
 
 DESIGN & USABILITY:
 - Dark Mode by default (with Light Mode option).
@@ -41,6 +43,10 @@ DESIGN & USABILITY:
 
 CHANGELOG 
 ---------------------
+
+v3.7
+- Lists keep their state across section changes: the chosen sort order always, the search term optionally (off by default, since it hides rows).
+- Insert a row below in parameter tables, for lists where the order carries meaning.
 
 v3.6
 - Edit variables straight from input fields: a chip under any field that references a {{variable}} opens its definition directly above the tag; closing it returns you to your work instead of the variable list.
@@ -103,10 +109,12 @@ Wenn Sie in der GTM-Oberfläche arbeiten, erkennt der Helper dies und bietet ein
 - Warnung im Sende-Dialog: Färbt den Senden-Button orange, sobald die gewählte Aktion nur eine Version erstellt statt zu veröffentlichen.
 - Fixierte Navigation: Bereichsnavigation bleibt beim Scrollen langer Listen sichtbar, statt nach oben wegzuscrollen.
 - Fixierbare Suchleiste: Ein Schalter in der Titelleiste von Tags, Triggern und Benutzerdefinierten Variablen hält Titel, Suche und Schaltflächen beim Scrollen oben.
-- Sortierung von Parametertabellen: Suchtabellen, Ereignisparameter und vergleichbare Schlüssel-Wert-Listen lassen sich alphabetisch auf- und absteigend sortieren — nach Eingabe- oder Ausgabespalte.
+- Sortierung von Parametertabellen: Suchtabellen, Ereignisparameter und vergleichbare Schlüssel-Wert-Listen lassen sich alphabetisch auf- und absteigend sortieren — nach Eingabe- oder Ausgabespalte. Eine Schaltfläche fügt eine leere Zeile unterhalb der aktuellen ein, wo Anhängen am Ende nicht genügt.
+- Gemerkter Listenzustand: Die Sortierung von Tag-, Trigger- und Variablenliste übersteht einen Bereichswechsel, statt auf Name aufsteigend zurückzufallen. Suchbegriffe auf Wunsch ebenfalls, solange der Tab offen bleibt.
+- Erkennbare Herkunft: Jedes eingefügte Bedienelement nennt sich im Tooltip, damit klar bleibt, zu welcher Extension eine Schaltfläche gehört.
 - Integrierte Variablen ausblenden: Ein Schieberegler blendet die selten benötigte Liste dauerhaft aus, damit die benutzerdefinierten Variablen ohne Scrollen erreichbar sind.
 - Variablen aus Eingabefeldern heraus bearbeiten: Enthält ein Feld eines Tags oder Triggers eine Referenz wie {{Meine Variable}}, erscheint darunter ein Chip. Ein Klick öffnet deren Definition direkt darüber — nach dem Schließen steht man wieder im Tag statt in der Variablenliste.
-- Alles abschaltbar: Jede dieser Funktionen lässt sich einzeln — oder alle zusammen — im Popup abschalten. Voreingestellt ist alles an.
+- Alles abschaltbar: Jede dieser Funktionen lässt sich einzeln — oder alle zusammen — im Popup abschalten. Voreingestellt ist alles an, außer dem Merken von Suchbegriffen — das blendet Zeilen aus und ist deshalb ab Werk aus.
 
 DESIGN & USABILITY:
 - Dark Mode Standard (mit Light Mode Option).
