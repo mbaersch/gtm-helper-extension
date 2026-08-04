@@ -47,6 +47,12 @@
     return text;
   }
 
+  // Herkunft an jedem eingefuegten Bedienelement. Nur im title, nicht im
+  // aria-label — sonst liest ein Screenreader sie bei jedem Fokus mit vor.
+  function withSource(text) {
+    return text + '\n' + t('gtm_ui_source');
+  }
+
   /* ------------------------------------------------------------- Werkzeug */
 
   // Sheets liegen fix positioniert, offsetParent ist dann null.
@@ -234,8 +240,9 @@
       chip.type = 'button';
       chip.className = CHIP_CLASS + (state ? ' ' + CHIP_CLASS + '--' + state : '');
       chip.textContent = name;
-      chip.title = t(TITLE_KEY[state] || 'gtm_ui_var_edit', { name: name });
-      chip.setAttribute('aria-label', chip.title);
+      var label = t(TITLE_KEY[state] || 'gtm_ui_var_edit', { name: name });
+      chip.title = withSource(label);
+      chip.setAttribute('aria-label', label);
 
       // Fehlende bleiben anklickbar – sie koennen inzwischen angelegt worden sein.
       if (state === 'builtin') {

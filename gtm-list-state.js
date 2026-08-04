@@ -70,6 +70,32 @@
     return getTranslation(detectGtmLanguage(), key);
   }
 
+  function withSource(text) {
+    return text + '\n' + t('gtm_ui_source');
+  }
+
+  // Fehlender Schluessel heisst: Die Funktion wurde nie angefasst, der Hinweis
+  // erreicht jemanden, der sie nicht kennt. Steht dort ausdruecklich false, hat
+  // sie jemand abgelehnt — dann Ruhe.
+  function searchNeverSet() {
+    var state = igtmGtmUiFeatures.read();
+    if (state.enabled === false) return false;
+    return (state.features || {}).listSearch === undefined;
+  }
+
+  // Ueberschreibt nie ein vorhandenes title — GTM setzt dort selbst nichts,
+  // aber eine andere Extension koennte es.
+  function hintSearch(area) {
+    var host = listOf(area);
+    if (!host) return false;
+
+    var field = searchFieldIn(host);
+    if (!field) return false;
+
+    if (!field.hasAttribute('title')) field.setAttribute('title', t('gtm_ui_search_hint'));
+    return true;
+  }
+
   function mark(field) {
     if (field.classList.contains(MARK)) return;
     // Ein vorhandenes title sichern, sonst ist es nach dem Entfernen weg.
@@ -77,7 +103,7 @@
       field.setAttribute(TITLE_BACKUP, field.getAttribute('title'));
     }
     field.classList.add(MARK);
-    field.setAttribute('title', t('gtm_ui_search_restored'));
+    field.setAttribute('title', withSource(t('gtm_ui_search_restored')));
   }
 
   function unmark(field) {
@@ -245,10 +271,12 @@
 
     var wantSort = igtmGtmUiFeatures.isOn('listSort') && !!stored(area);
     var wantSearch = igtmGtmUiFeatures.isOn('listSearch') && !!readSearch()[area];
-    if (!wantSort && !wantSearch) return;
+    var wantHint = searchNeverSet();
+    if (!wantSort && !wantSearch && !wantHint) return;
 
     var searchDone = !wantSearch;
     var sortDone = !wantSort;
+    var hintDone = !wantHint;
     var deadline = Date.now() + TIMEOUT_MS;
     toggled = false;
 
@@ -257,7 +285,8 @@
       // die sich ins Gehege kommen.
       if (!searchDone) searchDone = restoreSearch(area);
       if (searchDone && !sortDone) sortDone = restore(area);
-      if ((searchDone && sortDone) || Date.now() > deadline) stopPolling();
+      if (!hintDone) hintDone = hintSearch(area);
+      if ((searchDone && sortDone && hintDone) || Date.now() > deadline) stopPolling();
     }, POLL_MS);
   }
 

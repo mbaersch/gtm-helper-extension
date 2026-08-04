@@ -37,6 +37,12 @@
     return text;
   }
 
+  // Herkunft an jedem eingefuegten Bedienelement. Nur im title, nicht im
+  // aria-label — sonst liest ein Screenreader sie bei jedem Fokus mit vor.
+  function withSource(text) {
+    return text + '\n' + t('gtm_ui_source');
+  }
+
   /* ---------------------------------------------------------------- Titelbalken */
 
   var readState = igtmGtmUiFeatures.read;
@@ -48,7 +54,7 @@
     document.documentElement.classList.toggle(CLASS_ON, active);
     var label = t(active ? 'gtm_ui_pin_off' : 'gtm_ui_pin_on');
     [].forEach.call(document.querySelectorAll('.' + PIN_CLASS), function (btn) {
-      btn.title = label;
+      btn.title = withSource(label);
       btn.setAttribute('aria-label', label);
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
@@ -112,7 +118,7 @@
     if (sw) {
       var label = t(hidden ? 'gtm_ui_builtin_show' : 'gtm_ui_builtin_hide');
       sw.setAttribute('aria-checked', hidden ? 'false' : 'true');
-      sw.title = label;
+      sw.title = withSource(label);
       sw.setAttribute('aria-label', label);
     }
   }
@@ -301,7 +307,7 @@
       var name = names[index] || t('gtm_ui_sort_column', { n: index + 1 });
       var label = t(ascending ? 'gtm_ui_sort_asc' : 'gtm_ui_sort_desc', { col: name });
       btn.textContent = ascending ? 'A→Z' : 'Z→A';
-      btn.title = label;
+      btn.title = withSource(label);
       btn.setAttribute('aria-label', label);
     });
   }
@@ -477,7 +483,7 @@
     // Sortierknoepfen, damit die Aktion nicht wie ein Chip aussieht.
     chip.className = 'btn ' + INSERT_CHIP_CLASS;
     chip.textContent = t('gtm_ui_insert_row');
-    chip.title = t('gtm_ui_insert_row_title');
+    chip.title = withSource(t('gtm_ui_insert_row_title'));
     chip.setAttribute('aria-label', chip.title);
 
     // mousedown wie bei den Variablen-Chips: Das blur raeumt die Leiste sonst
