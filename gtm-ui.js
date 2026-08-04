@@ -502,6 +502,33 @@
 
   window.igtmTableInsert = { chipFor: insertChipFor };
 
+  /* ------------------------------------------- Ausstehende Aenderungen */
+
+  // Die Uebersichtsseite zeigt nur drei kleine Zaehler; ob etwas aussteht, ist
+  // sonst nirgends abzulesen. Das Markup unterscheidet die beiden Zustaende
+  // durch nichts als diese Zahlen – deshalb JS statt reinem CSS. Die Klasse
+  // haengt am Header selbst, nicht am <html>: Die Angular-Komponente kann pro
+  // Arbeitsbereich einmal vorkommen. Entwurf:
+  // docs/2026-08-04-workspace-header-hint-design.md
+  var WS_HEADER_SELECTOR = 'div.config-destination-card__header.workspaces-header';
+  var WS_COUNT_SELECTOR = 'span.workspaces-header__count-number';
+  var WS_CHANGED_CLASS = 'igtm-ws-changed';
+
+  // Kein parseInt: Vierstellige Zaehler stehen in DE als "1.234" da, davon liest
+  // parseInt die 1. Sprachen mit nicht-arabischen Ziffern faerben nichts ein –
+  // die harmlose Fehlrichtung.
+  function hasPendingChanges(header) {
+    return [].some.call(header.querySelectorAll(WS_COUNT_SELECTOR), function (span) {
+      return /[1-9]/.test(span.textContent);
+    });
+  }
+
+  function markWorkspaceHeaders(active) {
+    [].forEach.call(document.querySelectorAll(WS_HEADER_SELECTOR), function (header) {
+      header.classList.toggle(WS_CHANGED_CLASS, active && hasPendingChanges(header));
+    });
+  }
+
   /* ---------------------------------------------------------------- Anbindung */
 
   // Abgeschaltete Funktionen raeumen auch ab, was im DOM steht – sonst wirkt der
@@ -515,6 +542,8 @@
 
     if (isOn('sort')) findTables().forEach(addSortRow);
     else removeSortRows();
+
+    markWorkspaceHeaders(isOn('overviewHint'));
   }
 
   // AngularJS baut Listen bei jedem Wechsel neu auf. Ein Frame Entprellung, damit
@@ -534,7 +563,7 @@
   var observing = false;
 
   function syncObserver() {
-    var needed = isOn('pin') || isOn('builtIn') || isOn('sort');
+    var needed = isOn('pin') || isOn('builtIn') || isOn('sort') || isOn('overviewHint');
     if (needed === observing) return;
     if (needed) observer.observe(document.body, { childList: true, subtree: true });
     else observer.disconnect();

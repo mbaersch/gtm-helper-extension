@@ -265,6 +265,23 @@ html.igtm-hide-builtin div[data-items="ctrl.builtInVariables"] table.gtm-table--
   white-space: nowrap;
 }
 
+/*
+ * Ausstehende Aenderungen im Workspace-Header der Uebersichtsseite
+ *
+ * Kein Merkmal im Markup traegt "es gibt Aenderungen" – die beiden Zustaende
+ * unterscheiden sich allein in den drei Zahlen. Die Klasse setzt deshalb
+ * gtm-ui.js. Farben wie beim Hinweis im Sende-Dialog, damit beide Warnungen
+ * dieselbe Sprache sprechen.
+ */
+div.config-destination-card__header.workspaces-header.igtm-ws-changed {
+  background-color: rgb(243, 231, 209) !important;
+  border-bottom: 1px solid #958d26;
+}
+
+div.config-destination-card__header.workspaces-header.igtm-ws-changed div.blg-subhead {
+  color: #b51919;
+}
+
 /* Wiederhergestellter Suchbegriff: Ohne Markierung wirkt die verkuerzte Liste
    wie ein Fehler. */
 input.blg-input.igtm-restored {

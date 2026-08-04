@@ -237,11 +237,12 @@ function updateUI(lang) {
     { id: 'label_feat_nav', key: 'gtmui_feat_nav', type: 'innerText' },
     { id: 'label_feat_pin', key: 'gtmui_feat_pin', type: 'innerText' },
     { id: 'label_feat_builtin', key: 'gtmui_feat_builtin', type: 'innerText' },
-    { id: 'label_feat_submit', key: 'gtmui_feat_submit', type: 'innerText' },
     { id: 'label_feat_chips', key: 'gtmui_feat_chips', type: 'innerText' },
     { id: 'label_feat_sort', key: 'gtmui_feat_sort', type: 'innerText' },
     { id: 'label_feat_listsort', key: 'gtmui_feat_listsort', type: 'innerText' },
     { id: 'label_feat_listsearch', key: 'gtmui_feat_listsearch', type: 'innerText' },
+    { id: 'label_feat_submit', key: 'gtmui_feat_submit', type: 'innerText' },
+    { id: 'label_feat_overview', key: 'gtmui_feat_overview', type: 'innerText' },
     { id: 'gtmui_note', key: 'gtmui_note', type: 'innerText' },
     { id: 'igtm_help', key: 'help_link', type: 'innerText' }
   ];
@@ -470,7 +471,7 @@ function saveSettingsToPage(settings, callback) {
 
 const GTM_UI_ORIGIN = 'https://tagmanager.google.com/';
 const GTM_UI_STORAGE_KEY = 'igtm_gtm_ui';
-const GTM_UI_FEATURES = ['nav', 'pin', 'builtIn', 'submitHint', 'chips', 'sort', 'listSort', 'listSearch'];
+const GTM_UI_FEATURES = ['nav', 'pin', 'builtIn', 'chips', 'sort', 'listSort', 'listSearch', 'submitHint', 'overviewHint'];
 
 function featureBoxes() {
   return GTM_UI_FEATURES.map(name => document.querySelector('[data-feature="' + name + '"]'));

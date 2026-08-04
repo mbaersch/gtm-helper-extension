@@ -26,6 +26,7 @@ When working in the GTM interface, the Helper detects this and provides a direct
 
 6. GTM Interface Comfort
 - Submit dialog warning: colors the submit button orange whenever the selected action only creates a version instead of publishing.
+- Pending changes highlighted: on the overview page, the workspace header is tinted as soon as anything is waiting to be published — three small counters are easy to miss.
 - Pinned navigation: navigation stays visible while scrolling long lists instead of scrolling out of view.
 - Pinnable search bars: a toggle in the title bar of tag, trigger, and custom variable lists keeps title, search, and buttons at the top while scrolling.
 - Sorting for parameter tables: lookup tables, event parameters, and comparable key/value lists can be sorted alphabetically in both directions — by input or output column. A control inserts an empty row below the current one, where appending at the end is not enough.
@@ -45,6 +46,7 @@ CHANGELOG
 ---------------------
 
 v3.7
+- Pending changes are highlighted in the workspace overview.
 - Lists keep their state across section changes: the chosen sort order always, the search term optionally (off by default, since it hides rows).
 - Insert a row below in parameter tables, for lists where the order carries meaning.
 
@@ -107,6 +109,7 @@ Wenn Sie in der GTM-Oberfläche arbeiten, erkennt der Helper dies und bietet ein
 
 6. Komfort in der GTM-Oberfläche
 - Warnung im Sende-Dialog: Färbt den Senden-Button orange, sobald die gewählte Aktion nur eine Version erstellt statt zu veröffentlichen.
+- Ausstehende Änderungen hervorgehoben: Auf der Übersichtsseite färbt sich der Workspace-Kopf, sobald etwas auf die Veröffentlichung wartet — drei kleine Zähler übersieht man leicht.
 - Fixierte Navigation: Bereichsnavigation bleibt beim Scrollen langer Listen sichtbar, statt nach oben wegzuscrollen.
 - Fixierbare Suchleiste: Ein Schalter in der Titelleiste von Tags, Triggern und Benutzerdefinierten Variablen hält Titel, Suche und Schaltflächen beim Scrollen oben.
 - Sortierung von Parametertabellen: Suchtabellen, Ereignisparameter und vergleichbare Schlüssel-Wert-Listen lassen sich alphabetisch auf- und absteigend sortieren — nach Eingabe- oder Ausgabespalte. Eine Schaltfläche fügt eine leere Zeile unterhalb der aktuellen ein, wo Anhängen am Ende nicht genügt.
