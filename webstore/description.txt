@@ -29,6 +29,7 @@ When working in the GTM interface, the Helper detects this and provides a direct
 - Pending changes highlighted: on the overview page, the workspace header is tinted as soon as anything is waiting to be published — three small counters are easy to miss.
 - Pinned navigation: navigation stays visible while scrolling long lists instead of scrolling out of view.
 - Pinnable search bars: a toggle in the title bar of tag, trigger, and custom variable lists keeps title, search, and buttons at the top while scrolling.
+- Workspace search on Alt+S: the search in the header is one keystroke away, however far you have scrolled — the page jumps back to the top, the cursor lands in the field, and a term already there is selected. While a dialog is open the key stays inert and belongs to the browser.
 - Sorting for parameter tables: lookup tables, event parameters, and comparable key/value lists can be sorted alphabetically in both directions — by input or output column. A control inserts an empty row below the current one, where appending at the end is not enough.
 - Remembered list state: the sort order of tag, trigger, and variable lists survives a section change instead of falling back to name-ascending. Search terms optionally do too, for as long as the tab stays open.
 - Clear origin: every control the extension adds names itself in its tooltip, so it stays apparent which extension a button belongs to.
@@ -46,6 +47,7 @@ CHANGELOG
 ---------------------
 
 v3.7
+- Workspace search on Alt+S: one keystroke scrolls back to the top and puts the cursor in the search field.
 - Pending changes are highlighted in the workspace overview.
 - Lists keep their state across section changes: the chosen sort order always, the search term optionally (off by default, since it hides rows).
 - Insert a row below in parameter tables, for lists where the order carries meaning.
@@ -112,6 +114,7 @@ Wenn Sie in der GTM-Oberfläche arbeiten, erkennt der Helper dies und bietet ein
 - Ausstehende Änderungen hervorgehoben: Auf der Übersichtsseite färbt sich der Workspace-Kopf, sobald etwas auf die Veröffentlichung wartet — drei kleine Zähler übersieht man leicht.
 - Fixierte Navigation: Bereichsnavigation bleibt beim Scrollen langer Listen sichtbar, statt nach oben wegzuscrollen.
 - Fixierbare Suchleiste: Ein Schalter in der Titelleiste von Tags, Triggern und Benutzerdefinierten Variablen hält Titel, Suche und Schaltflächen beim Scrollen oben.
+- Workspace-Suche per Alt+S: Die Suche in der Kopfzeile ist einen Tastendruck entfernt, egal wie weit gescrollt wurde — die Seite springt an den Anfang, der Cursor steht im Feld, ein vorhandener Begriff ist markiert. Bei geöffnetem Dialog bleibt die Taste wirkungslos und gehört dem Browser.
 - Sortierung von Parametertabellen: Suchtabellen, Ereignisparameter und vergleichbare Schlüssel-Wert-Listen lassen sich alphabetisch auf- und absteigend sortieren — nach Eingabe- oder Ausgabespalte. Eine Schaltfläche fügt eine leere Zeile unterhalb der aktuellen ein, wo Anhängen am Ende nicht genügt.
 - Gemerkter Listenzustand: Die Sortierung von Tag-, Trigger- und Variablenliste übersteht einen Bereichswechsel, statt auf Name aufsteigend zurückzufallen. Suchbegriffe auf Wunsch ebenfalls, solange der Tab offen bleibt.
 - Erkennbare Herkunft: Jedes eingefügte Bedienelement nennt sich im Tooltip, damit klar bleibt, zu welcher Extension eine Schaltfläche gehört.

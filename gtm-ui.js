@@ -529,6 +529,71 @@
     });
   }
 
+  /* ------------------------------------------------ Workspace-Suche per Alt+S */
+
+  var SEARCH_SELECTOR = 'input.suite-assistant-search-input';
+
+  function searchField() {
+    return document.querySelector(SEARCH_SELECTOR);
+  }
+
+  // Ein offener Dialog laesst das Feld im DOM stehen. Erreichbar heisst deshalb
+  // nicht "vorhanden", sondern: in der Mitte des Feldes liegt auch wirklich das
+  // Feld. Ausserhalb des Viewports liefert elementFromPoint nichts Brauchbares —
+  // dort entscheidet allein die Vorpruefung auf inert/aria-hidden.
+  function searchReachable(field) {
+    if (!field.offsetParent) return false;
+    if (field.closest('[inert], [aria-hidden="true"]')) return false;
+    var r = field.getBoundingClientRect();
+    if (!r.width || !r.height) return false;
+    var x = r.left + r.width / 2;
+    var y = r.top + r.height / 2;
+    if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) return true;
+    var oben = document.elementFromPoint(x, y);
+    return !!oben && (oben === field || field.contains(oben) || oben.contains(field));
+  }
+
+  // code trifft die Taste unabhaengig vom Layout, key faengt macOS ab: Dort
+  // kommt Alt+S als "ß" an. Beides zusammen deckt auch Dvorak ab.
+  function isSearchHotkey(event) {
+    if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return false;
+    return event.code === 'KeyS' || (event.key && event.key.toLowerCase() === 's');
+  }
+
+  // Unabhaengig vom Schalter angemeldet, geprueft wird erst hier — sonst wirkte
+  // das Umschalten im Popup erst nach einem Neuladen.
+  document.addEventListener('keydown', function (event) {
+    if (event.defaultPrevented || !isSearchHotkey(event) || !isOn('searchHotkey')) return;
+    var field = searchField();
+    if (!field || !searchReachable(field)) return;
+    // Kein preventDefault in den Abbruchfaellen: Die Taste gehoert dann wieder
+    // Browser und Seite.
+    event.preventDefault();
+    scrollToTop(field);
+    field.focus({ preventScroll: true });
+    field.select();
+  });
+
+  // Zum Seitenanfang, nicht bis zur Oberkante des Feldes: scrollIntoView klebt
+  // es an den Viewport-Rand, der Kopfbereich darueber fehlt dann. Die Kette der
+  // Vorfahren mit, weil GTM den Inhalt je nach Seite in einem eigenen Container
+  // scrollt statt im Dokument.
+  function scrollToTop(field) {
+    for (var el = field.parentElement; el; el = el.parentElement) {
+      if (el.scrollTop) el.scrollTop = 0;
+    }
+    if (window.scrollY) window.scrollTo(0, 0);
+  }
+
+  // Das Feld gehoert GTM, traegt dort aber kein title — deshalb ohne die
+  // Sicherung, die gtm-list-state.js fuer das Filterfeld der Listen braucht.
+  function markSearchField(active) {
+    var field = searchField();
+    if (!field) return;
+    if (active) field.title = withSource(t('gtm_ui_hotkey_title'));
+    else field.removeAttribute('title');
+  }
+
   /* ---------------------------------------------------------------- Anbindung */
 
   // Abgeschaltete Funktionen raeumen auch ab, was im DOM steht – sonst wirkt der
@@ -544,6 +609,7 @@
     else removeSortRows();
 
     markWorkspaceHeaders(isOn('overviewHint'));
+    markSearchField(isOn('searchHotkey'));
   }
 
   // AngularJS baut Listen bei jedem Wechsel neu auf. Ein Frame Entprellung, damit
@@ -563,7 +629,8 @@
   var observing = false;
 
   function syncObserver() {
-    var needed = isOn('pin') || isOn('builtIn') || isOn('sort') || isOn('overviewHint');
+    var needed = isOn('pin') || isOn('builtIn') || isOn('sort') || isOn('overviewHint') ||
+                 isOn('searchHotkey');
     if (needed === observing) return;
     if (needed) observer.observe(document.body, { childList: true, subtree: true });
     else observer.disconnect();
