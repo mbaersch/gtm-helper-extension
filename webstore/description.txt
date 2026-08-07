@@ -47,10 +47,10 @@ CHANGELOG
 ---------------------
 
 v3.7
-- Workspace search on Alt+S: one keystroke scrolls back to the top and puts the cursor in the search field.
 - Pending changes are highlighted in the workspace overview.
 - Lists keep their state across section changes: the chosen sort order always, the search term optionally (off by default, since it hides rows).
 - Insert a row below in parameter tables, for lists where the order carries meaning.
+- Workspace search on Alt+S: one keystroke scrolls back to the top and puts the cursor in the search field.
 
 v3.6
 - Edit variables straight from input fields: a chip under any field that references a {{variable}} opens its definition directly above the tag; closing it returns you to your work instead of the variable list.
