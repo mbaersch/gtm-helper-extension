@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.7-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.8-blue.svg)](#)
 
 GTM & CMP Helper is a Chrome Extension for resetting Consent Management Platform (CMP) data, injecting Google Tag Manager containers, and managing data during development and debugging.
 
@@ -48,7 +48,8 @@ Display and usability helpers on `tagmanager.google.com` — no extra permission
 - **Hide built-in variables:** a switch permanently collapses the rarely needed list so the user-defined variables are reachable without scrolling.
 - **Submit dialog warning:** colors the submit button orange whenever the selected action only creates a version instead of publishing.
 - **Edit variables straight from input fields:** when a field of a tag or trigger contains a reference such as `{{My Variable}}`, a chip appears below it for each variable. Clicking it opens the variable's definition right on top — closing it returns you to the tag, with no section switch and no detour through the variable picker. Combined references in one field are handled as well.
-- **Search by keyboard shortcut:** `Alt+S` jumps to the workspace search, puts the cursor in it, and selects any term already there — even when scrolling has long pushed the field out of view. While a dialog is open the key stays inert and belongs to the browser again.
+- **Search by keyboard shortcut:** `Alt+S` jumps to the workspace search, puts the cursor in it, and selects any term already there — even when scrolling has long pushed the field out of view. While a dialog is open the key stays inert and belongs to the browser again. The shortcut can be chosen freely in the popup.
+- **Section switching by keyboard:** `Alt+1`, `Alt+2`, and `Alt+3` open tags, triggers, and variables without reaching for the mouse. Each of the three shortcuts can be set individually in the popup.
 - **Individually switchable:** the "Enhance the GTM interface" card in the popup turns each of these features off on its own, plus a master switch for all of them. Off means gone: the controls in the interface disappear as well, so nothing collides with other GTM extensions. Everything is on by default. The card is operable while a `tagmanager.google.com` tab is active — that is where the settings live, and without a new permission there is no way in from outside.
 
 The toggles remember their state; their labels follow the language of the GTM interface.
@@ -71,6 +72,10 @@ The toggles remember their state; their labels follow the language of the GTM in
 ## Changelog
 
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
+
+### 3.8
+- **New — tags, triggers, and variables by keyboard shortcut:** switching between the three lists is the most common move through the interface, and every time it costs a reach for the mouse. `Alt+1`, `Alt+2`, and `Alt+3` do it from the keyboard. The menu entry itself is clicked, so GTM takes its own route and carries the selection in the menu along — jumping via the address bar would leave it behind. The overview is deliberately left out. While the menu is covered or a dialog is open, the keys stay inert and belong to the browser again. Can be switched off in the "Enhance the GTM interface" card; the menu entries name their shortcut in the tooltip.
+- **New — all four shortcuts can be chosen freely:** if `Alt+S` or `Alt+1` to `Alt+3` are already taken — by another extension or by the operating system — you can now change them in the popup: click the field below the matching switch, press the combination, done. Each shortcut stands on its own, so `Ctrl+Ü` for tags and `Alt+Ü` for variables are possible. At least `Alt`, `Ctrl`, or `Cmd` has to be part of it: without one of those modifiers the shortcut would fire while typing into a GTM field. A click on ↺ restores the default. The combination is shown the way the key is labelled — umlauts included, and on macOS, where `Alt+S` arrives as `ß`.
 
 ### 3.7
 - **New — workspace search on `Alt+S`:** The search sits at the very top of the header and has long scrolled out of view while you work through long lists. `Alt+S` brings it back: the page jumps to the top, the cursor lands in the field, and any term already there is selected, so the next keystroke replaces it. The combination is unassigned in Chrome, Edge, and Firefox and works regardless of keyboard layout — including macOS, where `Alt+S` arrives as `ß`. While a dialog is open the key stays inert and belongs to the browser again: focus must not jump into a covered field. Can be switched off in the "Enhance the GTM interface" card; the search field itself names the shortcut in its tooltip.

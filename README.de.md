@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Installieren-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.7-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.8-blue.svg)](#)
 
 GTM & CMP Helper ist eine Chrome-Extension zum Verwalten von Consent Management Platform (CMP) Daten, Injizieren von Google Tag Manager Containern und zum Debugging während der Entwicklung.
 
@@ -48,7 +48,8 @@ Anzeige- und Bedienhilfen auf `tagmanager.google.com` — ohne zusätzliche Bere
 - **Integrierte Variablen ausblenden:** Ein Schieberegler blendet die selten benötigte Liste dauerhaft aus, damit die benutzerdefinierten Variablen ohne Scrollen erreichbar sind.
 - **Warnung im Sende-Dialog:** Färbt den Senden-Button orange, sobald die gewählte Aktion nur eine Version erstellt statt zu veröffentlichen.
 - **Variablen aus Eingabefeldern heraus bearbeiten:** Enthält ein Feld eines Tags oder Triggers eine Referenz wie `{{Meine Variable}}`, erscheint darunter ein Chip pro Variable. Ein Klick öffnet deren Definition direkt darüber — nach dem Schließen steht man wieder im Tag, ohne Bereichswechsel und ohne Umweg über die Auswahlliste. Auch bei kombinierten Referenzen in einem Feld.
-- **Suche per Tastenkürzel:** `Alt+S` springt zur Workspace-Suche, setzt den Cursor hinein und markiert einen bereits vorhandenen Begriff — auch wenn das Feld beim Scrollen längst aus dem Bild ist. Steht ein Dialog offen, bleibt die Taste wirkungslos und gehört wieder dem Browser.
+- **Suche per Tastenkürzel:** `Alt+S` springt zur Workspace-Suche, setzt den Cursor hinein und markiert einen bereits vorhandenen Begriff — auch wenn das Feld beim Scrollen längst aus dem Bild ist. Steht ein Dialog offen, bleibt die Taste wirkungslos und gehört wieder dem Browser. Das Kürzel ist im Popup frei wählbar.
+- **Bereichswechsel per Tastatur:** `Alt+1`, `Alt+2` und `Alt+3` öffnen Tags, Trigger und Variablen, ohne den Weg über die Maus. Jedes der drei Kürzel ist im Popup einzeln wählbar.
 - **Einzeln abschaltbar:** Die Karte „GTM-Oberfläche verbessern" im Popup schaltet jede dieser Funktionen für sich ab, dazu alle zusammen. Abgeschaltet heißt weg: Auch die Bedienelemente in der Oberfläche verschwinden, damit sich nichts mit anderen GTM-Extensions doppelt. Voreingestellt ist alles an. Die Karte lässt sich bedienen, während ein Tab mit `tagmanager.google.com` aktiv ist — dort liegen die Einstellungen, und ohne neue Berechtigung ist von außen kein Weg dorthin.
 
 Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache der GTM-Oberfläche.
@@ -71,6 +72,10 @@ Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache d
 ## Changelog
 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
+
+### 3.8
+- **Neu — Tags, Trigger und Variablen per Tastenkürzel:** Der Wechsel zwischen den drei Listen ist der häufigste Weg durch die Oberfläche und kostet jedes Mal den Griff zur Maus. `Alt+1`, `Alt+2` und `Alt+3` erledigen ihn von der Tastatur aus. Angeklickt wird dabei der Menüeintrag selbst, damit GTM seinen eigenen Weg geht und die Markierung im Menü mitzieht — ein Sprung über die Adresszeile ließe sie stehen. Die Übersicht bleibt bewusst außen vor. Ist das Menü verdeckt oder steht ein Dialog offen, bleiben die Tasten wirkungslos und gehören wieder dem Browser. Abschaltbar über die Karte „GTM-Oberfläche verbessern"; die Menüeinträge nennen ihr Kürzel im Tooltip.
+- **Neu — alle vier Tastenkürzel sind frei wählbar:** Wer `Alt+S` oder `Alt+1` bis `Alt+3` schon anderweitig belegt hat — durch eine andere Extension oder das Betriebssystem —, ändert sie jetzt im Popup: ein Klick in das Feld unter dem jeweiligen Schalter, die gewünschte Kombination drücken, fertig. Jedes Kürzel steht für sich, `Strg+Ü` für Tags und `Alt+Ü` für Variablen sind also möglich. Mindestens `Alt`, `Strg` oder `Cmd` muss dabei sein: Ohne einen dieser Modifier löste das Kürzel schon beim Tippen in ein GTM-Feld aus. Ein Klick auf ↺ stellt die Voreinstellung wieder her. Angezeigt wird die Kombination so, wie die Taste beschriftet ist — auch bei Umlauten und auf macOS, wo `Alt+S` als `ß` ankommt.
 
 ### 3.7
 - **Neu — Workspace-Suche per `Alt+S`:** Die Suche liegt ganz oben in der Kopfzeile und ist beim Arbeiten in langen Listen längst aus dem Bild gescrollt. `Alt+S` holt sie zurück: Die Seite springt an den Anfang, der Cursor steht im Feld, und ein bereits eingegebener Begriff ist markiert und damit vom nächsten Tastendruck ersetzt. Die Kombination ist in Chrome, Edge und Firefox unbelegt und funktioniert unabhängig vom Tastaturlayout — auch auf macOS, wo `Alt+S` als `ß` ankommt. Steht ein Dialog offen, bleibt die Taste wirkungslos und gehört wieder dem Browser: Der Fokus soll nicht in ein verdecktes Feld springen. Abschaltbar über die Karte „GTM-Oberfläche verbessern"; das Suchfeld selbst nennt das Kürzel in seinem Tooltip.
