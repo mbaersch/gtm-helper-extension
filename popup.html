@@ -148,8 +148,34 @@
           </div>
           <div class="checkbox-group">
             <input type="checkbox" id="igtm_feat_searchhotkey" data-feature="searchHotkey">
-            <label for="igtm_feat_searchhotkey" id="label_feat_searchhotkey">Workspace-Suche per Alt+S fokussieren</label>
+            <label for="igtm_feat_searchhotkey" id="label_feat_searchhotkey">Workspace-Suche per Tastenkürzel fokussieren</label>
           </div>
+          <div class="hotkey-row" id="igtm_hotkey_row">
+            <label for="igtm_hotkey_field" id="label_hotkey">Suche:</label>
+            <input type="text" class="hotkey-field" id="igtm_hotkey_field" readonly value="Alt+S">
+            <button type="button" class="hotkey-reset" id="igtm_hotkey_reset" title="Auf Alt+S zurücksetzen">↺</button>
+          </div>
+          <p class="field-hint hotkey-hint" id="igtm_hotkey_hint" style="display:none;">Mindestens Alt, Strg oder Cmd</p>
+          <div class="checkbox-group">
+            <input type="checkbox" id="igtm_feat_sectionhotkeys" data-feature="sectionHotkeys">
+            <label for="igtm_feat_sectionhotkeys" id="label_feat_sectionhotkeys">Tags, Trigger und Variablen per Tastenkürzel aufrufen</label>
+          </div>
+          <div class="hotkey-row" id="igtm_section_row_0">
+            <label for="igtm_section_field_0" id="label_hotkey_tags">Tags:</label>
+            <input type="text" class="hotkey-field" id="igtm_section_field_0" readonly value="Alt+1">
+            <button type="button" class="hotkey-reset" id="igtm_section_reset_0" title="Auf Alt+1 zurücksetzen">↺</button>
+          </div>
+          <div class="hotkey-row" id="igtm_section_row_1">
+            <label for="igtm_section_field_1" id="label_hotkey_triggers">Trigger:</label>
+            <input type="text" class="hotkey-field" id="igtm_section_field_1" readonly value="Alt+2">
+            <button type="button" class="hotkey-reset" id="igtm_section_reset_1" title="Auf Alt+2 zurücksetzen">↺</button>
+          </div>
+          <div class="hotkey-row" id="igtm_section_row_2">
+            <label for="igtm_section_field_2" id="label_hotkey_variables">Variablen:</label>
+            <input type="text" class="hotkey-field" id="igtm_section_field_2" readonly value="Alt+3">
+            <button type="button" class="hotkey-reset" id="igtm_section_reset_2" title="Auf Alt+3 zurücksetzen">↺</button>
+          </div>
+          <p class="field-hint hotkey-hint" id="igtm_section_hint" style="display:none;">Mindestens Alt, Strg oder Cmd</p>
         </div>
         <p class="field-hint gtmui-note" id="gtmui_note" style="display:none;">Diese Einstellungen lassen sich nur ändern, während ein Tab mit tagmanager.google.com aktiv ist.</p>
       </section>
@@ -168,6 +194,7 @@
   </div>
 
   <script src="translations.js"></script>
+  <script src="gtm-hotkey.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

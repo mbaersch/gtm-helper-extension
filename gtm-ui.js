@@ -537,35 +537,35 @@
     return document.querySelector(SEARCH_SELECTOR);
   }
 
-  // Ein offener Dialog laesst das Feld im DOM stehen. Erreichbar heisst deshalb
-  // nicht "vorhanden", sondern: in der Mitte des Feldes liegt auch wirklich das
-  // Feld. Ausserhalb des Viewports liefert elementFromPoint nichts Brauchbares —
-  // dort entscheidet allein die Vorpruefung auf inert/aria-hidden.
-  function searchReachable(field) {
-    if (!field.offsetParent) return false;
-    if (field.closest('[inert], [aria-hidden="true"]')) return false;
-    var r = field.getBoundingClientRect();
+  // Ein offener Dialog laesst das Element im DOM stehen. Erreichbar heisst
+  // deshalb nicht "vorhanden", sondern: in seiner Mitte liegt auch wirklich es
+  // selbst. Ausserhalb des Viewports liefert elementFromPoint nichts
+  // Brauchbares — dort entscheidet allein die Vorpruefung auf inert/aria-hidden.
+  function reachable(el) {
+    if (!el.offsetParent) return false;
+    if (el.closest('[inert], [aria-hidden="true"]')) return false;
+    var r = el.getBoundingClientRect();
     if (!r.width || !r.height) return false;
     var x = r.left + r.width / 2;
     var y = r.top + r.height / 2;
     if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) return true;
     var oben = document.elementFromPoint(x, y);
-    return !!oben && (oben === field || field.contains(oben) || oben.contains(field));
+    return !!oben && (oben === el || el.contains(oben) || oben.contains(el));
   }
 
-  // code trifft die Taste unabhaengig vom Layout, key faengt macOS ab: Dort
-  // kommt Alt+S als "ß" an. Beides zusammen deckt auch Dvorak ab.
-  function isSearchHotkey(event) {
-    if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return false;
-    return event.code === 'KeyS' || (event.key && event.key.toLowerCase() === 's');
+  // Erst hier gelesen, nicht beim Laden: Sonst wirkte eine im Popup geaenderte
+  // Kombination erst nach einem Neuladen der Seite.
+  function searchCombo() {
+    return igtmHotkey.resolve(readState().searchHotkeyCombo);
   }
 
   // Unabhaengig vom Schalter angemeldet, geprueft wird erst hier — sonst wirkte
   // das Umschalten im Popup erst nach einem Neuladen.
   document.addEventListener('keydown', function (event) {
-    if (event.defaultPrevented || !isSearchHotkey(event) || !isOn('searchHotkey')) return;
+    if (event.defaultPrevented || !isOn('searchHotkey')) return;
+    if (!igtmHotkey.matches(event, searchCombo())) return;
     var field = searchField();
-    if (!field || !searchReachable(field)) return;
+    if (!field || !reachable(field)) return;
     // Kein preventDefault in den Abbruchfaellen: Die Taste gehoert dann wieder
     // Browser und Seite.
     event.preventDefault();
@@ -585,13 +585,74 @@
     if (window.scrollY) window.scrollTo(0, 0);
   }
 
+  /* ------------------------------------------- Bereichswechsel per Alt+1..3 */
+
+  // Einzeln benannt statt ueber ein gemeinsames Muster: "Tags" traegt als
+  // einziger Eintrag kein wd-Praefix. Benennt GTM einen um, faellt das hier auf,
+  // statt still den falschen Link zu treffen. Die Reihenfolge ist die der
+  // Ziffern.
+  var SECTION_SELECTORS = [
+    'a.open-tag-list-button',
+    'a.wd-open-trigger-list-button',
+    'a.wd-open-variable-list-button'
+  ];
+
+  function sectionCombo(index) {
+    return igtmHotkey.section(readState().sectionHotkeyCombos, index);
+  }
+
+  // Merkt, dass das title von uns stammt: Ohne den Marker liesse es sich beim
+  // Abschalten nicht von einem fremden unterscheiden.
+  var HOTKEY_MARK = 'data-igtm-hotkey';
+
+  document.addEventListener('keydown', function (event) {
+    if (event.defaultPrevented || !isOn('sectionHotkeys')) return;
+    for (var i = 0; i < SECTION_SELECTORS.length; i++) {
+      if (!igtmHotkey.matches(event, sectionCombo(i))) continue;
+      var link = document.querySelector(SECTION_SELECTORS[i]);
+      // Kein preventDefault ohne Ziel: Ausserhalb eines Workspace und bei
+      // offenem Dialog gehoert die Taste Browser und Seite.
+      if (!link || !reachable(link)) return;
+      event.preventDefault();
+      link.click();
+      return;
+    }
+  });
+
+  // Der Klick geht an GTMs eigenen Router — ein Sprung ueber location.hash
+  // umginge ihn und liesse die Markierung im Menue stehen.
+  function markSectionLinks(active) {
+    SECTION_SELECTORS.forEach(function (selector, index) {
+      var link = document.querySelector(selector);
+      if (!link) return;
+      if (!active) {
+        if (!link.hasAttribute(HOTKEY_MARK)) return;
+        link.removeAttribute(HOTKEY_MARK);
+        link.removeAttribute('title');
+        return;
+      }
+      if (link.hasAttribute('title') && !link.hasAttribute(HOTKEY_MARK)) return;
+      link.setAttribute(HOTKEY_MARK, '');
+      link.title = withSource(t('gtm_ui_section_title', {
+        key: igtmHotkey.label(sectionCombo(index), detectGtmLanguage())
+      }));
+    });
+  }
+
+  /* ------------------------------------------------------- Herkunft im title */
+
   // Das Feld gehoert GTM, traegt dort aber kein title — deshalb ohne die
   // Sicherung, die gtm-list-state.js fuer das Filterfeld der Listen braucht.
   function markSearchField(active) {
     var field = searchField();
     if (!field) return;
-    if (active) field.title = withSource(t('gtm_ui_hotkey_title'));
-    else field.removeAttribute('title');
+    if (!active) {
+      field.removeAttribute('title');
+      return;
+    }
+    field.title = withSource(t('gtm_ui_hotkey_title', {
+      key: igtmHotkey.label(searchCombo(), detectGtmLanguage())
+    }));
   }
 
   /* ---------------------------------------------------------------- Anbindung */
@@ -610,6 +671,7 @@
 
     markWorkspaceHeaders(isOn('overviewHint'));
     markSearchField(isOn('searchHotkey'));
+    markSectionLinks(isOn('sectionHotkeys'));
   }
 
   // AngularJS baut Listen bei jedem Wechsel neu auf. Ein Frame Entprellung, damit
@@ -630,7 +692,7 @@
 
   function syncObserver() {
     var needed = isOn('pin') || isOn('builtIn') || isOn('sort') || isOn('overviewHint') ||
-                 isOn('searchHotkey');
+                 isOn('searchHotkey') || isOn('sectionHotkeys');
     if (needed === observing) return;
     if (needed) observer.observe(document.body, { childList: true, subtree: true });
     else observer.disconnect();

@@ -28,6 +28,7 @@ const filesToInclude = [
   'gtm-ui.css',
   'gtm-ui.js',
   'gtm-ui-features.js',
+  'gtm-hotkey.js',
   'gtm-var-edit.js',
   'gtm-list-state.js',
   'translations.js',

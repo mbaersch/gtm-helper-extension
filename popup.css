@@ -551,5 +551,60 @@ main.info-open #info_page {
   margin: 14px 0 0;
 }
 
+/* Eingerueckt auf die Beschriftungen darueber: Schalter (34px) plus Abstand. */
+.hotkey-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 8px 46px;
+}
+
+.hotkey-row label {
+  margin: 0;
+  font-weight: normal;
+  color: var(--text-dim);
+}
+
+/* Ueber Klassen, nicht ueber die IDs: Sonst faellt jede weitere Kuerzel-Zeile
+   auf die Grundform der Textfelder zurueck und sieht anders aus. Mit dem
+   Element davor, weil input[type="text"] sonst hoeher wiegt als die Klasse
+   allein und seine Breite von 100% behaelt. */
+.hotkey-row input.hotkey-field {
+  width: 150px;
+  margin-top: 0;
+  padding: 5px 8px;
+  text-align: center;
+  cursor: pointer;
+  /* Es wird nichts getippt, sondern aufgenommen — ein Cursor im Feld liesse
+     das Gegenteil vermuten. */
+  caret-color: transparent;
+  user-select: none;
+}
+
+.hotkey-row input.hotkey-field.recording {
+  font-style: italic;
+  border-color: var(--secondary-color);
+}
+
+.hotkey-row button.hotkey-reset {
+  padding: 4px 9px;
+  font-size: 1.1em;
+  line-height: 1.2;
+  background: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+/* Alle Beschriftungen auf eine Spalte, damit die Felder untereinander stehen. */
+.hotkey-row label {
+  min-width: 62px;
+}
+
+.hotkey-hint {
+  margin: -4px 0 8px 46px;
+  font-style: normal;
+  color: var(--primary-color);
+}
+
 #gtm_detect_box ul { list-style: disc; }
 #gtm_detect_box li { line-height: 1.5; word-break: break-all; }

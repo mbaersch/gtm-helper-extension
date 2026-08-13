@@ -15,7 +15,7 @@ const translations = {
 <p>Geladene GTM-Container und gtag.js-Tags werden von selbst erkannt, samt Ladeweg: Standard, first-party (Server-side GTM), eigener Pfad oder base64-Tunnel. Die Zahl am Symbol in der Symbolleiste nennt die Container auf der Seite; zu erkannten Containern führt ein Link zum Container-Checkup.</p>
 
 <h3>Komfort in der GTM-Oberfläche</h3>
-<p>Auf <code>tagmanager.google.com</code> kommen Bedienhilfen dazu: mitlaufende Bereichsnavigation, fixierbare Titelbalken, Parametertabellen zum Sortieren und Einfügen von Zeilen, eine gemerkte Sortierung der Tag-, Trigger- und Variablenlisten, ausblendbare integrierte Variablen, eine Warnung im Sende-Dialog, die Workspace-Suche per <code>Alt+S</code> und Chips, über die sich Variablen direkt aus einem Eingabefeld heraus bearbeiten lassen. Jede Funktion ist in der Karte <b>GTM-Oberfläche verbessern</b> einzeln abschaltbar.</p>
+<p>Auf <code>tagmanager.google.com</code> kommen Bedienhilfen dazu: mitlaufende Bereichsnavigation, fixierbare Titelbalken, Parametertabellen zum Sortieren und Einfügen von Zeilen, eine gemerkte Sortierung der Tag-, Trigger- und Variablenlisten, ausblendbare integrierte Variablen, eine Warnung im Sende-Dialog, die Workspace-Suche per Tastenkürzel (voreingestellt <code>Alt+S</code>, frei wählbar), der Bereichswechsel per <code>Alt+1</code> bis <code>Alt+3</code> (jedes einzeln frei wählbar) und Chips, über die sich Variablen direkt aus einem Eingabefeld heraus bearbeiten lassen. Jede Funktion ist in der Karte <b>GTM-Oberfläche verbessern</b> einzeln abschaltbar.</p>
 
 <h3>Wo die Einstellungen liegen</h3>
 <p>Im <code>localStorage</code> der geöffneten Seite, getrennt nach Domain — was hier eingetragen wird, gilt also nur dort. Es werden keine Daten übertragen; die Extension kommt mit <code>activeTab</code>, <code>cookies</code> und <code>scripting</code> aus.</p>`,
@@ -59,7 +59,20 @@ const translations = {
     gtmui_feat_listsearch: "Suchbegriff der Listen merken",
     gtmui_feat_submit: "Sende-Dialog bei Erstellung ohne Veröffentlichung anpassen",
     gtmui_feat_overview: "Ausstehende Änderungen in der Übersicht hervorheben",
-    gtmui_feat_searchhotkey: "Workspace-Suche per Alt+S fokussieren",
+    gtmui_feat_searchhotkey: "Workspace-Suche per Tastenkürzel fokussieren",
+    gtmui_feat_sectionhotkeys: "Tags, Trigger und Variablen per Tastenkürzel aufrufen",
+    gtmui_hotkey_label: "Suche:",
+    gtmui_hotkey_record: "Taste drücken…",
+    gtmui_hotkey_invalid: "Mindestens Alt, Strg oder Cmd",
+    gtmui_hotkey_tags: "Tags:",
+    gtmui_hotkey_triggers: "Trigger:",
+    gtmui_hotkey_variables: "Variablen:",
+    gtmui_hotkey_reset: "Auf {key} zurücksetzen",
+    hotkey_mod_ctrl: "Strg",
+    hotkey_mod_alt: "Alt",
+    hotkey_mod_shift: "Umschalt",
+    hotkey_mod_meta: "Cmd",
+    hotkey_key_space: "Leertaste",
     gtmui_note: "Diese Einstellungen lassen sich nur ändern, während ein Tab mit tagmanager.google.com aktiv ist.",
     "gtm_method_standard": "Standard (googletagmanager.com)",
     "gtm_method_first-party": "first-party (sGTM)",
@@ -75,7 +88,8 @@ const translations = {
     gtm_ui_insert_row_title: "Leere Zeile unterhalb dieser Zeile einfügen",
     gtm_ui_search_restored: "Zuletzt verwendeter Suchbegriff — wiederhergestellt",
     gtm_ui_search_hint: "Suchbegriffe lassen sich beim Bereichswechsel behalten — einzuschalten im GTM & CMP Helper",
-    gtm_ui_hotkey_title: "Alt+S zur Suche",
+    gtm_ui_hotkey_title: "{key} zur Suche",
+    gtm_ui_section_title: "{key} öffnet diesen Bereich",
     gtm_ui_source: "Eingefügt vom GTM & CMP Helper",
     gtm_ui_builtin_hide: "Integrierte Variablen ausblenden",
     gtm_ui_builtin_show: "Integrierte Variablen einblenden",
@@ -100,7 +114,7 @@ const translations = {
 <p>Loaded GTM containers and gtag.js tags are detected on their own, including the load method: standard, first-party (server-side GTM), custom path or base64 tunnel. The number on the toolbar icon counts the containers on the page; detected containers come with a link to the container checkup.</p>
 
 <h3>Comfort in the GTM interface</h3>
-<p>On <code>tagmanager.google.com</code> you get extra usability helpers: section navigation that stays in view, pinnable title bars, parameter tables you can sort and insert rows into, remembered sorting for the tag, trigger, and variable lists, collapsible built-in variables, a warning in the submit dialog, the workspace search on <code>Alt+S</code>, and chips that let you edit a variable straight from an input field. Every one of them can be switched off individually in the <b>Enhance the GTM interface</b> card.</p>
+<p>On <code>tagmanager.google.com</code> you get extra usability helpers: section navigation that stays in view, pinnable title bars, parameter tables you can sort and insert rows into, remembered sorting for the tag, trigger, and variable lists, collapsible built-in variables, a warning in the submit dialog, the workspace search on a keyboard shortcut of your choice (<code>Alt+S</code> by default), section switching on <code>Alt+1</code> to <code>Alt+3</code> (each one configurable), and chips that let you edit a variable straight from an input field. Every one of them can be switched off individually in the <b>Enhance the GTM interface</b> card.</p>
 
 <h3>Where the settings live</h3>
 <p>In the <code>localStorage</code> of the page you have open, separately per domain — whatever you enter here applies there and nowhere else. No data is transmitted; the extension gets by with <code>activeTab</code>, <code>cookies</code> and <code>scripting</code>.</p>`,
@@ -144,7 +158,20 @@ const translations = {
     gtmui_feat_listsearch: "Remember list search terms",
     gtmui_feat_submit: "Mark the submit dialog when creating without publishing",
     gtmui_feat_overview: "Highlight pending changes in the overview",
-    gtmui_feat_searchhotkey: "Focus the workspace search with Alt+S",
+    gtmui_feat_searchhotkey: "Focus the workspace search with a keyboard shortcut",
+    gtmui_feat_sectionhotkeys: "Jump to tags, triggers, and variables by shortcut",
+    gtmui_hotkey_label: "Search:",
+    gtmui_hotkey_record: "Press a key…",
+    gtmui_hotkey_invalid: "Alt, Ctrl, or Cmd is required",
+    gtmui_hotkey_tags: "Tags:",
+    gtmui_hotkey_triggers: "Triggers:",
+    gtmui_hotkey_variables: "Variables:",
+    gtmui_hotkey_reset: "Reset to {key}",
+    hotkey_mod_ctrl: "Ctrl",
+    hotkey_mod_alt: "Alt",
+    hotkey_mod_shift: "Shift",
+    hotkey_mod_meta: "Cmd",
+    hotkey_key_space: "Space",
     gtmui_note: "These settings can only be changed while a tagmanager.google.com tab is active.",
     "gtm_method_standard": "standard (googletagmanager.com)",
     "gtm_method_first-party": "first-party (sGTM)",
@@ -160,7 +187,8 @@ const translations = {
     gtm_ui_insert_row_title: "Insert an empty row below this one",
     gtm_ui_search_restored: "Last search term — restored",
     gtm_ui_search_hint: "Search terms can be kept across section changes — enable this in GTM & CMP Helper",
-    gtm_ui_hotkey_title: "Alt+S to search",
+    gtm_ui_hotkey_title: "{key} to search",
+    gtm_ui_section_title: "{key} opens this section",
     gtm_ui_source: "Added by GTM & CMP Helper",
     gtm_ui_builtin_hide: "Hide built-in variables",
     gtm_ui_builtin_show: "Show built-in variables",

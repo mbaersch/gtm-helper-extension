@@ -244,6 +244,13 @@ function updateUI(lang) {
     { id: 'label_feat_submit', key: 'gtmui_feat_submit', type: 'innerText' },
     { id: 'label_feat_overview', key: 'gtmui_feat_overview', type: 'innerText' },
     { id: 'label_feat_searchhotkey', key: 'gtmui_feat_searchhotkey', type: 'innerText' },
+    { id: 'label_feat_sectionhotkeys', key: 'gtmui_feat_sectionhotkeys', type: 'innerText' },
+    { id: 'label_hotkey', key: 'gtmui_hotkey_label', type: 'innerText' },
+    { id: 'igtm_hotkey_hint', key: 'gtmui_hotkey_invalid', type: 'innerText' },
+    { id: 'label_hotkey_tags', key: 'gtmui_hotkey_tags', type: 'innerText' },
+    { id: 'label_hotkey_triggers', key: 'gtmui_hotkey_triggers', type: 'innerText' },
+    { id: 'label_hotkey_variables', key: 'gtmui_hotkey_variables', type: 'innerText' },
+    { id: 'igtm_section_hint', key: 'gtmui_hotkey_invalid', type: 'innerText' },
     { id: 'gtmui_note', key: 'gtmui_note', type: 'innerText' },
     { id: 'igtm_help', key: 'help_link', type: 'innerText' }
   ];
@@ -268,6 +275,9 @@ function updateUI(lang) {
   // Update "GTM Container identifiziert!" label specifically
   const checkupLabel = document.querySelector('#show_checkup b');
   if (checkupLabel) checkupLabel.innerText = getTranslation(lang, 'show_checkup_b');
+
+  // Stehen nicht in der Liste oben: Die Beschriftung ist die Kombination selbst.
+  paintHotkeyFields(lang);
 }
 
 function setLanguage(lang) {
@@ -472,10 +482,117 @@ function saveSettingsToPage(settings, callback) {
 
 const GTM_UI_ORIGIN = 'https://tagmanager.google.com/';
 const GTM_UI_STORAGE_KEY = 'igtm_gtm_ui';
-const GTM_UI_FEATURES = ['nav', 'pin', 'builtIn', 'chips', 'sort', 'listSort', 'listSearch', 'submitHint', 'overviewHint', 'searchHotkey'];
+const GTM_UI_FEATURES = ['nav', 'pin', 'builtIn', 'chips', 'sort', 'listSort', 'listSearch', 'submitHint', 'overviewHint', 'searchHotkey', 'sectionHotkeys'];
 
 function featureBoxes() {
   return GTM_UI_FEATURES.map(name => document.querySelector('[data-feature="' + name + '"]'));
+}
+
+/*
+ * Die vier Kürzel-Zeilen unter ihren Schaltern. Sie arbeiten alle gleich; nur
+ * Vorgabe und Ablageort unterscheiden sich. Die drei Bereiche liegen in einer
+ * Liste, deshalb `index`.
+ */
+const HOTKEY_ROWS = [
+  {
+    name: 'searchHotkeyCombo', feature: 'searchHotkey',
+    row: 'igtm_hotkey_row', field: 'igtm_hotkey_field',
+    reset: 'igtm_hotkey_reset', hint: 'igtm_hotkey_hint',
+    fallback: () => igtmHotkey.DEFAULT
+  }
+].concat([0, 1, 2].map(index => ({
+  name: 'sectionHotkeyCombos', index: index, feature: 'sectionHotkeys',
+  row: 'igtm_section_row_' + index, field: 'igtm_section_field_' + index,
+  reset: 'igtm_section_reset_' + index, hint: 'igtm_section_hint',
+  fallback: () => igtmHotkey.SECTION_DEFAULTS[index]
+})));
+
+// Gespiegelt aus dem Zustand der Seite. Nur hier gehalten, weil die
+// Kombinationen in keinem Formularfeld stehen, aus dem collectGtmUiState() sie
+// ablesen könnte.
+const hotkeyStore = {};
+let hotkeyRecording = null;
+
+function readHotkey(store, row) {
+  const value = store[row.name];
+  return row.index === undefined ? value : (value || [])[row.index];
+}
+
+function writeHotkey(store, row, combo) {
+  if (row.index === undefined) {
+    store[row.name] = combo;
+    return;
+  }
+  if (!Array.isArray(store[row.name])) store[row.name] = [];
+  store[row.name][row.index] = combo;
+}
+
+function hotkeyCombo(row) {
+  return igtmHotkey.resolve(readHotkey(hotkeyStore, row), row.fallback());
+}
+
+function paintHotkeyFields(lang) {
+  HOTKEY_ROWS.forEach(row => {
+    const field = document.getElementById(row.field);
+    if (!field) return;
+    field.value = hotkeyRecording === row
+      ? getTranslation(lang, 'gtmui_hotkey_record')
+      : igtmHotkey.label(hotkeyCombo(row), lang);
+    document.getElementById(row.reset).title =
+      getTranslation(lang, 'gtmui_hotkey_reset')
+        .replace('{key}', igtmHotkey.label(row.fallback(), lang));
+  });
+}
+
+function saveHotkey(row, combo) {
+  writeHotkey(hotkeyStore, row, combo);
+  document.getElementById(row.hint).style.display = 'none';
+  paintHotkeyFields(currentLang);
+  const next = collectGtmUiState();
+  applyGtmUiState(next.enabled, next.features, next.hotkeys);
+}
+
+function initHotkeyFields() {
+  HOTKEY_ROWS.forEach(row => {
+    const field = document.getElementById(row.field);
+    const hint = document.getElementById(row.hint);
+
+    field.addEventListener('focus', function() {
+      hotkeyRecording = row;
+      hint.style.display = 'none';
+      field.classList.add('recording');
+      paintHotkeyFields(currentLang);
+    });
+
+    field.addEventListener('blur', function() {
+      hotkeyRecording = null;
+      field.classList.remove('recording');
+      paintHotkeyFields(currentLang);
+    });
+
+    // Tab und Escape bleiben der Bedienung: Ohne einen Weg aus der Aufnahme
+    // heraus säße der Fokus fest. Damit sind sie als Kürzel ausgeschlossen.
+    field.addEventListener('keydown', function(event) {
+      if (event.key === 'Tab') return;
+      if (event.key === 'Escape') { field.blur(); return; }
+      event.preventDefault();
+      event.stopPropagation();
+
+      const combo = igtmHotkey.fromEvent(event);
+      // null heißt: nur ein Modifier gedrückt, die Aufnahme läuft weiter.
+      if (!combo) return;
+      if (!igtmHotkey.valid(combo)) {
+        hint.style.display = 'block';
+        return;
+      }
+      saveHotkey(row, combo);
+      field.blur();
+    });
+
+    document.getElementById(row.reset).addEventListener('click', function() {
+      saveHotkey(row, row.fallback());
+    });
+  });
 }
 
 function readGtmUiState(tabId, callback) {
@@ -500,14 +617,14 @@ function readGtmUiState(tabId, callback) {
 
 // In alle GTM-Tabs schreiben: Der localStorage ist für alle derselbe, aber die
 // laufenden Scripts erfahren von der Änderung nur durch das Ereignis.
-function applyGtmUiState(enabled, features) {
+function applyGtmUiState(enabled, features, hotkeys) {
   chrome.tabs.query({ url: GTM_UI_ORIGIN + '*' }, function(tabs) {
     (tabs || []).forEach(function(tab) {
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
         // Nur die eigenen Felder überschreiben: stickyBar und hideBuiltInVars
         // gehören den Schaltern in der Oberfläche.
-        func: function(key, isEnabled, featureFlags) {
+        func: function(key, isEnabled, featureFlags, combos) {
           let state = {};
           try {
             state = JSON.parse(localStorage.getItem(key)) || {};
@@ -516,10 +633,13 @@ function applyGtmUiState(enabled, features) {
           }
           state.enabled = isEnabled;
           state.features = featureFlags;
+          Object.keys(combos || {}).forEach(function(name) { state[name] = combos[name]; });
           localStorage.setItem(key, JSON.stringify(state));
           window.dispatchEvent(new CustomEvent('igtm-gtm-ui-changed'));
         },
-        args: [GTM_UI_STORAGE_KEY, enabled, features]
+        // null statt undefined: Ein undefined in args laesst executeScript
+        // scheitern, und dann kommt gar nichts mehr in der Seite an.
+        args: [GTM_UI_STORAGE_KEY, enabled, features, hotkeys || null]
       }, function() {
         void chrome.runtime.lastError;
       });
@@ -549,6 +669,16 @@ function paintGtmUiCard(state, editable) {
     box.disabled = !enabled;
   });
 
+  // Jede Zeile gehört zum Schalter darüber: Ist er aus, gibt es kein Kürzel zu
+  // wählen.
+  HOTKEY_ROWS.forEach(row => {
+    writeHotkey(hotkeyStore, row, igtmHotkey.resolve(readHotkey(state, row), row.fallback()));
+    const visible = enabled && features[row.feature] !== false;
+    document.getElementById(row.row).style.display = visible ? 'flex' : 'none';
+    if (!visible) document.getElementById(row.hint).style.display = 'none';
+  });
+  paintHotkeyFields(currentLang);
+
   document.getElementById('gtmui_section').classList.toggle('gtmui-locked', !editable);
   document.getElementById('gtmui_note').style.display = editable ? 'none' : 'block';
 }
@@ -558,7 +688,13 @@ function collectGtmUiState() {
   featureBoxes().forEach((box, index) => {
     features[GTM_UI_FEATURES[index]] = box.checked;
   });
-  return { enabled: document.getElementById('igtm_gtmui_active').checked, features: features };
+  const hotkeys = {};
+  HOTKEY_ROWS.forEach(row => { writeHotkey(hotkeys, row, hotkeyCombo(row)); });
+  return {
+    enabled: document.getElementById('igtm_gtmui_active').checked,
+    features: features,
+    hotkeys: hotkeys
+  };
 }
 
 function initGtmUiCard() {
@@ -571,13 +707,14 @@ function initGtmUiCard() {
 
     readGtmUiState(tab.id, function(state) {
       paintGtmUiCard(state, true);
+      initHotkeyFields();
 
       const controls = [document.getElementById('igtm_gtmui_active')].concat(featureBoxes());
       controls.forEach(control => {
         control.addEventListener('change', function() {
           const next = collectGtmUiState();
           paintGtmUiCard(next, true);
-          applyGtmUiState(next.enabled, next.features);
+          applyGtmUiState(next.enabled, next.features, next.hotkeys);
         });
       });
     });
