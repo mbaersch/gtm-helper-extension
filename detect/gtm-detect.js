@@ -28,7 +28,7 @@
   function methodLabel(m) {
     return { standard: 'standard', 'first-party': 'first-party (sGTM)',
              'custom-path': 'custom path', base64: 'base64 loader',
-             unknown: 'unknown (inline?)' }[m] || m;
+             unknown: 'first-party' }[m] || m;
   }
 
   function scan() {

@@ -606,5 +606,44 @@ main.info-open #info_page {
   color: var(--primary-color);
 }
 
-#gtm_detect_box ul { list-style: disc; }
-#gtm_detect_box li { line-height: 1.5; word-break: break-all; }
+/* Der Copy-Button steht anstelle des Aufzaehlungszeichens, deshalb keine Marker. */
+#gtm_detect_box ul { list-style: none; margin: 6px 0 0; padding-left: 0; }
+#gtm_detect_box li {
+  line-height: 1.5;
+  word-break: break-all;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.gtm-copy-btn {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: inherit;
+  opacity: .75;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.gtm-copy-btn svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+  margin: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gtm-copy-btn:hover,
+.gtm-copy-btn:focus-visible { opacity: 1; background: rgba(59, 111, 212, .22); }
+
+.gtm-copy-btn.copied { opacity: 1; color: #4caf50; background: none; }

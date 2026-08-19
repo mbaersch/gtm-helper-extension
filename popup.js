@@ -379,6 +379,53 @@ function checkURL(callback) {
 // Zuletzt geholte Funde, damit die Liste bei Sprachwechsel neu lokalisiert werden kann.
 var gtmDetectRecords = [];
 
+// Inline-SVG statt Emoji: Das rendert je nach Betriebssystem anders und bringt
+// eine eigene Farbe mit.
+const GTM_COPY_SVG =
+  '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+  '<rect x="9" y="9" width="12" height="12" rx="2"/>' +
+  '<path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>' +
+  '</svg>';
+const GTM_CHECK_SVG =
+  '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+  '<path d="M4 12.5 9.5 18 20 6.5"/></svg>';
+
+// navigator.clipboard lehnt ohne Fokus ab (z. B. direkt nach dem Oeffnen des
+// Popups) — dann uebernimmt der alte execCommand-Weg.
+function copyTextToClipboard(text) {
+  const legacy = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove();
+    return ok ? Promise.resolve() : Promise.reject(new Error('copy failed'));
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text).catch(legacy);
+  }
+  return legacy();
+}
+
+function copyGtmId(btn, id) {
+  copyTextToClipboard(id).then(() => {
+    clearTimeout(btn._resetTimer);
+    btn.classList.add('copied');
+    btn.innerHTML = GTM_CHECK_SVG;
+    btn.title = getTranslation(currentLang, 'gtm_copy_done') || 'Kopiert';
+    btn._resetTimer = setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = GTM_COPY_SVG;
+      btn.title = getTranslation(currentLang, 'gtm_copy_id') || 'ID kopieren';
+    }, 1400);
+  }).catch(() => { /* Zwischenablage nicht verfuegbar */ });
+}
+
 // Rendert die erkannten Tags aus dem Cache in der aktuellen Sprache neu.
 function paintGtmDetections() {
   const box = document.getElementById('gtm_detect_box');
@@ -390,11 +437,25 @@ function paintGtmDetections() {
     box.style.display = 'none';
     return;
   }
+  const copyLabel = getTranslation(currentLang, 'gtm_copy_id') || 'ID kopieren';
   gtmDetectRecords.forEach((r) => {
     const li = document.createElement('li');
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'gtm-copy-btn';
+    btn.innerHTML = GTM_COPY_SVG;
+    btn.title = copyLabel;
+    btn.setAttribute('aria-label', copyLabel + ': ' + r.id);
+    btn.addEventListener('click', () => copyGtmId(btn, r.id));
+    li.appendChild(btn);
+
     const method = getTranslation(currentLang, 'gtm_method_' + r.method) || r.method;
-    li.innerText = r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
-                   (r.frame === 'iframe' ? ' (iframe)' : '');
+    const text = document.createElement('span');
+    text.innerText = r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
+                     (r.frame === 'iframe' ? ' (iframe)' : '');
+    li.appendChild(text);
+
     list.appendChild(li);
   });
   box.style.display = 'block';
