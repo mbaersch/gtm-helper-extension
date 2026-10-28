@@ -43,6 +43,7 @@ async function generateScreenshots() {
     { name: 'light_de', lang: 'de', theme: 'light', advanced: false },
     { name: 'advanced_open', lang: 'de', theme: 'dark', advanced: true },
     { name: 'detection_de', lang: 'de', theme: 'dark', advanced: false, detection: true },
+    { name: 'destinations_de', lang: 'de', theme: 'dark', advanced: false, destinations: true },
     { name: 'gtmui_de', lang: 'de', theme: 'dark', advanced: false, gtmui: true },
   ];
 
@@ -75,6 +76,19 @@ async function generateScreenshots() {
           { id: 'GTM-XXXX123', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' },
           { id: 'G-ABCD1234', method: 'first-party', host: 'sst.example.com', frame: 'top' },
           { id: 'AW-98765432', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' }
+        ];
+        window.paintGtmDetections();
+      });
+    }
+
+    // Neues Format (Container mit Destinations) neben einem klassisch geladenen Google-Tag.
+    if (scenario.destinations) {
+      await page.waitForTimeout(300);
+      await page.evaluate(() => {
+        window.gtmDetectRecords = [
+          { id: 'GTM-XXXX123', method: 'standard', host: 'www.googletagmanager.com', frame: 'top',
+            destinations: ['G-ABCD1234', 'AW-98765432', 'DC-1234567'] },
+          { id: 'G-EFGH5678', method: 'first-party', host: 'sst.example.com', frame: 'top' }
         ];
         window.paintGtmDetections();
       });
