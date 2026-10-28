@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Installieren-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.8-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.9-blue.svg)](#)
 
 GTM & CMP Helper ist eine Chrome-Extension zum Verwalten von Consent Management Platform (CMP) Daten, Injizieren von Google Tag Manager Containern und zum Debugging während der Entwicklung.
 
@@ -38,6 +38,7 @@ Identifiziert die aktive Consent Management Platform auf einer Website.
 Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer aktiv, ohne Konfiguration und ohne zusätzliche Berechtigungen.
 - **Was:** GTM-Container und gtag.js-Tags (GA4, Google Ads etc.), erkannt über `window.google_tag_manager` und Resource-Timings.
 - **Wie:** Klassifiziert den Ladeweg — `standard` (googletagmanager.com), `first-party` (Server-side GTM / Google Tag Gateway), `custom-path` oder `base64`-Tunnel.
+- **Destinations:** Container, die direkt an GA4, Google Ads oder Floodlight senden — statt dafür ein eigenes Google-Tag zu laden —, führen diese Ziele eingerückt unter ihrer Container-ID auf. Sie zeigen, wofür der Container konfiguriert ist, nicht ob ein Request gesendet wurde.
 - **Wo:** Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Methode · Host) und ein Konsolen-Log pro neuem Fund.
 
 ### 4. Komfort in der GTM-Oberfläche
@@ -72,6 +73,9 @@ Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache d
 ## Changelog
 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
+
+### 3.9
+- **Neu — Destinations unter dem Container:** GTM-Container können GA4, Google Ads und Floodlight inzwischen direkt als Destinations ansprechen, ohne eigenes Google-Tag. Ein separates `gtag.js` wird dann nicht mehr geladen — der Container ist das Google-Tag. Das Popup zeigte bislang nur die GTM-ID: richtig, aber nur die halbe Wahrheit. Die im Container konfigurierten Destinations stehen jetzt eingerückt unter seiner ID, jeweils mit Kopieren-Symbol und Typ (GA4, Google Ads, Floodlight). Bekannt sind sie, sobald der Container geladen ist — unabhängig vom Consent und davon, ob schon ein Tag gefeuert hat; der Tooltip sagt das dazu. Dasselbe gilt für klassische Google-Tags: Ein `GT-`-Tag nennt jetzt die Google-Ads-ID, an die es sendet und die bisher nirgends auftauchte. Keine neuen Berechtigungen.
 
 ### 3.8
 - **Neu — Tags, Trigger und Variablen per Tastenkürzel:** Der Wechsel zwischen den drei Listen ist der häufigste Weg durch die Oberfläche und kostet jedes Mal den Griff zur Maus. `Alt+1`, `Alt+2` und `Alt+3` erledigen ihn von der Tastatur aus. Angeklickt wird dabei der Menüeintrag selbst, damit GTM seinen eigenen Weg geht und die Markierung im Menü mitzieht — ein Sprung über die Adresszeile ließe sie stehen. Die Übersicht bleibt bewusst außen vor. Ist das Menü verdeckt oder steht ein Dialog offen, bleiben die Tasten wirkungslos und gehören wieder dem Browser. Abschaltbar über die Karte „GTM-Oberfläche verbessern"; die Menüeinträge nennen ihr Kürzel im Tooltip.
