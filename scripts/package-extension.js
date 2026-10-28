@@ -14,7 +14,8 @@ const zipFile = path.resolve(rootDir, `gtm-cmp-helper-v${version}.zip`);
 // 1. Clean up
 console.log('Cleaning up...');
 if (fs.existsSync(distDir)) fs.rmSync(distDir, { recursive: true });
-if (fs.existsSync(zipFile)) fs.unlinkSync(zipFile);
+// Mit --no-zip bleibt ein vorhandenes ZIP stehen: Ein Testlauf gegen dist/ löschte sonst das fertige Release-Paket.
+if (!process.argv.includes('--no-zip') && fs.existsSync(zipFile)) fs.unlinkSync(zipFile);
 fs.mkdirSync(distDir);
 
 // 2. Define files to include (only what's needed for the browser)
