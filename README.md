@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.9-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.9.1-blue.svg)](#)
 
 GTM & CMP Helper is a Chrome Extension for resetting Consent Management Platform (CMP) data, injecting Google Tag Manager containers, and managing data during development and debugging.
 
@@ -37,9 +37,9 @@ Identifies the active Consent Management Platform on a website.
 ### 3. Google Tag & Container Detection
 Automatically detects Google tags loaded on the current page — always on, no configuration, no extra permissions.
 - **What:** GTM containers and gtag.js tags (GA4, Google Ads, etc.), identified via `window.google_tag_manager` and resource timings.
-- **How:** Classifies the load method — `standard` (googletagmanager.com), `first-party` (server-side GTM / Google Tag Gateway), `custom-path`, or `base64` tunnel.
+- **How:** Classifies where the loader comes from, relative to the page — `Standard` (googletagmanager.com), `Same-Origin` (a path on the same host, e.g. Google Tag Gateway; the path is shown), `Same-Site` (a subdomain of the site, e.g. server-side GTM), or `Cross-Site` (a foreign domain). A `base64` tunnel or `custom path` is named in addition. Obfuscated loaders are resolved through the URL Google itself records for the container.
 - **Destinations:** containers that send to GA4, Google Ads, or Floodlight directly — instead of loading a separate Google tag — list those destinations indented below their container ID. They show what the container is configured for, not whether a request was sent.
-- **Where:** Container count on the toolbar badge, a "Detected Google tags & containers" popup section (ID · method · host), and a console log per new detection.
+- **Where:** Container count on the toolbar badge, a "Detected Google tags & containers" popup section (ID · origin, e.g. `GTM-XXXX · Same-Site (sst.example.com)`), and a console log per new detection.
 
 ### 4. GTM Interface Comfort
 Display and usability helpers on `tagmanager.google.com` — no extra permissions, no access to container data.
@@ -73,6 +73,9 @@ The toggles remember their state; their labels follow the language of the GTM in
 ## Changelog
 
 > Available on the Chrome Web Store since 2019; this changelog covers the 3.x refactor onwards.
+
+### 3.9.1
+- **Change — where a loader comes from:** the detection list used to say "first-party (sGTM)" for every loader outside googletagmanager.com — including ones served from a completely different domain, where that was simply wrong. And for loaders whose URL does not give itself away (Stape's custom loader now obfuscates its parameter), only "First-Party" without a host was left. Each entry now states the origin relative to the page, with the one detail that matters: `Standard (www.googletagmanager.com)`, `Same-Origin (/metrics/)` for a path on the same host such as Google Tag Gateway, `Same-Site (sst.example.com)` for a subdomain, `Cross-Site (…)` for a foreign domain. A base64 tunnel or custom path is appended. The host comes from the loaded URL that Google records for each container, so obfuscated loaders are covered without decoding them. The console log uses the same labels. No new permissions.
 
 ### 3.9
 - **New — destinations below the container:** GTM containers can now send to GA4, Google Ads, and Floodlight directly as destinations, without a Google tag of their own. No separate `gtag.js` is loaded any more — the container is the Google tag. The popup so far only showed the GTM ID, which was correct but only half the story. The destinations configured in the container now appear indented below its ID, each with a copy icon and its type (GA4, Google Ads, Floodlight). They are known as soon as the container has loaded, regardless of consent and of whether a tag has fired — the tooltip says so. The same applies to classic Google tags: a `GT-` tag now shows the Google Ads ID it sends to, which did not appear anywhere before. No new permissions.

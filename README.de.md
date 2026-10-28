@@ -1,7 +1,7 @@
 # GTM & CMP Helper - Chrome Extension
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Installieren-blue?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/gtm-helper/kbnbkogeeackdjiibllebnpdccbmepil)
-[![Version](https://img.shields.io/badge/version-3.9-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-3.9.1-blue.svg)](#)
 
 GTM & CMP Helper ist eine Chrome-Extension zum Verwalten von Consent Management Platform (CMP) Daten, Injizieren von Google Tag Manager Containern und zum Debugging während der Entwicklung.
 
@@ -37,9 +37,9 @@ Identifiziert die aktive Consent Management Platform auf einer Website.
 ### 3. Google-Tag- & Container-Erkennung
 Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer aktiv, ohne Konfiguration und ohne zusätzliche Berechtigungen.
 - **Was:** GTM-Container und gtag.js-Tags (GA4, Google Ads etc.), erkannt über `window.google_tag_manager` und Resource-Timings.
-- **Wie:** Klassifiziert den Ladeweg — `standard` (googletagmanager.com), `first-party` (Server-side GTM / Google Tag Gateway), `custom-path` oder `base64`-Tunnel.
+- **Wie:** Ordnet ein, woher der Loader relativ zur Seite kommt — `Standard` (googletagmanager.com), `Same-Origin` (Pfad auf demselben Host, etwa Google Tag Gateway; der Pfad wird genannt), `Same-Site` (Subdomain der Seite, etwa Server-side GTM) oder `Cross-Site` (fremde Domain). Ein `base64`-Tunnel oder `custom path` wird zusätzlich genannt. Verschleierte Loader werden über die URL aufgelöst, die Google selbst zum Container notiert.
 - **Destinations:** Container, die direkt an GA4, Google Ads oder Floodlight senden — statt dafür ein eigenes Google-Tag zu laden —, führen diese Ziele eingerückt unter ihrer Container-ID auf. Sie zeigen, wofür der Container konfiguriert ist, nicht ob ein Request gesendet wurde.
-- **Wo:** Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Methode · Host) und ein Konsolen-Log pro neuem Fund.
+- **Wo:** Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Herkunft, z. B. `GTM-XXXX · Same-Site (sst.example.com)`) und ein Konsolen-Log pro neuem Fund.
 
 ### 4. Komfort in der GTM-Oberfläche
 Anzeige- und Bedienhilfen auf `tagmanager.google.com` — ohne zusätzliche Berechtigungen und ohne Zugriff auf Container-Daten.
@@ -73,6 +73,9 @@ Die Schalter merken sich ihren Zustand; ihre Beschriftungen folgen der Sprache d
 ## Changelog
 
 > Seit 2019 im Chrome Web Store verfügbar; dieses Changelog beginnt mit dem 3.x-Refactoring.
+
+### 3.9.1
+- **Änderung — woher ein Loader kommt:** Die Erkennungsliste nannte bislang jeden Loader außerhalb von googletagmanager.com „first-party (sGTM)“ — auch einen, der von einer ganz anderen Domain kam, wo das schlicht falsch war. Und bei Loadern, deren URL sich nicht zu erkennen gibt (der Custom Loader von Stape verschleiert seinen Parameter inzwischen), blieb nur „First-Party“ ohne Host. Jeder Eintrag nennt jetzt die Herkunft relativ zur Seite, mit dem einen Detail, auf das es ankommt: `Standard (www.googletagmanager.com)`, `Same-Origin (/metrics/)` für einen Pfad auf demselben Host wie beim Google Tag Gateway, `Same-Site (sst.example.com)` für eine Subdomain, `Cross-Site (…)` für eine fremde Domain. Ein base64-Tunnel oder eigener Pfad wird angehängt. Den Host liefert die geladene URL, die Google zu jedem Container notiert — verschleierte Loader sind damit erfasst, ohne sie zu entschlüsseln. Das Konsolen-Log nutzt dieselben Bezeichnungen. Keine neuen Berechtigungen.
 
 ### 3.9
 - **Neu — Destinations unter dem Container:** GTM-Container können GA4, Google Ads und Floodlight inzwischen direkt als Destinations ansprechen, ohne eigenes Google-Tag. Ein separates `gtag.js` wird dann nicht mehr geladen — der Container ist das Google-Tag. Das Popup zeigte bislang nur die GTM-ID: richtig, aber nur die halbe Wahrheit. Die im Container konfigurierten Destinations stehen jetzt eingerückt unter seiner ID, jeweils mit Kopieren-Symbol und Typ (GA4, Google Ads, Floodlight). Bekannt sind sie, sobald der Container geladen ist — unabhängig vom Consent und davon, ob schon ein Tag gefeuert hat; der Tooltip sagt das dazu. Dasselbe gilt für klassische Google-Tags: Ein `GT-`-Tag nennt jetzt die Google-Ads-ID, an die es sendet und die bisher nirgends auftauchte. Keine neuen Berechtigungen.

@@ -14,11 +14,11 @@ Inject any GTM container code (GTM-XXXXXX) into any website. Test new tracking s
 - Flexible positioning in <head> or <body>.
 
 3. Google Tag & Container Detection
-Automatically detects Google tags loaded on the current page — always on, no configuration, no extra permissions. Classifies the load method — standard (googletagmanager.com), first-party (server-side GTM / Google Tag Gateway), custom path, or base64 tunnel.
+Automatically detects Google tags loaded on the current page — always on, no configuration, no extra permissions. Shows where each loader comes from, relative to the page — Standard (googletagmanager.com), Same-Origin (a path on the same host, e.g. Google Tag Gateway), Same-Site (a subdomain, e.g. server-side GTM), or Cross-Site (a foreign domain) — plus a base64 tunnel or custom path where one is used.
 
 Containers that send to GA4, Google Ads, or Floodlight directly as destinations — without loading a Google tag of their own — list those destinations indented below the container ID.
 
-Container count on the toolbar badge, a "Detected Google tags & containers" popup section (ID · method · host), and a console log per new detection. A copy icon in front of every entry puts the bare ID on the clipboard.
+Container count on the toolbar badge, a "Detected Google tags & containers" popup section (ID · origin), and a console log per new detection. A copy icon in front of every entry puts the bare ID on the clipboard.
 
 4. dataLayer Tools
 Send dataLayer push events or execute custom JavaScript code on the current page. Perfect for quick testing of event handlers.
@@ -48,6 +48,9 @@ DESIGN & USABILITY:
 
 CHANGELOG 
 ---------------------
+
+v3.9.1
+- Detected loaders show their origin relative to the page: Standard, Same-Origin (with path), Same-Site or Cross-Site (with host) — also for obfuscated loaders.
 
 v3.9
 - GA4, Google Ads, and Floodlight destinations configured in a GTM container are listed below its ID.
@@ -110,11 +113,11 @@ Fügen Sie beliebigen GTM-Container-Code (GTM-XXXXXX) in jede beliebige Website 
 - Flexible Positionierung im <head> oder <body>.
 
 3. Google-Tag- & Container-Erkennung
-Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer aktiv, ohne Konfiguration und ohne zusätzliche Berechtigungen. Klassifiziert den Ladeweg — standard (googletagmanager.com), first-party (Server-side GTM / Google Tag Gateway), Custom Path oder base64-Tunnel. 
+Erkennt automatisch die auf der aktuellen Seite geladenen Google-Tags — immer aktiv, ohne Konfiguration und ohne zusätzliche Berechtigungen. Zeigt, woher jeder Loader relativ zur Seite kommt — Standard (googletagmanager.com), Same-Origin (Pfad auf demselben Host, etwa Google Tag Gateway), Same-Site (Subdomain, etwa Server-side GTM) oder Cross-Site (fremde Domain) —, dazu einen base64-Tunnel oder eigenen Pfad, wo einer genutzt wird.
 
 Container, die GA4, Google Ads oder Floodlight direkt als Destinations ansprechen — ohne eigenes Google-Tag zu laden —, führen diese Ziele eingerückt unter der Container-ID auf.
 
-Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Methode · Host) und ein Konsolen-Log pro neuem Fund. Ein Kopieren-Symbol vor jedem Eintrag legt die reine ID in die Zwischenablage.
+Container-Anzahl im Toolbar-Badge, eine Popup-Sektion „Erkannte Google-Tags & Container" (ID · Herkunft) und ein Konsolen-Log pro neuem Fund. Ein Kopieren-Symbol vor jedem Eintrag legt die reine ID in die Zwischenablage.
 
 4. dataLayer Tools
 Senden Sie dataLayer-Push-Events oder führen Sie benutzerdefinierten JavaScript-Code auf der aktuellen Seite aus. Perfekt für schnelle Tests von Event-Handlern.
