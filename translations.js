@@ -12,7 +12,7 @@ const translations = {
 <p>Vor dem Container lässt sich ein Objekt in den dataLayer schreiben — etwa <code>{"internal": true}</code>, um eigene Zugriffe zu markieren — und beliebiger JavaScript-Code ausführen. Wirksam wird all das erst mit <b>Speichern &amp; neu laden</b>.</p>
 
 <h3>Google-Tags erkennen</h3>
-<p>Geladene GTM-Container und gtag.js-Tags werden von selbst erkannt, samt Ladeweg: Standard, first-party (Server-side GTM), eigener Pfad oder base64-Tunnel. Die Zahl am Symbol in der Symbolleiste nennt die Container auf der Seite; zu erkannten Containern führt ein Link zum Container-Checkup.</p>
+<p>Geladene GTM-Container und gtag.js-Tags werden von selbst erkannt, samt Herkunft des Loaders: Standard (googletagmanager.com), Same-Origin (Pfad auf derselben Domain, etwa Google Tag Gateway), Same-Site (eigene Subdomain, etwa Server-side GTM) oder Cross-Site (fremde Domain). Ein base64-Tunnel oder eigener Pfad wird zusätzlich genannt; im Container konfigurierte Destinations stehen eingerückt darunter. Die Zahl am Symbol in der Symbolleiste nennt die Container auf der Seite; zu erkannten Containern führt ein Link zum Container-Checkup.</p>
 
 <h3>Komfort in der GTM-Oberfläche</h3>
 <p>Auf <code>tagmanager.google.com</code> kommen Bedienhilfen dazu: mitlaufende Bereichsnavigation, fixierbare Titelbalken, Parametertabellen zum Sortieren und Einfügen von Zeilen, eine gemerkte Sortierung der Tag-, Trigger- und Variablenlisten, ausblendbare integrierte Variablen, eine Warnung im Sende-Dialog, die Workspace-Suche per Tastenkürzel (voreingestellt <code>Alt+S</code>, frei wählbar), der Bereichswechsel per <code>Alt+1</code> bis <code>Alt+3</code> (jedes einzeln frei wählbar) und Chips, über die sich Variablen direkt aus einem Eingabefeld heraus bearbeiten lassen. Jede Funktion ist in der Karte <b>GTM-Oberfläche verbessern</b> einzeln abschaltbar.</p>
@@ -74,11 +74,6 @@ const translations = {
     hotkey_mod_meta: "Cmd",
     hotkey_key_space: "Leertaste",
     gtmui_note: "Diese Einstellungen lassen sich nur ändern, während ein Tab mit tagmanager.google.com aktiv ist.",
-    "gtm_method_standard": "Standard (googletagmanager.com)",
-    "gtm_method_first-party": "first-party (sGTM)",
-    "gtm_method_custom-path": "Custom Path",
-    "gtm_method_base64": "base64-Loader",
-    "gtm_method_unknown": "First-Party",
     gtm_copy_id: "ID kopieren",
     gtm_dest_hint: "Im Container als Ziel konfiguriert. Ob Daten gesendet werden, hängt von Triggern und Consent ab.",
     gtm_copy_done: "Kopiert",
@@ -114,7 +109,7 @@ const translations = {
 <p>Ahead of the container you can write an object into the dataLayer — <code>{"internal": true}</code> to mark your own visits, for instance — and run arbitrary JavaScript. None of it takes effect until <b>Save &amp; Reload</b>.</p>
 
 <h3>Detect Google tags</h3>
-<p>Loaded GTM containers and gtag.js tags are detected on their own, including the load method: standard, first-party (server-side GTM), custom path or base64 tunnel. The number on the toolbar icon counts the containers on the page; detected containers come with a link to the container checkup.</p>
+<p>Loaded GTM containers and gtag.js tags are detected on their own, including where the loader comes from: Standard (googletagmanager.com), Same-Origin (a path on the same domain, e.g. Google Tag Gateway), Same-Site (your own subdomain, e.g. server-side GTM) or Cross-Site (a foreign domain). A base64 tunnel or custom path is named in addition; destinations configured in the container are listed indented below. The number on the toolbar icon counts the containers on the page; detected containers come with a link to the container checkup.</p>
 
 <h3>Comfort in the GTM interface</h3>
 <p>On <code>tagmanager.google.com</code> you get extra usability helpers: section navigation that stays in view, pinnable title bars, parameter tables you can sort and insert rows into, remembered sorting for the tag, trigger, and variable lists, collapsible built-in variables, a warning in the submit dialog, the workspace search on a keyboard shortcut of your choice (<code>Alt+S</code> by default), section switching on <code>Alt+1</code> to <code>Alt+3</code> (each one configurable), and chips that let you edit a variable straight from an input field. Every one of them can be switched off individually in the <b>Enhance the GTM interface</b> card.</p>
@@ -176,11 +171,6 @@ const translations = {
     hotkey_mod_meta: "Cmd",
     hotkey_key_space: "Space",
     gtmui_note: "These settings can only be changed while a tagmanager.google.com tab is active.",
-    "gtm_method_standard": "standard (googletagmanager.com)",
-    "gtm_method_first-party": "first-party (sGTM)",
-    "gtm_method_custom-path": "custom path",
-    "gtm_method_base64": "base64 loader",
-    "gtm_method_unknown": "First-Party",
     gtm_copy_id: "Copy ID",
     gtm_dest_hint: "Configured as a destination in the container. Whether data is sent depends on triggers and consent.",
     gtm_copy_done: "Copied",

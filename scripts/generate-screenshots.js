@@ -73,9 +73,9 @@ async function generateScreenshots() {
       await page.waitForTimeout(300); // renderGtmDetections-Callback abwarten (setzt sonst auf leer zurück)
       await page.evaluate(() => {
         window.gtmDetectRecords = [
-          { id: 'GTM-XXXX123', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' },
-          { id: 'G-ABCD1234', method: 'first-party', host: 'sst.example.com', frame: 'top' },
-          { id: 'AW-98765432', method: 'standard', host: 'www.googletagmanager.com', frame: 'top' }
+          { id: 'GTM-XXXX123', origin: 'standard', host: 'www.googletagmanager.com', frame: 'top' },
+          { id: 'G-ABCD1234', origin: 'same-site', host: 'sst.example.com', frame: 'top' },
+          { id: 'AW-98765432', origin: 'standard', host: 'www.googletagmanager.com', frame: 'top' }
         ];
         window.paintGtmDetections();
       });
@@ -86,9 +86,9 @@ async function generateScreenshots() {
       await page.waitForTimeout(300);
       await page.evaluate(() => {
         window.gtmDetectRecords = [
-          { id: 'GTM-XXXX123', method: 'standard', host: 'www.googletagmanager.com', frame: 'top',
+          { id: 'GTM-XXXX123', origin: 'same-origin', host: 'www.example.com', path: '/metrics/', frame: 'top',
             destinations: ['G-ABCD1234', 'AW-98765432', 'DC-1234567'] },
-          { id: 'G-EFGH5678', method: 'first-party', host: 'sst.example.com', frame: 'top' }
+          { id: 'G-EFGH5678', origin: 'same-site', host: 'sst.example.com', frame: 'top' }
         ];
         window.paintGtmDetections();
       });

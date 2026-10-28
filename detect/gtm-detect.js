@@ -15,15 +15,18 @@
 
   // google_tag_data.tidr ist intern und undokumentiert. Die Destinations stehen dort,
   // sobald der Container geladen ist, unabhängig von Consent und davon, ob ein Tag feuert.
-  function tidrDestinations() {
-    var map = {};
+  // scriptSource ist die tatsächlich geladene URL, auch wenn sie sich nicht als Loader zu erkennen gibt.
+  function tidr() {
+    var out = { destinations: {}, scriptSources: {} };
     try {
       var c = window.google_tag_data.tidr.container;
       Object.keys(c).forEach(function (id) {
-        if (Array.isArray(c[id].destinations)) map[id.toUpperCase()] = c[id].destinations.slice();
+        var k = id.toUpperCase();
+        if (Array.isArray(c[id].destinations)) out.destinations[k] = c[id].destinations.slice();
+        if (typeof c[id].scriptSource === 'string' && c[id].scriptSource) out.scriptSources[k] = c[id].scriptSource;
       });
     } catch (e) { /* ignore */ }
-    return map;
+    return out;
   }
 
   function resourceUrls() {
@@ -38,20 +41,16 @@
     return urls;
   }
 
-  function methodLabel(m) {
-    return { standard: 'standard', 'first-party': 'first-party (sGTM)',
-             'custom-path': 'custom path', base64: 'base64 loader',
-             unknown: 'first-party' }[m] || m;
-  }
-
   function scan() {
+    var t = tidr();
     var records = window.GTMClassify.buildRecords({
       globalKeys: gtmGlobalKeys(), resourceUrls: resourceUrls(),
-      destinations: tidrDestinations(), frame: frame
+      destinations: t.destinations, scriptSources: t.scriptSources,
+      pageUrl: location.href, frame: frame
     });
     var fresh = records.filter(function (r) {
       var key = r.id.toUpperCase();
-      var sig = r.method + '|' + (r.destinations || []).join(',');
+      var sig = [r.origin, r.host, r.path, r.via].join('|') + '|' + (r.destinations || []).join(',');
       if (seen[key] === sig) return false; // schon so gemeldet
       seen[key] = sig;
       return true;
@@ -60,8 +59,9 @@
 
     fresh.forEach(function (r) {
       // Konsole bewusst englisch (MAIN-World kennt die gewählte UI-Sprache nicht) + Farbakzent im Badge-Blau.
-      console.log('%c[GTM Helper]%c ' + r.id + ' loaded via ' + methodLabel(r.method) +
-                  (r.host ? ' — host: ' + r.host : '') + (frame === 'iframe' ? ' (iframe)' : '') +
+      var label = window.GTMClassify.originLabel(r);
+      console.log('%c[GTM Helper]%c ' + r.id + (label ? ' loaded via ' + label : ' detected') +
+                  (frame === 'iframe' ? ' (iframe)' : '') +
                   (r.destinations ? ' — destinations: ' + r.destinations.join(', ') : ''),
                   'color:#3b6fd4;font-weight:bold', 'color:inherit');
     });

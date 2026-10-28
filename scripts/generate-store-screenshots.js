@@ -116,9 +116,9 @@ async function renderPromoTile(page, dir, filename, w, h) {
 // Mock-Funde für die Erkennungs-Sektion (Beispiel-IDs): ein Container mit Destinations
 // und ein klassisch geladenes Google-Tag — der Store erlaubt nur fünf Bilder, eins für beides.
 const DETECT_RECORDS = [
-  { id: 'GTM-XXXX123', method: 'standard', host: 'www.googletagmanager.com', frame: 'top',
+  { id: 'GTM-XXXX123', origin: 'same-origin', host: 'www.example.com', path: '/metrics/', frame: 'top',
     destinations: ['G-ABCD1234', 'AW-98765432', 'DC-1234567'] },
-  { id: 'G-EFGH5678', method: 'first-party', host: 'sst.example.com', frame: 'top' }
+  { id: 'G-EFGH5678', origin: 'same-site', host: 'sst.example.com', frame: 'top' }
 ];
 
 async function generateStoreScreenshots() {

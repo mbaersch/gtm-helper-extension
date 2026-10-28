@@ -460,9 +460,8 @@ function paintGtmDetections() {
     return text;
   };
   gtmDetectRecords.forEach((r) => {
-    const method = getTranslation(currentLang, 'gtm_method_' + r.method) || r.method;
-    addRow(r.id, r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
-                 (r.frame === 'iframe' ? ' (iframe)' : ''));
+    const label = GTMClassify.originLabel(r);
+    addRow(r.id, r.id + (label ? ' · ' + label : '') + (r.frame === 'iframe' ? ' (iframe)' : ''));
     (r.destinations || []).forEach((d) => {
       const text = addRow(d, d + ' · ' + gtmDestinationType(d), 'gtm-dest');
       text.title = destHint;
