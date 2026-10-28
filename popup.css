@@ -616,6 +616,8 @@ main.info-open #info_page {
   gap: 6px;
 }
 
+#gtm_detect_box li.gtm-dest { padding-left: 18px; opacity: .85; }
+
 .gtm-copy-btn {
   flex: 0 0 auto;
   width: 18px;

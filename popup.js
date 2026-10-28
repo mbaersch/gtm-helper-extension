@@ -438,27 +438,43 @@ function paintGtmDetections() {
     return;
   }
   const copyLabel = getTranslation(currentLang, 'gtm_copy_id') || 'ID kopieren';
-  gtmDetectRecords.forEach((r) => {
+  const destHint = getTranslation(currentLang, 'gtm_dest_hint');
+  const addRow = (id, label, cls) => {
     const li = document.createElement('li');
+    if (cls) li.className = cls;
 
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'gtm-copy-btn';
     btn.innerHTML = GTM_COPY_SVG;
     btn.title = copyLabel;
-    btn.setAttribute('aria-label', copyLabel + ': ' + r.id);
-    btn.addEventListener('click', () => copyGtmId(btn, r.id));
+    btn.setAttribute('aria-label', copyLabel + ': ' + id);
+    btn.addEventListener('click', () => copyGtmId(btn, id));
     li.appendChild(btn);
 
-    const method = getTranslation(currentLang, 'gtm_method_' + r.method) || r.method;
     const text = document.createElement('span');
-    text.innerText = r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
-                     (r.frame === 'iframe' ? ' (iframe)' : '');
+    text.innerText = label;
     li.appendChild(text);
 
     list.appendChild(li);
+    return text;
+  };
+  gtmDetectRecords.forEach((r) => {
+    const method = getTranslation(currentLang, 'gtm_method_' + r.method) || r.method;
+    addRow(r.id, r.id + ' · ' + method + (r.host ? ' · ' + r.host : '') +
+                 (r.frame === 'iframe' ? ' (iframe)' : ''));
+    (r.destinations || []).forEach((d) => {
+      const text = addRow(d, d + ' · ' + gtmDestinationType(d), 'gtm-dest');
+      text.title = destHint;
+    });
   });
   box.style.display = 'block';
+}
+
+// Produktnamen, deshalb nicht übersetzt.
+function gtmDestinationType(id) {
+  const prefix = id.split('-')[0].toUpperCase();
+  return { G: 'GA4', AW: 'Google Ads', DC: 'Floodlight', GT: 'Google Tag' }[prefix] || prefix;
 }
 
 // Erkannte GTM-Container/Tags vom Background holen und rendern

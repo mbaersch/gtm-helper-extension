@@ -7,7 +7,11 @@
     if (ev.source !== window) return;
     var d = ev.data;
     if (!d || d.source !== 'gtmhelper-detect' || !Array.isArray(d.records)) return;
-    last = last.concat(d.records);
+    // Nach ID ersetzen: Dieselbe ID kommt erneut, wenn Methode oder Destinations nachziehen.
+    d.records.forEach(function (r) {
+      var k = String(r.id).toUpperCase();
+      last = last.filter(function (x) { return String(x.id).toUpperCase() !== k; }).concat(r);
+    });
     try {
       chrome.runtime.sendMessage({ action: 'gtmDetected', records: d.records, url: d.url });
     } catch (e) { /* Background evtl. schlafend/weg — unkritisch */ }

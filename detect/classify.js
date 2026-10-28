@@ -96,6 +96,16 @@
       }
     });
 
+    // Destinations eines GTM-Containers (neues Format) oder eines GT-Tags. Die eigene ID
+    // steht bei G-Tags selbst in der Liste und wäre als Unterzeile nur ein Duplikat.
+    var dests = input.destinations || {};
+    byId.forEach(function (rec, k) {
+      var list = (dests[k] || []).filter(function (d) {
+        return ID_RE.test(d) && d.toUpperCase() !== k;
+      });
+      if (list.length) rec.destinations = list;
+    });
+
     return Array.from(byId.values());
   }
 

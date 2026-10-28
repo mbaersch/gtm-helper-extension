@@ -13,6 +13,19 @@
     } catch (e) { return []; }
   }
 
+  // google_tag_data.tidr ist intern und undokumentiert. Die Destinations stehen dort,
+  // sobald der Container geladen ist, unabhängig von Consent und davon, ob ein Tag feuert.
+  function tidrDestinations() {
+    var map = {};
+    try {
+      var c = window.google_tag_data.tidr.container;
+      Object.keys(c).forEach(function (id) {
+        if (Array.isArray(c[id].destinations)) map[id.toUpperCase()] = c[id].destinations.slice();
+      });
+    } catch (e) { /* ignore */ }
+    return map;
+  }
+
   function resourceUrls() {
     var urls = [];
     try {
@@ -33,12 +46,14 @@
 
   function scan() {
     var records = window.GTMClassify.buildRecords({
-      globalKeys: gtmGlobalKeys(), resourceUrls: resourceUrls(), frame: frame
+      globalKeys: gtmGlobalKeys(), resourceUrls: resourceUrls(),
+      destinations: tidrDestinations(), frame: frame
     });
     var fresh = records.filter(function (r) {
       var key = r.id.toUpperCase();
-      if (seen[key] === r.method) return false; // schon in dieser Methode gemeldet
-      seen[key] = r.method;
+      var sig = r.method + '|' + (r.destinations || []).join(',');
+      if (seen[key] === sig) return false; // schon so gemeldet
+      seen[key] = sig;
       return true;
     });
     if (!fresh.length) return;
@@ -46,7 +61,8 @@
     fresh.forEach(function (r) {
       // Konsole bewusst englisch (MAIN-World kennt die gewählte UI-Sprache nicht) + Farbakzent im Badge-Blau.
       console.log('%c[GTM Helper]%c ' + r.id + ' loaded via ' + methodLabel(r.method) +
-                  (r.host ? ' — host: ' + r.host : '') + (frame === 'iframe' ? ' (iframe)' : ''),
+                  (r.host ? ' — host: ' + r.host : '') + (frame === 'iframe' ? ' (iframe)' : '') +
+                  (r.destinations ? ' — destinations: ' + r.destinations.join(', ') : ''),
                   'color:#3b6fd4;font-weight:bold', 'color:inherit');
     });
     try {
