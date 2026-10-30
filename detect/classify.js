@@ -164,6 +164,17 @@
       if (list.length) rec.destinations = list;
     });
 
+    // Nur aus einem Hit bekannte IDs, die schon Destination eines Containers sind, sind kein eigenes
+    // Tag: Stape tunnelt auch Hits base64-kodiert (drpatrickbauer.de), Klartext-Hits erkennen wir gar nicht.
+    var globals = new Set((input.globalKeys || []).map(function (k) { return k.toUpperCase(); }));
+    var destIds = new Set();
+    byId.forEach(function (rec) {
+      (rec.destinations || []).forEach(function (d) { destIds.add(d.toUpperCase()); });
+    });
+    byId.forEach(function (rec, k) {
+      if (rank.get(k) === 1 && !globals.has(k) && destIds.has(k)) byId.delete(k);
+    });
+
     return Array.from(byId.values());
   }
 
