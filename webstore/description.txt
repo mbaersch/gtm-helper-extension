@@ -51,6 +51,9 @@ CHANGELOG
 
 v3.9.1
 - Detected loaders show their origin relative to the page: Standard, Same-Origin (with path), Same-Site or Cross-Site (with host) — also for obfuscated loaders.
+- Base64-tunneled hits of a container destination no longer show up as a separate Google tag.
+- Current Usercentrics versions are detected and reset, including the consent stored in the Usercentrics frame.
+- "Reset only this CMP" now also removes cookies with site-specific names; five more CMPs are detected.
 
 v3.9
 - GA4, Google Ads, and Floodlight destinations configured in a GTM container are listed below its ID.
