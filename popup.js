@@ -204,6 +204,25 @@ const CMP_SESSION_STORAGE = {
   "ccm_consent": "CCM19 / clickskeks / CMP4Net / WUM"
 };
 
+// Consent-Cookies mit Account-/Site-ID im Namen. Gelöscht wird per Teilstring, erkannt
+// nur per Präfix: "mnd-" steckt auch in "recommend-". `local` leitet LS-Schlüssel ab.
+const CMP_COOKIE_PREFIXES = [
+  // ohne "v:", es gibt real_cookie_banner-v:3_blog:1_path:... und real_cookie_banner-blog:1
+  { prefix: "real_cookie_banner-", cmp: "Real Cookie Banner" },
+  { prefix: "__cmpc", cmp: "Consentmanager.net", cookies: ["__cmpiuid"],
+    local: found => found.flatMap(c => [c.name + "_" + found[0].domain, c.name + "_expire" + found[0].domain]) },
+  { prefix: "concord-allow-state-", cmp: "Concord",
+    local: found => {
+      const account = found[0].name.replace("concord-allow-state-", "");
+      return ["concord-consent-state-" + account, "concord-transient-token-" + account, "concord-banner-closed"];
+    } },
+  { prefix: "ppms_privacy_", cmp: "Piwik PRO" },
+  { prefix: "_iub_cs-", cmp: "iubenda" },
+  { prefix: "map_accepted_", cmp: "MyAgilePrivacy" },
+  { prefix: "mnd-", cmp: "MND Cookie Notice" },
+  { prefix: "bigidcmp-consent-", cmp: "BigID / illow", local: found => [found[0].name] }
+];
+
 function updateUI(lang) {
   const elementsToTranslate = [
     { id: 'hdng', key: 'hdng', type: 'innerText' },
@@ -318,12 +337,8 @@ function identifyCMP(callback) {
         if (CMP_COOKIES[cookie.name]) {
           return callback(CMP_COOKIES[cookie.name]);
         }
-        // Sonderfall Piwik PRO (ppms_privacy_...)
-        if (cookie.name.indexOf("ppms_privacy_") === 0) return callback("Piwik PRO");
-        // Sonderfall Real Cookie Banner
-        if (cookie.name.indexOf("real_cookie_banner-") === 0) return callback("Real Cookie Banner");
-        // Sonderfall Consentmanager.net
-        if (cookie.name.indexOf("__cmpc") === 0) return callback("Consentmanager.net");
+        const rule = CMP_COOKIE_PREFIXES.find(r => cookie.name.indexOf(r.prefix) === 0);
+        if (rule) return callback(rule.cmp);
       }
 
       // 2. Check LocalStorage
@@ -823,174 +838,78 @@ function getCheckupUrl(callback) {
 }
 
 
-function deleteConsentSettings() {
-  if (confirm(getTranslation(currentLang, "confirm_reset"))) {
-    
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id },
-        func: function() {
-          return localStorage.getItem("ppms_webstorage") || "";
-        }
-      }, function(results) {
-        var ppCookie = "noPPCookie";
-        // Nicht injizierbare Seite: nichts zu löschen.
-        if (chrome.runtime.lastError) return;
-        if (results && results[0] && results[0].result) {
-          var ppobj;
-          try {ppobj = JSON.parse(results[0].result); } catch(e) {ppobj = []}
-          var ppid = ppobj[0];
-          if ((ppid && ppid.key)) ppCookie = ppid.key;
-        } 
+// Alle Löschziele, ohne cmpName für sämtliche CMPs. Ein gemeinsamer Weg für beide
+// Buttons: Der Einzel-Reset kannte früher nur die Konstanten und ließ die dynamischen Namen stehen.
+function consentTargets(cookies, ppmsWebstorage, cmpName) {
+  const wanted = cmp => !cmpName || cmp === cmpName;
+  const pick = map => Object.keys(map).filter(key => wanted(map[key]));
+  const targets = { cookies: pick(CMP_COOKIES), local: pick(CMP_LOCAL_STORAGE), session: pick(CMP_SESSION_STORAGE) };
 
-        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-          let tab = tabs[0];
-          if (!tab) return;
-          let tabId = tab.id;
-          let currentUrl = tab.url;
-          
-          // Liste der Consent-Cookie-Namen aus Mappings generieren
-          let cookieNames = [ppCookie, ...Object.keys(CMP_COOKIES)];
-          
-          // Liste der localStorage-Schlüssel aus Mappings generieren
-          let localStorageKeys = Object.keys(CMP_LOCAL_STORAGE);
+  CMP_COOKIE_PREFIXES.filter(rule => wanted(rule.cmp)).forEach(rule => {
+    const found = cookies.filter(c => c.name.indexOf(rule.prefix) >= 0);
+    if (!found.length) return;
+    targets.cookies.push(...found.map(c => c.name), ...(rule.cookies || []));
+    if (rule.local) targets.local.push(...rule.local(found));
+  });
 
-          // Liste der sessionStorage-Schlüssel aus Mappings generieren
-          let sessionStorageKeys = Object.keys(CMP_SESSION_STORAGE);
-
-          //Dynamische Namen von Cookies suchen und anhängen...
-          chrome.cookies.getAll({url: tabs[0].url}, function(results) {
-            if (chrome.runtime.lastError || !results) return;
-            //Real Cookie Banner: Praefix ohne "v:", es gibt beide Varianten
-            //(real_cookie_banner-v:3_blog:1_path:... und real_cookie_banner-blog:1)
-            let realCookiesFound = results.filter(x=>x.name.indexOf("real_cookie_banner-")>=0);
-            if (realCookiesFound.length > 0) cookieNames = cookieNames.concat(realCookiesFound.map(x => (x.name)));
-            //Consentmanager.net
-            let consentManagerCookiesFound = results.filter(x=>x.name.indexOf("__cmpc")>=0);
-            if (consentManagerCookiesFound.length > 0) {
-              let cmCookieDomain = consentManagerCookiesFound[0].domain; 
-              let cmCookieNames = consentManagerCookiesFound.map(x => (x.name));
-              cookieNames = cookieNames.concat(cmCookieNames);
-              cookieNames.push("__cmpiuid");
-              cmCookieNames.forEach(x=>{
-                localStorageKeys.push(x+"_"+cmCookieDomain);
-                localStorageKeys.push(x+"_expire"+cmCookieDomain);
-              });
-            }
-            //Concord
-            let concordCookiesFound = results.filter(x=>x.name.indexOf("concord-allow-state-")>=0);
-            if (concordCookiesFound.length > 0) {
-              let coCookieNames = concordCookiesFound.map(x => (x.name));
-              let coAccount = coCookieNames[0].replace("concord-allow-state-", "");
-              cookieNames = cookieNames.concat(coCookieNames);
-              localStorageKeys.push("concord-consent-state-"+coAccount);
-              localStorageKeys.push("concord-transient-token-"+coAccount);
-              localStorageKeys.push("concord-banner-closed");
-            }
-            //Piwik PRO (alle)
-            let ppCookiesFound = results.filter(x=>x.name.indexOf("ppms_privacy_")>=0);
-            if (ppCookiesFound.length > 0) 
-              cookieNames = cookieNames.concat(ppCookiesFound.map(x => (x.name)));
-            //Iubenda
-            let iubCookiesFound = results.filter(x=>x.name.indexOf("_iub_cs-")>=0);
-            if (iubCookiesFound.length > 0 && iubCookiesFound[0].name) 
-              cookieNames.push(iubCookiesFound[0].name);
-            //MyAgilePrivacy
-            let mapCookiesFound = results.filter(x=>x.name.indexOf("map_accepted_")>=0);
-            if (mapCookiesFound.length > 0) 
-              cookieNames = cookieNames.concat(mapCookiesFound.map(x => (x.name)));
-            //MND Cookie Notice (Shopware)
-            let mndCookiesFound = results.filter(x=>x.name.indexOf("mnd-")>=0);
-            if (mndCookiesFound.length > 0) 
-              cookieNames = cookieNames.concat(mndCookiesFound.map(x => (x.name)));
-            //BigID / illow 
-            let bigIdCookies = results.filter(x=>x.name.indexOf("bigidcmp-consent-")>=0);
-            if (bigIdCookies.length > 0) {
-              let biCookieNames = bigIdCookies.map(x => (x.name));
-              cookieNames = cookieNames.concat(biCookieNames);
-              localStorageKeys.push(biCookieNames[0]);
-            }
-            //Cookies entfernen, wenn vorhanden
-            cookieNames.forEach(function(name) {
-              chrome.cookies.remove({ url: currentUrl, name: name });
-              //console.log("remove cookie: ", name); 
-            });
-      
-            //LS Einträge entfernen, wenn vorhanden
-            chrome.scripting.executeScript({
-              target: { tabId: tabId },
-              func: function(keys) {
-                keys.forEach(function(key) {
-                  localStorage.removeItem(key);
-                });
-              },
-              args: [localStorageKeys]
-            }, function() {
-              void chrome.runtime.lastError;
-            });
-
-            //SessionStorage Einträge entfernen, wenn vorhanden (Danke, CCM19 :|)
-            chrome.scripting.executeScript({
-              target: { tabId: tabId },
-              func: function(keys) {
-                keys.forEach(function(key) {
-                  sessionStorage.removeItem(key);
-                });
-              },
-              args: [sessionStorageKeys]
-            }, function() {
-              void chrome.runtime.lastError;
-              chrome.tabs.reload(tabId);
-              // Popup erst schließen, wenn die gesamte Async-Kette (Cookies,
-              // LS/SS, Reload) durchgelaufen ist. Ein früheres window.close()
-              // zerstört den Popup-Kontext und bricht die ausstehenden
-              // Callbacks ab, bevor die Cookies überhaupt entfernt werden.
-              window.close();
-            });
-
-          });
-
-        });
-
-      });
-    });
-
+  // Piwik PRO nennt den Namen seines Consent-Cookies im localStorage.
+  if (wanted("Piwik PRO")) {
+    try {
+      const key = JSON.parse(ppmsWebstorage)[0].key;
+      if (key) targets.cookies.push(key);
+    } catch (e) { /* kein oder unlesbarer Eintrag */ }
   }
+  return targets;
 }
 
-function deleteSpecificConsentSettings(cmpName) {
-  const frage = getTranslation(currentLang, "confirm_reset_specific").replace("{cmp}", cmpName);
-  if (confirm(frage)) {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      const tab = tabs[0];
-      if (!tab) return;
-      const currentUrl = tab.url;
+function resetConsent(tab, cmpName, done) {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: function() {
+      return localStorage.getItem("ppms_webstorage") || "";
+    }
+  }, function(results) {
+    // Nicht injizierbare Seite: nichts zu löschen.
+    if (chrome.runtime.lastError) return;
+    const ppms = results && results[0] ? results[0].result : "";
 
-      // Filter keys for this specific CMP
-      const cookieNames = Object.keys(CMP_COOKIES).filter(key => CMP_COOKIES[key] === cmpName);
-      const localStorageKeys = Object.keys(CMP_LOCAL_STORAGE).filter(key => CMP_LOCAL_STORAGE[key] === cmpName);
-      const sessionStorageKeys = Object.keys(CMP_SESSION_STORAGE).filter(key => CMP_SESSION_STORAGE[key] === cmpName);
+    chrome.cookies.getAll({ url: tab.url }, function(cookies) {
+      if (chrome.runtime.lastError || !cookies) return;
+      const targets = consentTargets(cookies, ppms, cmpName);
 
-      // Cookies entfernen
-      cookieNames.forEach(name => {
-        chrome.cookies.remove({ url: currentUrl, name: name });
-      });
+      targets.cookies.forEach(name => chrome.cookies.remove({ url: tab.url, name: name }));
 
-      // LS/SS entfernen
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        func: function(lsKeys, ssKeys) {
-          lsKeys.forEach(key => localStorage.removeItem(key));
-          ssKeys.forEach(key => sessionStorage.removeItem(key));
+        func: function(local, session) {
+          local.forEach(key => localStorage.removeItem(key));
+          session.forEach(key => sessionStorage.removeItem(key));
         },
-        args: [localStorageKeys, sessionStorageKeys]
+        args: [targets.local, targets.session]
       }, function() {
         void chrome.runtime.lastError;
-        chrome.tabs.reload(tab.id);
-        window.close();
+        done();
       });
     });
-  }
+  });
+}
+
+function deleteConsentSettings(cmpName) {
+  const frage = cmpName
+    ? getTranslation(currentLang, "confirm_reset_specific").replace("{cmp}", cmpName)
+    : getTranslation(currentLang, "confirm_reset");
+  if (!confirm(frage)) return;
+
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    const tab = tabs[0];
+    if (!tab) return;
+    resetConsent(tab, cmpName, function() {
+      chrome.tabs.reload(tab.id);
+      // Erst schließen, wenn die Async-Kette durch ist: Ein früheres window.close()
+      // zerstört den Popup-Kontext, bevor die Cookies überhaupt entfernt werden.
+      window.close();
+    });
+  });
 }
 
 // Eingabehilfe: aus einer reinen GTM-Container-ID den Standard-Loader-Snippet erzeugen.
@@ -1064,7 +983,7 @@ window.onload = function() {
       cmpBox.style.display = 'block';
       document.getElementById('igtm_reset_specific').addEventListener('click', (e) => {
         e.preventDefault();
-        deleteSpecificConsentSettings(cmpName);
+        deleteConsentSettings(cmpName);
       });
     } else {
       cmpBox.style.display = 'none';
