@@ -173,6 +173,8 @@ const CMP_LOCAL_STORAGE = {
   "cookiefirst-consent": "CookieFirst",
   "uc_user_interaction": "UserCentrics",
   "uc_settings": "UserCentrics",
+  "ucData": "UserCentrics",
+  "ucString": "UserCentrics",
   "truste.eu.cookie.notice_gdpr_prefs": "TrustArc",
   "truste.eu.cookie.notice_preferences": "TrustArc",
   "ccm_consent": "CCM19 / clickskeks / CMP4Net / WUM",
@@ -221,6 +223,12 @@ const CMP_COOKIE_PREFIXES = [
   { prefix: "map_accepted_", cmp: "MyAgilePrivacy" },
   { prefix: "mnd-", cmp: "MND Cookie Notice" },
   { prefix: "bigidcmp-consent-", cmp: "BigID / illow", local: found => [found[0].name] }
+];
+
+// localStorage eingebetteter CMP-Frames (partitioniert nach Top-Level-Site). Erreichbar
+// nur über ein Script im Frame selbst, also nur, solange der Frame geladen ist.
+const CMP_FRAME_STORAGE = [
+  { origin: "https://web.cmp.usercentrics.eu", prefix: "ucData_", cmp: "UserCentrics" }
 ];
 
 function updateUI(lang) {
@@ -843,7 +851,10 @@ function getCheckupUrl(callback) {
 function consentTargets(cookies, ppmsWebstorage, cmpName) {
   const wanted = cmp => !cmpName || cmp === cmpName;
   const pick = map => Object.keys(map).filter(key => wanted(map[key]));
-  const targets = { cookies: pick(CMP_COOKIES), local: pick(CMP_LOCAL_STORAGE), session: pick(CMP_SESSION_STORAGE) };
+  const targets = {
+    cookies: pick(CMP_COOKIES), local: pick(CMP_LOCAL_STORAGE), session: pick(CMP_SESSION_STORAGE),
+    frames: CMP_FRAME_STORAGE.filter(f => wanted(f.cmp)).map(f => ({ origin: f.origin, prefix: f.prefix }))
+  };
 
   CMP_COOKIE_PREFIXES.filter(rule => wanted(rule.cmp)).forEach(rule => {
     const found = cookies.filter(c => c.name.indexOf(rule.prefix) >= 0);
@@ -879,17 +890,39 @@ function resetConsent(tab, cmpName, done) {
 
       targets.cookies.forEach(name => chrome.cookies.remove({ url: tab.url, name: name }));
 
+      // Getrennter Aufruf: Scheitert ein Frame, bleibt der Hauptframe unberührt.
+      // Erst danach weiter, sonst bricht der Reload ihn ab.
+      if (!targets.frames.length) return wipeTop();
       chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: function(local, session) {
-          local.forEach(key => localStorage.removeItem(key));
-          session.forEach(key => sessionStorage.removeItem(key));
+        target: { tabId: tab.id, allFrames: true },
+        func: function(frames) {
+          frames.filter(f => f.origin === location.origin).forEach(f => {
+            try {
+              Object.keys(localStorage)
+                .filter(key => key.indexOf(f.prefix) === 0)
+                .forEach(key => localStorage.removeItem(key));
+            } catch (e) { /* Storage im Frame gesperrt */ }
+          });
         },
-        args: [targets.local, targets.session]
+        args: [targets.frames]
       }, function() {
         void chrome.runtime.lastError;
-        done();
+        wipeTop();
       });
+
+      function wipeTop() {
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: function(local, session) {
+            local.forEach(key => localStorage.removeItem(key));
+            session.forEach(key => sessionStorage.removeItem(key));
+          },
+          args: [targets.local, targets.session]
+        }, function() {
+          void chrome.runtime.lastError;
+          done();
+        });
+      }
     });
   });
 }
