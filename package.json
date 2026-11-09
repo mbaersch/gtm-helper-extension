@@ -1,0 +1,17 @@
+{
+  "name": "gtm-helper-extension",
+  "private": true,
+  "description": "GTM & CMP Helper (Chrome Extension). Version steht in manifest.json.",
+  "scripts": {
+    "test": "node --test *.test.js detect/*.test.js",
+    "test:e2e": "playwright test",
+    "screenshots": "node scripts/generate-screenshots.js",
+    "store-assets": "node scripts/generate-store-screenshots.js",
+    "build": "node scripts/package-extension.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbaersch/gtm-helper-extension.git"
+  },
+  "license": "ISC"
+}

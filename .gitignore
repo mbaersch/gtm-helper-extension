@@ -18,13 +18,18 @@
 !README.md
 !README.de.md
 !.gitignore
+!package.json
+!*.test.js
 
 # 3. Ordner erlauben
-# detect/: nur Runtime-Dateien versionieren, Tests bleiben lokal (wie *.test.js sonst auch)
 !detect/
 !detect/classify.js
 !detect/gtm-detect.js
 !detect/gtm-relay.js
+!detect/classify.test.js
+!.github/
+!.github/workflows/
+!.github/workflows/*
 !images/
 !images/*
 !screenshots/
