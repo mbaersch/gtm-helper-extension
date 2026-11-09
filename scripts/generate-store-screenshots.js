@@ -123,11 +123,9 @@ const DETECT_RECORDS = [
 
 async function generateStoreScreenshots() {
   const extensionPath = path.resolve(__dirname, '..');
-  const userDataDir = path.resolve(__dirname, '..', 'tmp-user-data-store');
+  const userDataDir = ''; // leer = frisches Temp-Profil, also ohne übernommenen CMP-State
   const webstoreDir = path.resolve(__dirname, '..', 'webstore');
 
-  // Determinismus: altes Profil (übernommener CMP-State o.ä.) vor dem Lauf entfernen.
-  if (fs.existsSync(userDataDir)) fs.rmSync(userDataDir, { recursive: true, force: true });
   if (!fs.existsSync(webstoreDir)) fs.mkdirSync(webstoreDir);
 
   const browserContext = await chromium.launchPersistentContext(userDataDir, {

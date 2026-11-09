@@ -14,7 +14,7 @@ function optimizeImages(dir) {
 
 async function generateScreenshots() {
   const extensionPath = path.resolve(__dirname, '..');
-  const userDataDir = path.resolve(__dirname, '..', 'tmp-user-data');
+  const userDataDir = ''; // leer = frisches Temp-Profil; im Projektordner scheitert Chromes SingletonLock auf Netzfreigaben
   const screenshotDir = path.resolve(__dirname, '..', 'screenshots');
 
   if (!fs.existsSync(screenshotDir)) {
