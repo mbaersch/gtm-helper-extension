@@ -100,7 +100,7 @@
     try { u = new URL(loaderUrl); p = new URL(pageUrl); } catch (e) { return null; }
     var host = u.hostname;
     if (isGoogleHost(host)) return { origin: 'standard', host: host, path: null };
-    // Nur das erste Segment: dahinter hängt Stape kodierte IDs an (/ehlytics/fps/<base64>/...).
+    // Nur das erste Segment: dahinter hängt Stape kodierte IDs an (/<pfad>/fps/<base64>/...).
     var seg = u.pathname.match(/^\/[^/]+\//);
     var path = seg ? seg[0] : '/';
     if (host === p.hostname) return { origin: 'same-origin', host: host, path: path };
@@ -165,7 +165,7 @@
     });
 
     // Nur aus einem Hit bekannte IDs, die schon Destination eines Containers sind, sind kein eigenes
-    // Tag: Stape tunnelt auch Hits base64-kodiert (drpatrickbauer.de), Klartext-Hits erkennen wir gar nicht.
+    // Tag: Stape tunnelt auch Hits base64-kodiert, Klartext-Hits erkennen wir gar nicht.
     var globals = new Set((input.globalKeys || []).map(function (k) { return k.toUpperCase(); }));
     var destIds = new Set();
     byId.forEach(function (rec) {
@@ -178,7 +178,7 @@
     return Array.from(byId.values());
   }
 
-  // "Same-Site (tom.example.de) · base64" -- Fachbegriffe, in beiden UI-Sprachen gleich.
+  // "Same-Site (tg.example.de) · base64" -- Fachbegriffe, in beiden UI-Sprachen gleich.
   // Ohne Loader-URL null: lieber keine Angabe als eine geratene.
   function originLabel(rec) {
     var name = { standard: 'Standard', 'same-origin': 'Same-Origin',
