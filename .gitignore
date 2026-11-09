@@ -19,6 +19,7 @@
 !README.de.md
 !.gitignore
 !package.json
+!playwright.config.js
 !*.test.js
 
 # 3. Ordner erlauben
@@ -27,6 +28,8 @@
 !detect/gtm-detect.js
 !detect/gtm-relay.js
 !detect/classify.test.js
+!tests/
+!tests/*.spec.js
 !.github/
 !.github/workflows/
 !.github/workflows/*
