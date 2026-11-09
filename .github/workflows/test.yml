@@ -14,3 +14,17 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Global wie lokal: Specs laden 'playwright/test' über NODE_PATH, kein node_modules im Projekt.
+      - run: npm install -g playwright@1.58.2
+      - run: echo "NODE_PATH=$(npm root -g)" >> "$GITHUB_ENV"
+      - run: playwright install --with-deps chromium
+      # Die Specs laufen headed (Extensions), deshalb unter xvfb.
+      - run: xvfb-run --auto-servernum npm run test:e2e
